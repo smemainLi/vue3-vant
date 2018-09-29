@@ -24,7 +24,7 @@ export default async (
       credentials: "include",
       method: type,
       headers: {
-        Accept: "application/json",
+        "Accept": "application/json",
         "Content-Type": "application/json"
       },
       mode: "cors",
