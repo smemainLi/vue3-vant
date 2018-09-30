@@ -5,6 +5,7 @@ import store from "./store";
 import Vant from "vant";
 
 import "vant/lib/vant-css/index.css";
+import "./config/rem"
 
 Vue.config.productionTip = false;
 Vue.use(Vant);
