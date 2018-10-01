@@ -34,16 +34,12 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  isLogin().then(res => {
-    if (!res.data.login && to.path !== "/login") {
-      next({ path: "/login" })
-    } else if (res.data.login && to.path === "/login") {
-      next();
-    } else {
-      next()
-    }
-  })
-
+  // isLogin().then(res => {
+  //   // !res.data.login && to.path !== "/login" && next({ path: "/login" })
+  //   if (!res.data.login && to.path !== "/login") next({ path: "/login" })
+  //   next()
+  // })
+  next();
   //后续微信授权
   //......
 
