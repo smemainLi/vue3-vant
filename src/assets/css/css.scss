@@ -1,0 +1,4 @@
+$proportion: 16; // px : rem   16:1
+@function px2rem($px) {
+  @return $px/$proportion+rem;
+}

@@ -1,4 +1,6 @@
 import { baseUrl } from "./env";
+import qs from 'qs'
+
 export default async (
   url = "",
   data: any = {},
@@ -24,15 +26,15 @@ export default async (
       credentials: "include",
       method: type,
       headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Accept": "application/json, text/plain, */*",
+        "Content-Type": "application/x-www-form-urlencoded"
       },
       mode: "cors",
       cache: "force-cache"
     };
     if (type === "POST") {
       Object.defineProperty(requestConfig, "body", {
-        value: JSON.stringify(data)
+        value: qs.stringify(data)
       });
     }
     try {

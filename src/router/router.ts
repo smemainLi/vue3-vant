@@ -19,14 +19,14 @@ const router = new Router({
     { path: "/redeem/index", name: "redeem", meta: { title: '积分兑换' }, component: routerPath.redeem },
     { path: "/earn/index", name: "earn", meta: { title: '赚积分' }, component: routerPath.earn },
     { path: "/member/index", name: "member", meta: { title: '会员信息' }, component: routerPath.member },
+    { path: "/member/login", name: "login", meta: { title: '登录' }, component: routerPath.login }
   ]
 });
 
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title;
   /* isLogin().then(res => {
-    // !res.data.login && to.path !== "/login" && next({ path: "/login" })
-    if (!res.data.login && to.path !== "/login") next({ path: "/login" })
+    if (!res.data.login && to.path !== "/login" && to.path !== "/") next({ path: "/login" })
     next()
   }) */
   next();

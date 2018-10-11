@@ -1,6 +1,6 @@
 <template>
   <div class="member">
-    <h1>会员信息</h1>
+    <h1>会员信息ninininini🐱 🐾</h1>
   </div>
 </template>
 
@@ -13,7 +13,6 @@ import { Component, Provide, Vue } from "vue-property-decorator";
   }
 })
 export default class Member extends Vue {
-
 }
 </script>
 

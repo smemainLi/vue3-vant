@@ -27,3 +27,4 @@ export const earn = (r: any) => require.ensure([], () => r(require('../views/ear
 
 // 会员信息
 export const member = (r: any) => require.ensure([], () => r(require('../views/member/index.vue')), e => console.log(e), 'member')
+export const login = (r: any) => require.ensure([], () => r(require('../views/member/login.vue')), e => console.log(e), 'login')

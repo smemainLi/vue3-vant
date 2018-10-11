@@ -20,7 +20,10 @@ export default class Guide extends Vue {
 
 <style lang="scss" scoped>
 .image {
-  width: 42.875rem;
-  height: 15rem;
+  // width: 42.875rem;
+  width: 686px;
+  // width: 686px
+  // height: 15rem;
+  // height: px2rem(423);
 }
 </style>
