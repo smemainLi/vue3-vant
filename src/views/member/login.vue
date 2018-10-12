@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
-import { codePic, isLogin, getAuthorizeUrl, login } from "@/service/getData";
+import { codePic, isLogin, login } from "@/service/getData";
 import { LOGIN } from "../../lang/zh"
 import { getCookie } from '../../config/utils'
 
@@ -26,7 +26,7 @@ import headTop from "@/components/header/head.vue";
 })
 export default class Login extends Vue {
   account = '13536540921';
-  pwd = '4A2F8C7EC323C0EFDFF54CCBAF64CA91';
+  pwd = 'e10adc3949ba59abbe56e057f20f883e';
   phone = '';
   sms = '';
   testParam = "hh";
@@ -46,21 +46,18 @@ export default class Login extends Vue {
     console.log(res.data.login);
   } */
 
-  async getAuthorizeUrl() {
-    const res = await getAuthorizeUrl();
-    console.log(res);
-  }
-
   async login() {
     /**
      * 测试账号
      * 13536540921
      * 测试密码
-     * 4A2F8C7EC323C0EFDFF54CCBAF64CA91
+     * e10adc3949ba59abbe56e057f20f883e
      */
     const res = await login(this.account, this.pwd);
     console.log(res);
     console.log(res.message);
+    const coo1 = await getCookie('qi_openid');
+    console.log(coo1);
   }
 }
 </script>

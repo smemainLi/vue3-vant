@@ -1,7 +1,10 @@
 <template>
   <div class="guide">
-    <h1>我的券包</h1>
-    <img src="../../assets/image/coupon/cashCoupon.png" alt="" class="image">
+    <router-link tag="div" :to="{name:'allCoupon'}">
+      <img src="../../assets/image/coupon/coupon.png" alt="">
+    </router-link>
+    <img src="../../assets/image/coupon/cashCoupon.png" alt="">
+    <img src="../../assets/image/coupon/exchangeVoucher.png" alt="">
   </div>
 </template>
 
@@ -13,13 +16,14 @@ import { Component, Provide, Vue } from "vue-property-decorator";
   components: {
   }
 })
-export default class Guide extends Vue {
+
+export default class Coupon extends Vue {
 
 }
 </script>
 
 <style lang="scss" scoped>
-.image {
+img {
   // width: 42.875rem;
   width: 686px;
   // width: 686px

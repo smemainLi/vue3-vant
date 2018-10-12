@@ -18,6 +18,7 @@ export const ar = (r: any) => require.ensure([], () => r(require('../views/ar/in
 
 // 我的券包
 export const coupon = (r: any) => require.ensure([], () => r(require('../views/coupon/index.vue')), e => console.log(e), 'coupon')
+export const allCoupon = (r: any) => require.ensure([], () => r(require('../views/coupon/allCoupon.vue')), e => console.log(e), 'allCoupon')
 
 // 积分兑换
 export const redeem = (r: any) => require.ensure([], () => r(require('../views/redeem/index.vue')), e => console.log(e), 'redeem')
