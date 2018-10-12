@@ -61,11 +61,6 @@ export default class Login extends Vue {
     const res = await login(this.account, this.pwd);
     console.log(res);
     console.log(res.message);
-    if (res.message === '操作成功') {
-      console.log(`${location.origin}/member/login`);
-      const coo = await getCookie('1');
-      console.log(coo);
-    }
   }
 }
 </script>
