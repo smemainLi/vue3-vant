@@ -1,5 +1,5 @@
 <template>
-  <div class="guide">
+  <div class="coupon">
     <router-link tag="div" :to="{name:'allCoupon'}">
       <img src="../../assets/image/coupon/coupon.png" alt="">
     </router-link>
@@ -19,15 +19,22 @@ import { Component, Provide, Vue } from "vue-property-decorator";
 
 export default class Coupon extends Vue {
 
+
 }
 </script>
 
 <style lang="scss" scoped>
-img {
-  // width: 42.875rem;
+img{
   width: 686px;
-  // width: 686px
-  // height: 15rem;
-  // height: px2rem(423);
+  height: 240px;
+  margin-top: 30px;
+  display: block
+}
+
+.coupon{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
 }
 </style>

@@ -4,6 +4,7 @@ import router from "@/router/router";
 import store from "./store";
 import Vant from "vant";
 import "./assets/css/css.scss"
+import '../src/assets/icon/style.css'
 
 Vue.config.productionTip = false;
 Vue.use(Vant);

@@ -25,12 +25,16 @@ export default class Index extends Vue {
     { name: '积分兑换', url: '/redeem/index' },
     { name: '赚积分', url: '/earn/index' },
     { name: '会员信息', url: '/member/index' },
+    { name: '登录', url: '/login' },
   ]
 }
 </script>
 
 <style lang="scss" scoped>
-h3 {
-  cursor: pointer;
+.index {
+  text-align: center;
+  h3 {
+    cursor: pointer;
+  }
 }
 </style>

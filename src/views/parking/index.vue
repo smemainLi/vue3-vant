@@ -1,6 +1,8 @@
 <template>
   <div class="parking">
-    <h1>积分停车</h1>
+    <div class="car-info">
+
+    </div>
   </div>
 </template>
 
@@ -18,4 +20,12 @@ export default class Parking extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.parking {
+  .car-info {
+    width: 750px;
+    height: 507px;
+    background: #ffffff;
+    border: 1px solid black;
+  }
+}
 </style>

@@ -1,21 +1,34 @@
 $proportion: 16; // px : rem   16:1
 @function px2rem($px) {
   @return $px/$proportion+rem;
-}
+};
+
 
 // 全局字号
+$size36:36px;
+$size28:28px;
+$size26:26px;
 
-/* $size36:36; */
+html{
+  background-color: rgba(245,245,245,1);
+}
+
+img{
+  content: normal !important
+}
+
+
+* {
+  margin: 0 auto;
+}
 
 html {
   background-color: #fff
 }
 
-// 定义button字号
-
-/* [class^='van-button']{
-  font-size:px2rem($size36)
-} */
-
-// tab
-// [class^='van-tab']
+input {
+  background: none;
+  outline: none;
+  border: 0px;
+  appearance: none;
+}

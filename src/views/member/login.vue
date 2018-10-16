@@ -1,13 +1,20 @@
 <template>
   <div class="login">
-    <headTop></headTop>
-
-    <van-cell-group>
-      <van-field v-model="account" required label="手机号码" icon="question" placeholder="请输入用户名" @click-icon="$toast('question')" />
-      <van-field v-model="pwd" type="password" label="密码" placeholder="请输入密码" required />
-    </van-cell-group>
-    <van-button slot="button" size="small" type="primary" @click="login()">登录</van-button>
-
+    <div class="group">
+      <div class="input-file">
+        <i class="icon-personal-phone"></i>
+        <input type="text" v-model="account" placeholder="请输入手机号码">
+      </div>
+      <div class="input-file">
+        <i class="icon-lock"></i>
+        <input type="password" v-model="pwd" placeholder="请输入手机号码">
+      </div>
+      <button class="input-button">登录</button>
+    </div>
+    <div class="tips">
+      <div class="no-account">还没有账号</div>
+      <div class="forget-pwd">忘记密码</div>
+    </div>
   </div>
 </template>
 
@@ -17,16 +24,13 @@ import { codePic, isLogin, login } from "@/service/getData";
 import { LOGIN } from "../../lang/zh"
 import { getCookie } from '../../config/utils'
 
-import headTop from "@/components/header/head.vue";
-
 @Component({
   components: {
-    headTop
   }
 })
 export default class Login extends Vue {
-  account = '13536540921';
-  pwd = 'e10adc3949ba59abbe56e057f20f883e';
+  account = '';
+  pwd = '';
   phone = '';
   sms = '';
   testParam = "hh";
@@ -63,7 +67,52 @@ export default class Login extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.testDiv {
-  font-size: 3.5rem;
+.login {
+  .group {
+    text-align: center;
+    margin-top: 74px;
+    .input-file {
+      position: relative;
+      margin-top: 24px;
+      i {
+        position: absolute;
+        left: 53px;
+        top: 29px;
+        font-size: 34px;
+        color: #888888;
+      }
+      input {
+        /* outline: none; */
+        width: 617px;
+        height: 88px;
+        font-size: 28px;
+        border: 1px solid #e5e5e5;
+        border-radius: 10px;
+        padding-left: 69px;
+      }
+    }
+    .input-button {
+      margin-top: 100px;
+      font-size: 36px;
+      width: 686px;
+      height: 88px;
+      border: 0;
+      background: #fbde19;
+      border-radius: 10px;
+    }
+  }
+  .tips {
+    margin-top: 75px;
+    font-size: 28px;
+    color: #353535;
+    .no-account {
+      margin-left: 32px;
+      float: left;
+    }
+    .forget-pwd {
+      margin-right: 32px;
+      float: right;
+    }
+  }
 }
 </style>
