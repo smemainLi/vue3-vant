@@ -1,21 +1,19 @@
 <template>
-  <div class="guide">
-    <h1>找商家</h1>
-  </div>
+  <van-tabs>
+    <van-tab v-for="index in 8" :title="'标签'+index" :key="index">
+      内容{{index}}
+    </van-tab>
+  </van-tabs>
 </template>
-
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
-import tab from '../../components/common/guide/tab.vue'
 
 @Component({
   components: {
   }
 })
-export default class Guide extends Vue {
-
+export default class Tab extends Vue {
 }
 </script>
-
 <style lang="scss" scoped>
 </style>

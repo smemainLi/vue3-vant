@@ -29,6 +29,18 @@
     window.viewportUnitsBuggyfill.init({
       hacks: window.viewportUnitsBuggyfillHacks
     });
+
+//禁止页面滚动
+    // document.querySelector('body').addEventListener('touchstart', function (ev) {
+    //     event.preventDefault();
+    // });
+
+    // 参考：https://segmentfault.com/a/1190000008512184
+    // window.addEventListener('touchmove', 
+    // function (ev) {
+    //                 event.preventDefault();
+    //                },
+    // { passive: false })
   }
 </script>
 

@@ -9,7 +9,7 @@
         <i class="icon-lock"></i>
         <input type="password" v-model="pwd" placeholder="请输入手机号码">
       </div>
-      <button class="input-button">登录</button>
+      <commonBtn></commonBtn>
     </div>
     <div class="tips">
       <div class="no-account">还没有账号</div>
@@ -21,24 +21,22 @@
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
 import { codePic, isLogin, login } from "@/service/getData";
-import { LOGIN } from "../../lang/zh"
-import { getCookie } from '../../config/utils'
+import { LOGIN } from "../../lang/zh";
+import { getCookie } from '../../config/utils';
+import commonBtn from "../../components/common/button.vue"
 
 @Component({
   components: {
+    commonBtn
   }
 })
 export default class Login extends Vue {
   account = '';
   pwd = '';
-  phone = '';
-  sms = '';
-  testParam = "hh";
-  mainButton = LOGIN.TEST01;
-  checkLogin = LOGIN.TEST02;
 
   @Provide()
-  title: string = '登录'
+  btnName: string = '登录';
+  /* mainButton = LOGIN.TEST01; */
 
   /* async getCodePic() {
     const res = await codePic();
@@ -63,14 +61,20 @@ export default class Login extends Vue {
     const coo1 = await getCookie('qi_openid');
     console.log(coo1);
   }
+
 }
 </script>
 
+<style lang="scss">
+body {
+  background-color: $color-w;
+}
+</style>
 <style lang="scss" scoped>
 .login {
   .group {
     text-align: center;
-    margin-top: 74px;
+    padding-top: 74px;
     .input-file {
       position: relative;
       margin-top: 24px;
@@ -79,7 +83,7 @@ export default class Login extends Vue {
         left: 53px;
         top: 29px;
         font-size: 34px;
-        color: #888888;
+        color: $color-g2;
       }
       input {
         /* outline: none; */
@@ -91,20 +95,11 @@ export default class Login extends Vue {
         padding-left: 69px;
       }
     }
-    .input-button {
-      margin-top: 100px;
-      font-size: 36px;
-      width: 686px;
-      height: 88px;
-      border: 0;
-      background: #fbde19;
-      border-radius: 10px;
-    }
   }
   .tips {
     margin-top: 75px;
     font-size: 28px;
-    color: #353535;
+    color: $color-35;
     .no-account {
       margin-left: 32px;
       float: left;
@@ -116,3 +111,4 @@ export default class Login extends Vue {
   }
 }
 </style>
+

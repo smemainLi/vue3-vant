@@ -1,19 +1,18 @@
 <template>
-  <div class="guide">
-    <h1>找商家</h1>
+  <div class="forget-password">
+    忘记密码
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
-import tab from '../../components/common/guide/tab.vue'
+
 
 @Component({
   components: {
   }
 })
-export default class Guide extends Vue {
-
+export default class ForgetPassword extends Vue {
 }
 </script>
 
