@@ -71,7 +71,7 @@ export default class Deduction extends Vue {
   }
   .cut-line {
     width: 684px;
-    height: 8px;
+    /* height: 8px; */
     margin: 0 auto;
     margin-top: 76px;
     border-bottom: 1px solid #e5e5e5;

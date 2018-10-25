@@ -4,17 +4,33 @@ $proportion: 16; // px : rem   16:1
 }
 
 // 全局字号
-$size36:36px;
-$size28:28px;
-$size26:26px;
-$size30:30px;
+$size20:20px;
+$size22:22px;
 $size32:32px;
+$size26:26px;
+$size27:27px;
+$size28:28px;
+$size30:30px;
+$size34:34px;
+$size36:36px;
+$size40:40px;
+$size50:50px;
+$size94:94px;
 // 全局色号
 $color-w:#ffffff;
 $color-y:rgba(251, 222, 25, 1);
 $color-g:#f5f5f5;
 $color-g2:#888888;
 $color-35:#353535;
+$color-00:#000000;
+$color-e5:#E5E5E5;
+$color-d2:#D2D2D2;
+$color-f5:#F5F5F5;
+$color-f56:#F56E72;
+$color-a6:#A6B5F7;
+$color-e3:#E3E3E3;
+$color-90:#908224;
+
 body {
   background-color: #f5f5f5;
 }
@@ -23,6 +39,7 @@ html,
 body,
 #app {
   height: 100%;
+  touch-action: none; //当你触摸并按住触摸目标时候，禁止系统默认菜单
 }
 
 img {

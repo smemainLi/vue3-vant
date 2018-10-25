@@ -13,7 +13,7 @@
     </div>
     <div class="tips">
       <div class="no-account">还没有账号</div>
-      <div class="forget-pwd">忘记密码</div>
+      <router-link tag="div" :to="{name:'forgetPassword'}" class="forget-pwd">忘记密码</router-link>
     </div>
   </div>
 </template>
@@ -65,13 +65,10 @@ export default class Login extends Vue {
 }
 </script>
 
-<style lang="scss">
-body {
-  background-color: $color-w;
-}
-</style>
 <style lang="scss" scoped>
 .login {
+  height: 100%;
+  background-color: $color-w;
   .group {
     text-align: center;
     padding-top: 74px;
@@ -81,7 +78,7 @@ body {
       i {
         position: absolute;
         left: 53px;
-        top: 29px;
+        top: 36px;
         font-size: 34px;
         color: $color-g2;
       }

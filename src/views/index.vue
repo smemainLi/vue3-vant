@@ -26,6 +26,7 @@ export default class Index extends Vue {
     { name: '赚积分', url: '/earn/index' },
     { name: '会员信息', url: '/member/index' },
     { name: '登录', url: '/login' },
+    { name: '开通会员卡', url: '/member/openMember' }
   ]
 }
 </script>
