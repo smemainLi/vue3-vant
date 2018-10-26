@@ -1,43 +1,34 @@
 <template>
   <div class="scope">
 
-		<!-- 有效期及时间 -->
+		<!-- 有效期及时间和适用范围等适用 -->
 		<div v-for="(items,indexs) in scopeMsg" :key="indexs">
 			<div class="time">
-				<i class="icon-time"></i><div class="time-msg" v-text="items.title">有效期及时间</div>
+				<i class="icon-time"></i><div class="time-msg" v-text="items.title"></div>
 			</div>
 			<ul>
 				<li v-for="(item,index) in items.content" :key="index">
-					<!-- <div class="dot"></div> -->
 					<span class="dots">●</span>
 					<span v-text="item"></span>
 				</li>
 			</ul>
-
 		</div>
-
-		<!-- 使用范围 -->
-		<!-- <div class="time">
-			<i class="icon-time"></i>
-			<div class="time-msg">使用范围</div>
-		</div>
-		<ul>
-			<li v-for="(item,index) in scopeMsg" :key="index">
-				<div class="dot"></div>
-				<span v-text="item"></span>
-			</li>
-		</ul> -->
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
 
-@Component({
-  props:['scopeMsg'],
-  components: {
+/**
+ * 			scopeMsg --- Array
+ * 				title  标题 （比如有效期及时间）
+ * 				content	 --- Object
+ * 						在 content 对象内随意定义字段就行
+ */
 
-  }
+
+@Component({
+  props:['scopeMsg']
 })
 
 export default class Scope extends Vue {
@@ -50,7 +41,7 @@ export default class Scope extends Vue {
   padding-left: 32px;
 	padding-top:10px;
 	padding-bottom: 92px;
-	background-color: $color-w;
+	background-color: $color-ff;
 	min-height:405px;
 
   .time{
@@ -65,7 +56,6 @@ export default class Scope extends Vue {
 			margin-right: 10px;
 			font-size: $size30;
 			margin-bottom: 4px;
-			// vertical-align: middle;
 		}
 	}
 
@@ -73,28 +63,17 @@ export default class Scope extends Vue {
 		li{
 			display: flex;
 			align-items: center;
-			color: $color-g2;
+			color: $color-88;
 			font-size: $size26;
 			margin-bottom: 10px;
 			letter-spacing:2px;
 		}
 	}
 	
-
-// .dot{
-// 	width: 10px;
-// 	height: 10px;
-// 	background-color: $color-g2;
-// 	border-radius: 50% !important;
-// 	display: inline-block;
-// 	margin-right: 10px;
-// 	}
 .dots{
 	font-size: 20px;
 	margin-right: 8px;
 	line-height: 35px;
 	}
 }
-
-
 </style>

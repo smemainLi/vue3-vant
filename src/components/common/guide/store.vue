@@ -45,8 +45,8 @@ export default class Tab extends Vue {
 </script>
 <style lang="scss" scoped>
 .store {
-  background-color: $color-w;
-  border-top: 1px solid $color-g;
+  background-color: $color-ff;
+  border-top: 1px solid $color-f5;
   padding-bottom: 28px;
   .introduce,
   .discount {
@@ -71,7 +71,7 @@ export default class Tab extends Vue {
         line-height: 32px;
         padding-left: 9px;
         box-sizing: border-box;
-        color: $color-g;
+        color: $color-f5;
         background-color: rgba(0, 0, 0, 0.3);
       }
     }
@@ -83,7 +83,7 @@ export default class Tab extends Vue {
         font-size: 28px;
       }
       .store-brief {
-        color: $color-g2;
+        color: $color-88;
         font-size: 24px;
         padding-top: 12px;
       }
@@ -105,13 +105,13 @@ export default class Tab extends Vue {
       .title {
         width: 30px;
         height: 30px;
-        color: $color-g;
+        color: $color-f5;
         line-height: 30px;
         text-align: center;
         display: inline-block;
       }
       .content {
-        color: $color-g2;
+        color: $color-88;
         display: inline-block;
         margin-left: 19px;
       }

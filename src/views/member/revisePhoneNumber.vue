@@ -41,7 +41,7 @@ export default class RevisePhoneNumber extends Vue {
   height: 100%;
   width: calc(100%-64px);
   padding:0 32px;
-  background-color: $color-w;
+  background-color: $color-ff;
   overflow: hidden;
 
   .input-one{
@@ -65,7 +65,7 @@ export default class RevisePhoneNumber extends Vue {
       border-radius: 10px;
     }
     .identifying-two{
-      background-color: $color-y;
+      background-color: $color-fb;
       width: 178px;
       height: 88px;
       line-height: 88px;
@@ -80,7 +80,7 @@ export default class RevisePhoneNumber extends Vue {
     height: 88px;
     width: 100%;
     border:0;
-    background-color: $color-y;
+    background-color: $color-fb;
     font-size: $size36;
     color:$color-35;
     border-radius: 10px;
@@ -88,7 +88,7 @@ export default class RevisePhoneNumber extends Vue {
   }
 
   p{
-    color:$color-g2;
+    color:$color-88;
     font-size: $size26;
   }
 }

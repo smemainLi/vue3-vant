@@ -20,28 +20,26 @@ import { Component, Provide, Vue } from "vue-property-decorator";
 
 @Component({
   props:{
-    borderColor:{   //给加上border-bottom
+    borderColor:{   //是否加上border-bottom
       type:Boolean,
       default:false
     },
-    title:{
+    title:{         //左边主体内容
       type:String,
       default:''
     },
-    text:{
+    text:{          //右边信息文字
       type:String,
       default:''
     },
-    imgUrl:{
+    imgUrl:{       // 最左边图标
       type:String,
       default:require('@/assets/image/member/my.png')
     },
-    component:{
+    component:{    //要跳转的页面name  组件name
       type:String,
       default:""
     }
-  },
-  components: {
   }
 })
 export default class DataCard extends Vue {
@@ -53,7 +51,7 @@ export default class DataCard extends Vue {
   .data{
     font-size: $size28;
     padding: 0 36px;
-    background-color: $color-w;
+    background-color: $color-ff;
     .data-top{
       width: 100%;
       display: flex;
@@ -85,7 +83,6 @@ export default class DataCard extends Vue {
 }
 
 [class^='van-icon']{
-  // color: #888888 !important;
   margin-left: 10px;
 }
 </style>

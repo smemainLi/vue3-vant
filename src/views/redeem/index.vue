@@ -1,13 +1,15 @@
 <template>
   <div class="store">
-    <!-- top -->
+  <!-- top -->
     <indexTop redeem="5800"></indexTop>
-
+    
+  <!-- 去赚积分和积分明细 -->
     <div class="exchange">
       <div class="border-color">去赚积分</div>
       <router-link tag="div" :to="{name:'integralDetail'}">积分明细</router-link>
     </div>
 
+  <!-- 游戏币和停车缴费 -->
     <div class="function">
       <functionCard text="100积分/1个" @trigger="exchangeGame" :imgUrl="require('../../assets/image/redeem/gemeBG.png')"></functionCard>
       <functionCard text="100积分/1元" @trigger="$router.push({name:'parking'})" :imgUrl="require('../../assets/image/redeem/parkingBG.png')"></functionCard>
@@ -18,7 +20,7 @@
 
     <!-- 商品展示 -->
     <div class="arrondi-content">
-      <goodsCard v-for="item in 4" :key="item" class="arrondi-item">
+      <goodsCard v-for="item in 4" :key="item" :goodsInfo="goodsInfo" class="arrondi-item">
         <Mybutton bgColor="#F56E72" v-if="item===1">
           100分/个 点击兑换
         </Mybutton>
@@ -31,39 +33,51 @@
         <Mybutton bgColor="#A6B5F7" v-else>
           100分/个 点击兑换
         </Mybutton>
-
       </goodsCard>
     </div>
+
+
+    <dialong ref="dialong" @confirm="confirm"></dialong>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Provide, Vue } from "vue-property-decorator";
-import path from "../../config/componentsPath"
+import { Component, Provide, Vue, Watch } from "vue-property-decorator";
+import indexTop from "@/components/common/redeem/indexTop.vue"
+import functionCard from "@/components/common/redeem/functionCard.vue"
+import Mybutton from "@/components/common/redeem/myButton.vue"
+import goodsCard from "@/components/common/redeem/goodsCard.vue"
+import dialong from "@/components/common/redeem/dialong.vue"
 
 @Component({
   components: {
-    indexTop: path.indexTop,
-    functionCard: path.functionCard,
-    Mybutton: path.Mybutton,
-    goodsCard: path.goodsCard
+    indexTop: indexTop,
+    functionCard: functionCard,
+    Mybutton: Mybutton,
+    goodsCard: goodsCard,
+    dialong: dialong
   }
 })
 export default class Store extends Vue {
+  value:Number = 0  //输入框的数字
 
-  exchangeGame() {
-    this.$dialog.confirm({
-      title: '标题',
-      message: '大佬说，她还没决定好,等她决定好了，再来弄'
-    }).then(() => {
-      // on confirm
-    }).catch(() => {
-      // on cancel
-    });
-
+// 礼品的信息
+  goodsInfo = {
+    goodsName:"超特价柔软毛巾",
+    price:"¥100.00",
+    surplus:"余998"
   }
 
-  mounted() {
+// 弹框的子组件点击确定后触发父组件的方法
+// 把输入框的数值传递给父组件
+  confirm(data){
+    this.value = data
+  }
+
+// 子组件触发父组件的方法
+  exchangeGame(){
+    // this.$refs.dialong.showDialong(true)
+    this.$refs.dialong["showDialong"](true)
   }
 }
 </script>
@@ -75,7 +89,7 @@ export default class Store extends Vue {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: $color-w;
+    background: $color-ff;
     margin: 15px 0;
 
     div {
@@ -87,7 +101,7 @@ export default class Store extends Vue {
   }
   .function {
     height: 218px;
-    background-color: $color-w;
+    background-color: $color-ff;
     display: flex;
     align-items: center;
     justify-content: space-between;

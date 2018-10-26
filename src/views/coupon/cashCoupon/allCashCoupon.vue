@@ -30,7 +30,7 @@
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
 import Tab from "@/components/common/coupon/tab.vue"
-import tabUse from '@/components/common/coupon/tabUse.vue'
+// import tabUse from '@/components/common/coupon/tabUse.vue'
 import ContentModel from '@/components/common/coupon/contentModel.vue'
 
 // 定义内容模块的接口信息
@@ -45,7 +45,6 @@ interface contentMsg{
 @Component({
   components: {
 		Tab,
-		tabUse,
 		ContentModel
   }
 })

@@ -86,7 +86,10 @@ export default class SelectCard extends Vue {
 
 // 弹出框
   popup(index:number){
-    if(index==2) return
+    if(index===2){
+      this.$router.push({name:"cardNumber"})
+      return
+    }
     this.indexs = index
     this.show = true
   }
@@ -96,7 +99,7 @@ export default class SelectCard extends Vue {
 <style lang="scss" scoped>
 .select-card{
   font-size: $size28;
-  background-color: $color-w;
+  background-color: $color-ff;
   padding: 0 45px 0 35px;
 
   .content{
@@ -121,6 +124,6 @@ export default class SelectCard extends Vue {
 }
 .box-right /deep/ .van-icon{
   font-size: $size26 !important;
-  color: $color-g2;
+  color: $color-88;
 }
 </style>

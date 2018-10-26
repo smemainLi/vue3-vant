@@ -137,7 +137,7 @@ export default class DetailPage extends Vue {
         right: 32px;
         line-height: 124px;
         font-size: 70px;
-        color: $color-w;
+        color: $color-ff;
       }
     }
     .pop-box-middle {

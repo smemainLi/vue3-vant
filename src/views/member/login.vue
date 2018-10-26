@@ -3,17 +3,17 @@
     <div class="group">
       <div class="input-file">
         <i class="icon-personal-phone"></i>
-        <input type="text" v-model="account" placeholder="请输入手机号码">
+        <input type="number" @touchstart.native.stop="show=true" v-model="account" :placeholder="accountPlaceholder">
       </div>
       <div class="input-file">
         <i class="icon-lock"></i>
-        <input type="password" v-model="pwd" placeholder="请输入手机号码">
+        <input type="password" v-model="pwd" :placeholder="pwdPlaceholder">
       </div>
-      <commonBtn></commonBtn>
+      <commonBtn @click.native="login()"></commonBtn>
     </div>
     <div class="tips">
-      <div class="no-account">还没有账号</div>
-      <router-link tag="div" :to="{name:'forgetPassword'}" class="forget-pwd">忘记密码</router-link>
+      <router-link tag="div" :to="{name:'openMember'}" class="no-account" v-cloak>{{noAccount}}</router-link>
+      <router-link tag="div" :to="{name:'forgetPassword'}" class="forget-pwd" v-cloak>{{forgetPwd}}</router-link>
     </div>
   </div>
 </template>
@@ -24,6 +24,7 @@ import { codePic, isLogin, login } from "@/service/getData";
 import { LOGIN } from "../../lang/zh";
 import { getCookie } from '../../config/utils';
 import commonBtn from "../../components/common/button.vue"
+import md5 from 'js-md5';
 
 @Component({
   components: {
@@ -31,35 +32,21 @@ import commonBtn from "../../components/common/button.vue"
   }
 })
 export default class Login extends Vue {
-  account = '';
+  account = '13536540921';
   pwd = '';
+
+  accountPlaceholder = "请输入手机号码";
+  pwdPlaceholder = "请输入密码";
+  noAccount = "还没有账号";
+  forgetPwd = "忘记密码";
 
   @Provide()
   btnName: string = '登录';
-  /* mainButton = LOGIN.TEST01; */
-
-  /* async getCodePic() {
-    const res = await codePic();
-    console.log(res);
-  }
-  async isLogin() {
-    const res = await isLogin();
-    console.log(res);
-    console.log(res.data.login);
-  } */
 
   async login() {
-    /**
-     * 测试账号
-     * 13536540921
-     * 测试密码
-     * e10adc3949ba59abbe56e057f20f883e
-     */
-    const res = await login(this.account, this.pwd);
+    const res = await login(this.account, this.pwd = md5(this.pwd));
     console.log(res);
     console.log(res.message);
-    const coo1 = await getCookie('qi_openid');
-    console.log(coo1);
   }
 
 }
@@ -68,7 +55,7 @@ export default class Login extends Vue {
 <style lang="scss" scoped>
 .login {
   height: 100%;
-  background-color: $color-w;
+  background-color: $color-ff;
   .group {
     text-align: center;
     padding-top: 74px;
@@ -80,7 +67,7 @@ export default class Login extends Vue {
         left: 53px;
         top: 36px;
         font-size: 34px;
-        color: $color-g2;
+        color: $color-88;
       }
       input {
         /* outline: none; */

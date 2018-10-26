@@ -14,8 +14,8 @@ const router = new Router({
     { path: "/", name: "index", meta: { title: '主页面' }, component: routerPath.index },
 
     // 积分停车
-    { path: "/parking/index", name: "parking", meta: { title: '停车缴费' }, component: routerPath.parking },
-    { path: "/parking/parkingFee", name: "parkingFee", meta: { title: '支付停车缴费' }, component: routerPath.parkingFee },
+    { path: "/parking/index", name: "parking", meta: { title: '积分停车' }, component: routerPath.parking },
+    { path: "/parking/parkingFee", name: "parkingFee", meta: { title: '积分停车' }, component: routerPath.parkingFee },
     { path: "/parking/successDeduct", name: "successDeduct", meta: { title: '积分抵扣成功' }, component: routerPath.successDeduct },
     { path: "/parking/paymentRecord", name: "paymentRecord", meta: { title: '缴费记录' }, component: routerPath.paymentRecord },
 
@@ -59,6 +59,7 @@ const router = new Router({
     { path: "/member/openMember", name: "openMember", meta: { title: '开通会员卡' }, component: routerPath.openMember },
     { path: "/member/memberRank", name: "memberRank", meta: { title: '会员等级' }, component: routerPath.memberRank },
     { path: "/member/selectData", name: "selectData", meta: { title: '我的资料' }, component: routerPath.selectData },
+    { path: "/member/cardNumber", name: "cardNumber", meta: { title: '车牌号' }, component: routerPath.cardNumber },
 
     // 账号登录
     { path: "/login", name: "login", meta: { title: '账号登录' }, component: routerPath.login },

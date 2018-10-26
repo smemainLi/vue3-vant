@@ -47,7 +47,7 @@ export default class Card extends Vue {
   padding: 14px 32px;
   box-sizing: border-box;
   position: relative;
-  background-color: $color-w;
+  background-color: $color-ff;
   z-index: -3;
   .no-card {
     height: 410px;
@@ -73,7 +73,7 @@ export default class Card extends Vue {
       background-color: rgba(0, 0, 0, 0.3);
       position: absolute;
       z-index: 2;
-      color: $color-w;
+      color: $color-ff;
       font-size: 40px;
       text-align: center;
       line-height: 240px;

@@ -40,7 +40,7 @@ export default class Deduction extends Vue {
 </script>
 <style lang="scss" scoped>
 .deduction {
-  background-color: $color-w;
+  background-color: $color-ff;
   padding-top: 10px;
   text-align: left;
   .confirm {
@@ -95,7 +95,7 @@ export default class Deduction extends Vue {
         color: #f56e72;
       }
       .content-integral {
-        color: $color-g2;
+        color: $color-88;
       }
     }
   }

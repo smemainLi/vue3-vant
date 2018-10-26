@@ -24,7 +24,7 @@ export default class GrowUpValue extends Vue {
 .grow-up-value{
   // overflow: hidden;
   // min-height: 712px;
-  background: $color-w;
+  background: $color-ff;
   padding: 23px 30px 0 30px;
   
   .title{
@@ -36,7 +36,7 @@ export default class GrowUpValue extends Vue {
     .upright{
       width:11px;
       height:37px;
-      background: $color-y;
+      background: $color-fb;
       margin-right: 15px;
     }
   }

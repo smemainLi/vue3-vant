@@ -100,7 +100,7 @@ export default class GoodsSwiper extends Vue {
             color: $color-35;
           }
           .goods-price {
-            color: $color-g2;
+            color: $color-88;
           }
         }
       }

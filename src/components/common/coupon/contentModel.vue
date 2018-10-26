@@ -4,11 +4,11 @@
 			<img src="@/assets/image/coupon/store.png" alt="">
 			<div class="content-title">
 				<span class='title' v-text="contentText.title"></span>
-				<span class="coupon-text" v-text="contentText.coupon">满100减200</span>
+				<span class="coupon-text" v-text="contentText.coupon"></span>
 			</div>
 		</div>
 
-		<!-- 以下主要针对优惠券等的主页面和待使用等的页面区分 > 和 button -->
+		<!-- 以下主要针对优惠券等的主页面和待使用等的页面区分" > "和 button -->
 	<button v-if="'isUse' in contentText" :class="['button',contentText.isUse? 'yes':'']" v-text="contentText.useText"></button>
 	<van-icon v-else class="icon" name="arrow" />
 </div>
@@ -16,6 +16,13 @@
 
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
+/**
+ *  contentText --- Object
+ *  	 title   ---> 餐馆名字
+ * 		 coupon  ---> 优惠
+ * 		 isUse   ---> 按钮样式 （不传就不显示按钮，只显示 > ）
+ * 		 useText ---> 按钮文字
+ * */  
 
 @Component({
 	props:['contentText'], 

@@ -7,6 +7,7 @@ import functionCard from "../components/common/redeem/functionCard.vue"
 import Mybutton from "../components/common/redeem/myButton.vue"
 import goodsCard from "../components/common/redeem/goodsCard.vue"
 import couponTitle from "../components/common/guide/couponTitle.vue"
+import dialong from "../components/common/redeem/dialong.vue"
 // 赚积分
 import earnTitle from "../components/common/earn/earnTitle.vue"
 import taskCard from "../components/common/earn/taskCard.vue"
@@ -23,7 +24,8 @@ export default {
   couponTitle,
   earnTitle,
   taskCard,
-  moreIntegral
+  moreIntegral,
+  dialong
 }
 
 // export default "@/components/common/redeem/indexTop.vue"

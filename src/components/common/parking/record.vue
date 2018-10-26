@@ -29,7 +29,7 @@ export default class Record extends Vue {
   margin-bottom: 14px;
   .details {
     padding: 56px 0;
-    background-color: $color-w;
+    background-color: $color-ff;
     .row {
       .left {
         display: inline-block;
@@ -50,11 +50,11 @@ export default class Record extends Vue {
       }
       .integral {
         font-size: 26px;
-        color: $color-g2;
+        color: $color-88;
       }
       .time {
         font-size: 24px;
-        color: $color-g2;
+        color: $color-88;
       }
     }
   }

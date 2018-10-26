@@ -10,7 +10,6 @@
     <!-- 有效期及时间和适用范围 -->
 		  <scope :scopeMsg="scopeMsg"></scope>
 
-
   </div>
 </template>
 <script lang="ts">

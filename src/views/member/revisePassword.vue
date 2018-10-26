@@ -28,7 +28,7 @@ export default class RevisePassword extends Vue {
   height: calc(100%-74px);
   width: calc(100%-64px);
   padding: 74px 32px 0 32px;
-  background-color: $color-w;
+  background-color: $color-ff;
 
   .myInput{
     width: 100%;
@@ -39,7 +39,7 @@ export default class RevisePassword extends Vue {
     border:0;
     width: 686px;
     height: 88px;
-    background-color: $color-y;
+    background-color: $color-fb;
     padding: 0;
     color:$color-35;
     font-size: $size36;

@@ -1,13 +1,11 @@
 <template>
   <div class="member">
     <!-- 会员信息头部 -->
-    <dataTop></dataTop>
+    <dataTop :userInfo="userInfo"></dataTop>
 
     <!-- 功能卡片tab 上-->
     <div class="center">
       <dataCard borderColor title="我的资料" text="完善即+5积分" component="selectData"></dataCard>
-      
-
       <dataCard title="135***66896"  text="修改手机号码" component="revisePhoneNumber" :imgUrl="require('../../assets/image/member/phone.png')"></dataCard>
     </div>
 
@@ -38,6 +36,13 @@ import bar from "@/components/common/member/bar.vue"
 
 
 export default class Member extends Vue {
+  userInfo={
+    name:"小小星星高高挂",                               //用户名
+    myIntegral:"16850",                                 //我的积分
+    integrationRanking:"112",                           //积分排名
+    imgUrl:require("@/assets/image/coupon/store.png"),  //头像
+    qrCode:require("@/assets/image/member/QR-code.png") //二维码
+  }
 }
 </script>
 

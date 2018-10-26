@@ -30,7 +30,7 @@ export default class Guide extends Vue {
 <style lang="scss" scoped>
 .ar {
   height: 100%;
-  background-color: $color-w;
+  background-color: $color-ff;
   text-align: center;
   .actual-scenery {
     padding-top: 300px;

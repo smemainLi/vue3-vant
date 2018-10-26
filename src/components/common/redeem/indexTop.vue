@@ -15,7 +15,7 @@
 import { Component, Provide, Vue } from "vue-property-decorator";
   @Component({
     props:{
-      redeem:{
+      redeem:{       //当前积分
         type:String,
         default:''
       }
@@ -36,7 +36,7 @@ export default class IndexTop extends Vue {
     background-size: 100% 100% ;
 
     .content-left{
-      color:$color-w;
+      color:$color-ff;
       position: absolute;
       top:31px;
       left: 34px;

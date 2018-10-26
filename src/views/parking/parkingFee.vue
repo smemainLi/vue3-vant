@@ -1,7 +1,10 @@
 <template>
   <div class="parkingFee">
     <deduction></deduction>
-    <commonBtn :class="[{commonBtn:!needToPay}]" @click.native="deduct()"></commonBtn>
+    <router-link :to="{path:'/parking/successDeduct'}">
+      <commonBtn :class="[{commonBtn:!needToPay}]"></commonBtn>
+    </router-link>
+
   </div>
 </template>
 <script lang="ts">
@@ -66,14 +69,11 @@ export default class ParkingFee extends Vue {
   @Provide()
   deduction: Array<deductionInfo> = this.deductionInfo;
 
-  deduct() {
-    this.$router.push({ path: '/parking/successDeduct' });
-  }
 }
 </script>
 <style lang="scss">
 body {
-  background-color: $color-g;
+  background-color: $color-f5;
 }
 </style>
 <style lang="scss" scoped>

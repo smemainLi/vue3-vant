@@ -23,7 +23,7 @@ export default class GrowValueIllustrate extends Vue {
 
 <style lang="scss" scoped>
 .grow-value-illustrate{
-  background:$color-w;
+  background:$color-ff;
   padding:21px 25px 113px 25px;
   .top{
     display: flex;
@@ -33,7 +33,7 @@ export default class GrowValueIllustrate extends Vue {
     .upright{
       width:11px;
       height:37px;
-      background:$color-y;
+      background:$color-fb;
       margin-right: 15px;
     }
     .title{
@@ -43,7 +43,7 @@ export default class GrowValueIllustrate extends Vue {
   }
 
   .bottom{
-    color: $color-g2;
+    color: $color-88;
     font-size: $size27;
     margin-top:40px;
   }

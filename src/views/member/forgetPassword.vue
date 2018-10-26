@@ -54,7 +54,7 @@ export default class ForgetPassword extends Vue {
 <style lang="scss" scoped>
 .forget-password{
   height: 100%;
-  background-color: $color-w;
+  background-color: $color-ff;
 
   .only{
     display: flex;
@@ -77,7 +77,7 @@ export default class ForgetPassword extends Vue {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color:$color-w;
+    background-color:$color-ff;
     padding-top: 70px;
     .myInput{
       width: 686px;
@@ -90,7 +90,7 @@ export default class ForgetPassword extends Vue {
     width: 686px;
     height: 88px;
     border-radius: 10px;
-    background-color:$color-y;
+    background-color:$color-fb;
     color:#353535;
     font-size: $size36;
     font-weight:500;

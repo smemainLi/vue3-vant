@@ -72,7 +72,7 @@ export default class CashCouponWaitUse extends Vue {
 .cash-coupon-wait-use{
   .add{
     height: 87px;
-    background-color: $color-w;
+    background-color: $color-ff;
     padding-left: 30px;
     display: flex;
     align-items: center;
@@ -88,7 +88,7 @@ export default class CashCouponWaitUse extends Vue {
     }
 
     .dot-index{
-      color: $color-y;
+      color: $color-fb;
       font-size: 20px;
       margin-right: 8px;
     }

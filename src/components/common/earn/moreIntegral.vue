@@ -17,24 +17,22 @@ import { Component, Provide, Vue } from "vue-property-decorator";
 
 @Component({
   props:{
-    imgUrl:{
+    imgUrl:{    //img url
       type:String,
       default:require("@/assets/image/earn/integral.png")
     },
-    text:{
+    text:{      //获取积分的方式，文字描述
       type:String,
       default:'消费后向卖家索取'
     },
-    component:{
+    component:{ //要跳转的页面 模板 name
       type:String,
       default:'guide'
     },
-    skipText:{
+    skipText:{  //获取积分的方式，右边的文字描述
       type:String,
       default:"去逛逛 >>"
     }
-  },
-  components: {
   }
 })
 export default class MoreIntegral extends Vue {
@@ -50,7 +48,7 @@ export default class MoreIntegral extends Vue {
   margin-bottom: 24px;
   .box{
     height: 218px;
-    background-color:$color-w;
+    background-color:$color-ff;
     display: flex;
     align-items: center;
     justify-content: space-between;

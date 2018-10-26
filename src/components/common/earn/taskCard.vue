@@ -27,45 +27,43 @@
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
 
+// ！！注意  邀请人数还没有该字段
+
 @Component({
   props:{
-    // 按钮文字
-    btnText:{
+    btnText:{     // 按钮文字
       type:String,
       default:"已完善"
     },
-    // 是否已分享，已完善
-    isActive:{
+    isActive:{    // 是否已分享，或者是已完善
       type:Boolean,
       default:false
     },
-    number:{
+    number:{     // 分享次数或者是邀请可获积分
       type:String,
       default:''
     },
-    value:{
+    value:{     // 分值左边的那些
       type:String,
       default:"+5分"
     },
-    content:{
+    content:{  // 完善资料
       type:String,
       default:'完善资料后即可获得'
     }
-  },
-  components: {
-
   }
 })
 export default class TaskCard extends Vue {
   register:Boolean = false;   //是否签到
   
+  // 点击按钮
   skip(name){
     if(name==="去完善"){
       this.$router.push({name:'selectData'})
     }else if(name==='去分享'){
-      alert("去分享")
+      this.$emit('goShare')
     }else if(name==="去邀请"){
-      alert("去邀请")
+      this.$emit('goShare')
     }
   }
 }
@@ -75,7 +73,7 @@ export default class TaskCard extends Vue {
 .task-card{
   .content{
     height: 218px;
-    background-color: $color-w;
+    background-color: $color-ff;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -90,7 +88,7 @@ export default class TaskCard extends Vue {
       width: 226px;
       border-radius: 10px;
       background-color: $color-d2;
-      color:$color-w;
+      color:$color-ff;
     }
 
     .content-left{
@@ -110,7 +108,7 @@ export default class TaskCard extends Vue {
 
     .invite{
       font-size: $size28;
-      color:$color-g2;
+      color:$color-88;
       position: absolute;
       right: 54px;
       bottom: 24px;

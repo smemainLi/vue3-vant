@@ -40,7 +40,7 @@ export default class RankTop extends Vue {
 <style lang="scss" scoped>
 .member-info{
   height: 280px;
-  background-color: $color-w;
+  background-color: $color-ff;
   overflow: hidden;
   padding: 0 27px;
 
@@ -83,7 +83,7 @@ export default class RankTop extends Vue {
   .foot{
     display: flex;
     justify-content: space-between;
-    color:$color-g2;
+    color:$color-88;
     font-size: $size28;
   }
 }

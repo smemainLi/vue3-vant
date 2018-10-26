@@ -42,7 +42,7 @@ img{
 }
 
 .coupon{
-  background-color: $color-w;
+  background-color: $color-ff;
   display: flex;
   flex-direction: column;
   justify-content: center;

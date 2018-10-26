@@ -5,10 +5,10 @@
        <img src="../../../assets/image/coupon/store.png" alt="">
      </div>
      <div class="content-bottom">
-       <div class="title">超特价柔软毛巾</div>
+       <div class="title" v-text="goodsInfo.goodsName"></div>
        <div class="price">
-         <div>¥100.00</div>
-         <div>余998</div>
+         <div v-text="goodsInfo.price"></div>
+         <div v-text="goodsInfo.surplus"></div>
        </div>
      </div>
      <slot></slot>
@@ -18,13 +18,15 @@
 
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
-
-
+/**
+ *      goodsInfo     -----  Object
+ *          goodsName   商品名字
+ *          price       价格
+ *          surplus     剩余多少件商品
+ */
 
 @Component({
-  components: {
-   
-  }
+  props:["goodsInfo"]
 })
 export default class GoodsCard extends Vue {
   

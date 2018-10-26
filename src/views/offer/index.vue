@@ -80,7 +80,7 @@ export default class Member extends Vue {
     }
     .btn {
       text-align: center;
-      background-color: $color-w;
+      background-color: $color-ff;
       .commonBtn {
         margin: 72px 0 65px 0;
         width: 326px;

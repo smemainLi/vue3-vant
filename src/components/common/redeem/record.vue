@@ -34,7 +34,7 @@ export default class Record extends Vue {
   .record-row {
     width: 750px;
     height: 180px;
-    background-color: $color-w;
+    background-color: $color-ff;
     box-sizing: border-box;
     margin-bottom: 24px;
     .score {
@@ -42,7 +42,7 @@ export default class Record extends Vue {
       height: 56px;
       background: #fbde19;
       border-radius: 10px;
-      color: $color-w;
+      color: $color-ff;
       text-align: center;
       margin: 62px 0 0 40px;
       float: left;
@@ -77,7 +77,7 @@ export default class Record extends Vue {
           display: inline-block;
           margin-left: 16px;
           font-size: 24px;
-          color: $color-g2;
+          color: $color-88;
         }
       }
     }

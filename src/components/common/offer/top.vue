@@ -30,7 +30,7 @@ export default class Top extends Vue {
   .store-title {
     width: 750px;
     height: 194px;
-    background-color: $color-w;
+    background-color: $color-ff;
     .store-photo {
       width: 111px;
       height: 111px;

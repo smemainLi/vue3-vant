@@ -10,10 +10,13 @@
 
 <script lang="ts">
 import { Component, Provide, Vue, Watch } from "vue-property-decorator";
-
-
-
-
+/** 
+ *  四个参数 （*为必传）
+ *   * 一、输入框的值，外面直接v-model绑定一个phoneNumber的值(随便一个字段)
+ *     二、指定input的type类型 ===》type
+ *     三、input的placeholder  ===》placeholder
+ *     四、input的左边图标 ===》icon （使用字体图标）
+*/
 @Component({
   model:{
     event:'phoneNumber'

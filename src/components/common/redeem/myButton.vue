@@ -11,13 +11,10 @@ import { Component, Provide, Vue } from "vue-property-decorator";
 
 @Component({
   props:{
-    bgColor:{
+    bgColor:{          //控制backgroundColor和border
       type:String,
       default:'#F5F5F5'
-    },
-  },
-  components: {
-
+    }
   }
 })
 export default class MyButton extends Vue {
@@ -41,11 +38,11 @@ export default class MyButton extends Vue {
   }
 
   .boder-font{
-    border:1px solid $color-g2;
-    color:$color-g2
+    border:1px solid $color-88;
+    color:$color-88
   }
   .font-color{
-    color: $color-w;
+    color: $color-ff;
   }
 }
 

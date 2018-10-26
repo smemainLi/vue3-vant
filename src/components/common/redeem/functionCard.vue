@@ -10,21 +10,16 @@
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
 
-
-
 @Component({
   props:{
-    text:{
+    text:{              //文字显示（如 100积分/1个）
       type:String,
       default:''
     },
-    imgUrl:{
+    imgUrl:{            //图片 url
       type:String,
       default:''
     }
-  },
-  components: {
-
   }
 })
 export default class FunctionCard extends Vue {
@@ -40,7 +35,7 @@ export default class FunctionCard extends Vue {
     height: 178px;
     width: 274px;
     object-fit: cover;
-    color: $color-w;
+    color: $color-ff;
     font-size: $size26;
     position: relative;
     img{

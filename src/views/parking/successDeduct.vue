@@ -47,7 +47,7 @@ export default class ParkingFee extends Vue {
   padding-top: 10px;
   text-align: center;
   .successDeduct-content {
-    background-color: $color-w;
+    background-color: $color-ff;
     .tick-photo {
       padding-top: 92px;
       .tick-image {
@@ -75,7 +75,7 @@ export default class ParkingFee extends Vue {
         text-align: left;
         margin: 30px 0 0 45px;
         .title {
-          color: $color-g2;
+          color: $color-88;
           display: inline-block;
         }
         .content {

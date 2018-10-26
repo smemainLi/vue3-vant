@@ -13,8 +13,6 @@
         <img :src="codeMsg.codeUrl" alt="">
 
     </div>
-
-      
   </div>
 </template>
 
@@ -24,11 +22,14 @@ import { Component, Provide, Vue } from "vue-property-decorator";
 
 // 券码  判断按钮的class，文字
 // 消费时间
+/**
+ *      codeMsg  --- Object
+ *          code     券码
+ *          codeUrl  二维码的url
+ */
 
 @Component({
-  props:["codeMsg"],
-  components: {
-  }
+  props:["codeMsg"]
 })
 
 export default class Waituse extends Vue {
@@ -40,7 +41,7 @@ export default class Waituse extends Vue {
 <style lang='scss' scoped>
 .couponCode{
   .Code-and-QRCode{
-    background-color: $color-w;
+    background-color: $color-ff;
     padding: 0 30px;
     margin-top: 24px;
     margin-bottom: 23px;
@@ -59,7 +60,7 @@ export default class Waituse extends Vue {
         height: 37px;
         line-height: 37px;
         font-size: $size32;
-        border-left: 11px solid $color-y;
+        border-left: 11px solid $color-fb;
         padding-left: 15px;
       }
     }

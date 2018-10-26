@@ -19,9 +19,6 @@ import contentModel from "@/components/common/coupon/contentModel.vue"
 import waitUse from "@/components/common/coupon/waitUse.vue"
 import scope from "@/components/common/coupon/scope.vue"
 
-
-
-
 @Component({
   components: {
     contentModel,

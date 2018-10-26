@@ -17,7 +17,7 @@ export default class CouponTitle extends Vue {
 <style lang="scss" scoped>
 .couponTitle {
   height: 96px;
-  background-color: $color-w;
+  background-color: $color-ff;
   padding: 29px 0;
   box-sizing: border-box;
   .title-content {

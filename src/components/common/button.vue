@@ -22,5 +22,6 @@ button {
   background: #fbde19;
   border-radius: 10px;
   margin-top: 100px;
+  color: $color-35;
 }
 </style>

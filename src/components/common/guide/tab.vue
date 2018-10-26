@@ -23,7 +23,7 @@ export default class Tab extends Vue {
   padding-top: 10px;
   // 样式渗透
   /deep/ .van-tab {
-    color: $color-g2;
+    color: $color-88;
   }
   /deep/ .van-tab--active {
     color: $color-35;

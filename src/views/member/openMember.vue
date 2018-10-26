@@ -66,7 +66,7 @@ export default class OpenMember extends Vue {
 <style lang="scss" scoped>
 .open-member{
   height: calc(100%-70px);
-  background-color: $color-w;
+  background-color: $color-ff;
   padding-top: 70px;
 
   .only{
@@ -101,7 +101,7 @@ export default class OpenMember extends Vue {
     width: 686px;
     height: 88px;
     border-radius: 10px;
-    background-color:$color-y;
+    background-color:$color-fb;
     color:#353535;
     font-size: $size36;
     font-weight:500;

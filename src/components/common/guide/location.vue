@@ -27,7 +27,7 @@ export default class Location extends Vue {
   margin-top: 10px;
   height: 134px;
   width: 100%;
-  background-color: $color-w;
+  background-color: $color-ff;
   font-size: 24px;
   .coordinates {
     line-height: 134px;
@@ -41,7 +41,7 @@ export default class Location extends Vue {
     margin-left: 10px;
     line-height: 134px;
     float: left;
-    color: $color-g2;
+    color: $color-88;
   }
   .telephone {
     float: right;
