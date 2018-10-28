@@ -14,15 +14,13 @@ module.exports = {
     hotOnly: false,
     proxy: null,
     /* {
-         '/api': {
-           target: 'wyw-wx.qi-cloud.com',
-           ws: true,
-           changeOrigin: true,
-         }
-       } */
+      '/api': {
+        target: 'wyw-wx.qi-cloud.com',
+        ws: true,
+        changeOrigin: true,
+      }
+    } */
   },
-
-
   chainWebpack: config => {
     const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
     types.forEach(type => addStyleResource(config.module.rule('scss').oneOf(type)))

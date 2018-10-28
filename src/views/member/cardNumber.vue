@@ -4,7 +4,6 @@
       <div class="car-content-title">
         <span>车牌号</span>
         <label class="ze-checkbox">
-
           <input type="checkbox" v-model="checkbox">
           <span class="ze-checkbox-icon" style="width: 20px;height: 20px;">
             <i style="width: 6px;height: 12px;"></i>
@@ -20,7 +19,7 @@
               {{areaName}}
             </button>
             <span class="blank-border blank-border-first"></span>
-            <button id='letter' class="flex-btn" @click="btnClickA" v-bind:class="{isClick: isA}">
+            <button id='letter' class="flex-btn" @click="btnClickA()" v-bind:class="{isClick: isA}">
               <!-- isClick样式 -->
               {{areaLetter}}
             </button>
@@ -102,10 +101,10 @@
           </button>
         </div>
         <div class="keyboard-row">
-          <button :disabled="isSelectl" v-for="(item,index) in carNumBottom" :key="index" class="keyboard-row-item bottom" @click="btnBottomNumClick(item)">{{item}}
+          <button :disabled="isSelectl" v-for="(item,index) in carNumBottom" :key="index" class="keyboard-row-item bottom" @click="btnBottomNumClick(item)">{{item}}{{index}}{{index}}
           </button>
-          <button v-for="(j,index) in noneBottom" :key="index+'botton'" class="none-botton">{{j}}{{index}}{{index}}</button><!-- 空格，占据最底部一定的空格数 -->
-          <div class="keyboard-row-item clear" @click="clearClick">
+          <button v-for="(j,index) in noneBottom" :key="index+'botton'" class="none-botton">{{index}}</button><!-- 空格，占据最底部一定的空格数 -->
+          <div class="keyboard-row-item clear" @click="clearClick()">
             <img src="../../assets/image/guide/like.png" alt="删除">
           </div>
         </div>
@@ -124,9 +123,9 @@ export default {
       isDown: false, //键盘隐藏
       isUp: false, //键盘显示
       selected: null,
-      isSelectx: false,
-      isSelectl: false, //选中的不是第一个空
-      key: 1, //车牌号对应键，1对应车牌号码第一位，2对应车牌号码第二位，...以此类推
+      isSelectx: false, //选中'新'
+      isSelectl: false, //选中'临'
+      key: 1, //车牌号对应位，1对应车牌号码第一位，2对应车牌号码第二位，...以此类推
 
       areaName: "", //区域简称
       areaLetter: "", //地市一级代码（车牌号的第二位）
@@ -166,7 +165,7 @@ export default {
         { name: ["琼", "渝", "川", "贵", "云", "藏", "陕", "甘", "青", "宁"] }
       ],
       carNumBottom: ["W", "X", "Y", "Z"],
-      noneBottom: ["f", "f", "f", "f"],
+      noneBottom: ["", "", "", ""],
       noneBottomtxt: ["", "", "", "", "", ""],
       carNum: [
         { name: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"] },
@@ -344,10 +343,27 @@ export default {
       this.key = 1;
     },
 
+    /**
+     * carTxt: [
+     *       { name: ["粤", "京", "冀", "沪", "津", "晋", "蒙", "辽", "吉", "黑"] },
+     *       { name: ["苏", "浙", "皖", "闽", "赣", "鲁", "豫", "鄂", "湘", "桂"] },
+     *       { name: ["琼", "渝", "川", "贵", "云", "藏", "陕", "甘", "青", "宁"] }
+     *    ],
+     * carNum: [
+        { name: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"] },
+        { name: ["A", "B", "C", "D", "E", "F", "G", "H", "J", "K"] },
+        { name: ["L", "M", "N", "P", "Q", "R", "S", "T", "U", "V"] }
+      ],
+     * rows 表示carTxt/carNum数据的下标，0、1、2行
+     * index 表示具体行数据的下标，["粤", "京", "冀", "沪", "津", "晋", "蒙", "辽", "吉", "黑"]/["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]的下标
+     * i 表示具体行里面具体的某个汉字，["粤", "京", "冀", "沪", "津", "晋", "蒙", "辽", "吉", "黑"]/["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]的具体文字
+     */
     btnWordClick(rows, index, i) {
       this.selected = i;
       if (this.key === 1) {
+        //key 车牌号对应位，1对应车牌号码第一位，2对应车牌号码第二位，...以此类推
         if (this.areaName === "临") {
+          //'临'不在carTxt内，所以点击carTxt以外的字是不会触发btnWordClick方法
           this.areaLetter = "";
           this.numOne = "";
           this.numTwo = "";
@@ -357,9 +373,10 @@ export default {
           this.numSix = "";
         }
         this.areaName = i;
-        this.isSelectl = false;
+        this.isSelectl = false; //被修改了值======false--->true
         document.getElementById("letter").click();
       } else if (this.key === 2) {
+        //如果选中的是车牌号码的第二位，第二位的内容为键盘中选中的内容，并且选中下一个车牌号方框
         this.areaLetter = i;
         document.getElementById("numOne").click();
       } else if (this.key === 3) {
@@ -383,9 +400,11 @@ export default {
         this.numSix = i;
       }
       if (this.key === 7 || this.key === 8) {
+        //如果选中的是序号码的最后一个或者新能源车牌号添加的序号吗，修改键盘最底层文字，并且减少空格，即noneBottom的内容长度
         this.carNumBottom = ["W", "X", "Y", "Z", "港", "澳", "学"];
         this.noneBottom = [""];
       } else if (
+        //否则换回原来的字母，并且添加空格，即noneBottom的内容长度
         this.key === 3 ||
         this.key === 4 ||
         this.key === 5 ||
@@ -396,6 +415,9 @@ export default {
       }
     },
 
+    /**
+     * 选中"新"或者"临"
+     */
     btnBottomClick(val) {
       if (val === "新") {
         if (this.areaName === "临") {
@@ -408,13 +430,13 @@ export default {
           this.numSix = "";
         }
         this.areaName = "新";
-        this.isSelectx = true;
-        this.isSelectl = false;
+        this.isSelectx = true; //选中'新'置为true
+        this.isSelectl = false; //选中'临'置为false
         document.getElementById("letter").click();
       } else if (val === "临") {
         this.areaName = "临";
-        this.isSelectl = true;
-        this.isSelectx = false;
+        this.isSelectl = true; //选中'临'置为true
+        this.isSelectx = false; //选中'新'置为false
         this.isDisable = true;
         this.areaLetter = "";
         this.numOne = "";
@@ -423,9 +445,13 @@ export default {
         this.numFour = "";
         this.numFive = "";
         this.numSix = "";
-        document.getElementById("letter").click("isLin");
+        document.getElementById("letter").click("isLin"); //修改"isLin"======>"isLin"------>空
       }
     },
+
+    /**
+     * 键盘最后一行字母被选
+     */
     btnBottomNumClick(i) {
       this.selected = i;
       if (this.key === 2) {
@@ -452,6 +478,10 @@ export default {
         this.numSix = i;
       }
     },
+
+    /**
+     * 选中的是地市一级代码
+     */
     btnClickA() {
       this.isDisable = true;
       this.isA = true;
@@ -473,7 +503,7 @@ export default {
      */
     btnClickNum(name) {
       if (this.isSelectl) {
-        //如果选中的不是第一个空，开启数字字母键盘
+        //如果选中'临'，在这里只是单纯的标志位
         this.isDisable = true;
       } else {
         this.isDisable = false;
@@ -538,10 +568,14 @@ export default {
       this.keyboardShow = false;
     },
 
+    /**
+     *
+     */
     clearClick() {
       if (this.key === 1) {
         this.areaName = "";
       } else if (this.key === 2) {
+        //如果当前选中的是第二个空，切换第一个空被选中，然后删除当前空格中的内容
         document.getElementById("font").click();
         this.areaLetter = "";
       } else if (this.key === 3) {
@@ -564,9 +598,14 @@ export default {
         this.numSix = "";
       }
     },
+
+    /**
+     * 添加车牌号
+     */
     addCarNumber() {
       var num;
       if (!this.checkbox) {
+        //不是新能源车牌号
         num =
           this.areaName +
           this.areaLetter +
@@ -576,6 +615,7 @@ export default {
           this.numFour +
           this.numFive;
       } else if (this.checkbox) {
+        //新能源车牌号
         num =
           this.areaName +
           this.areaLetter +
