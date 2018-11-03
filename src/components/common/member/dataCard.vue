@@ -1,6 +1,6 @@
 <template>
-  <router-link tag="div" :to="{name:component}" class="data-card">
-    <div class="data">
+  <router-link tag="div" :to="{name:component}"  class="data-card">
+    <div class="data" @click="component===''? callTel('10086'):''">
       <div :class="['data-top',borderColor? 'border-color':'']">
         <div class="text">
           <img :src="imgUrl" alt="">
@@ -43,6 +43,9 @@ import { Component, Provide, Vue } from "vue-property-decorator";
   }
 })
 export default class DataCard extends Vue {
+  callTel(telNumber){
+    window.location.href = `tel:${telNumber}`;
+  }
 }
 </script>
 

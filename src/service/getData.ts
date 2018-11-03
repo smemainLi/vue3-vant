@@ -1,6 +1,5 @@
-import fetch from "../config/fetch";
+import { request } from "@/config/request"
 
-export const codePic = () => fetch('/wx/getCodePic', {}, "POST");
-export const isLogin = () => fetch('/wx/member/account/isLogin', {}, "POST");
-export const getAuthorizeUrl = (pageUri: any) => fetch('/wx/user/account/getAuthorizeUrl', { pageUri }, "POST");
-export const login = (account: any, pwd: any) => fetch('/wx/member/account/auth/login', { account, pwd }, "POST");
+export const isLogin = () => request('/wx/member/account/isLogin');
+export const getAuthorizeUrl = (pageUri) => request('/wx/member/account/auth/getAuthorizeUrl', { pageUri: pageUri });
+export const getJsSdkConfig = (url) => request('/wx/user/account/getJsSdkConfig', { url: url });

@@ -1,7 +1,7 @@
 <template>
   <div class="member-info">
     <!-- 等级信息 -->
-   <rankTop class="top"></rankTop>
+  <rankTop class="top" :memberLevel="memberLevel"></rankTop>
 
    <!-- 成长值 -->
   <growUpValue>
@@ -10,7 +10,7 @@
 
   <!-- 成长值说明 -->
   <div class="foot">
-    <growValueIllustrate></growValueIllustrate>
+    <growValueIllustrate :title="conditionDesc.title" :content="conditionDesc.contents"></growValueIllustrate>
   </div>
   </div>
 </template>
@@ -20,16 +20,59 @@ import rankTop from "@/components/common/member/rankTop.vue"
 import growUpValue from "@/components/common/member/growUpValue.vue"
 import growUpValueCard from "@/components/common/member/growValueCard.vue"
 import growValueIllustrate from "@/components/common/member/growValueIllustrate.vue"
+import { Action } from 'vuex-class'
+
 @Component({
   components: {
     rankTop,
     growUpValue,
     growUpValueCard,
     growValueIllustrate
-
   }
 })
 export default class MemberInfo extends Vue {
+  // 成长值说明
+  conditionDesc = {
+    title:"",
+    contents:""
+  }
+
+  // 等级相关信息
+  memberLevel = {
+    image:'',
+    name:"",
+    needCondition:"",
+    nextCondition:"",
+    nextLevelName:"",
+    nowCondition:""
+  }
+
+  @Action('memberRights')   memberRights         // 会员权益
+  @Action('memberIndex')    memberIndex          // 等级首页展示
+
+
+   RightsMethod(){
+     this.memberIndex().then(res=>{
+       this.conditionDesc.title = res.data.conditionDesc.name
+       this.conditionDesc.contents = res.data.conditionDesc.content
+       this.memberLevel = res.data.memberLevel
+     })
+   }
+
+  //  Rights(){
+  //   this.memberRights().then(res=>{
+  //     this.title = res.data.name
+  //     this.contents = res.data.content
+  //   }).catch(err=>{
+  //     this.$toast.fail(err)
+  //   })
+  //  }
+
+   mounted () {
+    this.RightsMethod()
+    // this.Rights()
+   }
+
   
   content:Array<any> = [
     {

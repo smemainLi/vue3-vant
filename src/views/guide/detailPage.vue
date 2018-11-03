@@ -8,7 +8,7 @@
     <card :cardInfo="cardInfo"></card>
     <coupon-title class="feel" :titleContent="feelTitle"></coupon-title>
     <feeling></feeling>
-    <van-popup class="pop-box" v-model="nonExistence" :close-on-click-overlay="false">
+    <van-popup v-show="true" class="pop-box" v-model="nonExistence" :close-on-click-overlay="false">
       <div class="pop-box-top">
         <div class="box-top-title" v-cloak>{{boxTitle}}</div>
         <router-link class="box-top-close" tag="div" :to="{path:'/guide/index'}">×</router-link>
@@ -17,35 +17,34 @@
       <router-link :to="{path:'/guide/index'}">
         <common-Btn class="pop-box-bottom-btn"></common-Btn>
       </router-link>
-
     </van-popup>
   </div>
 </template>
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
-import top from "../../components/common/guide/top.vue";
-import location from "../../components/common/guide/location.vue";
-import discount from "../../components/common/guide/discount.vue";
-import goodsSwiper from "../../components/common/guide/goodsSwiper.vue";
-import couponTitle from "../../components/common/guide/couponTitle.vue";
-import card from "../../components/common/guide/card.vue";
-import feeling from "../../components/common/guide/feeling.vue";
-import commonBtn from "../../components/common/button.vue";
+import top from '../../components/common/guide/top.vue';
+import location from '../../components/common/guide/location.vue';
+import discount from '../../components/common/guide/discount.vue';
+import goodsSwiper from '../../components/common/guide/goodsSwiper.vue';
+import couponTitle from '../../components/common/guide/couponTitle.vue';
+import card from '../../components/common/guide/card.vue';
+import feeling from '../../components/common/guide/feeling.vue';
+import commonBtn from '../../components/common/button.vue';
 
 interface discountInfo {
-  discountTitle: string;
-  discountTime: string;
+  discountTitle: string,
+  discountTime: string
 }
 
 interface cardInfo {
-  bgImage: string;
-  parValue: string;
-  fullReduction: string;
-  range: string;
-  time: string;
-  cardType?: boolean /* false表示满减，true表示代金券 */;
-  isMask?: boolean /* false表示还有券，true表示已抢光 */;
-  finish?: string;
+  bgImage: string,
+  parValue: string,
+  fullReduction: string,
+  range: string,
+  time: string,
+  cardType?: boolean,/* false表示满减，true表示代金券 */
+  isMask?: boolean,/* false表示还有券，true表示已抢光 */
+  finish?: string,
 }
 
 @Component({
@@ -76,7 +75,7 @@ export default class DetailPage extends Vue {
   discountInfo: discountInfo = {
     discountTitle: "全场9折全场9折全场9折全场折",
     discountTime: "20180504 ~ 20190603"
-  };
+  }
 
   cardInfo: Array<cardInfo> = [
     {
@@ -87,7 +86,7 @@ export default class DetailPage extends Vue {
       time: "2018.05.31-2018.06.30",
       cardType: false,
       isMask: false,
-      finish: "抢光了，下次早点来哦"
+      finish: "抢光了，下次早点来哦",
     },
     {
       bgImage: require("../../assets/image/guide/cash.png"),
@@ -97,7 +96,7 @@ export default class DetailPage extends Vue {
       time: "2018.05.31-2018.06.30",
       cardType: false,
       isMask: true,
-      finish: "抢光了，下次早点来哦"
+      finish: "抢光了，下次早点来哦",
     },
     {
       bgImage: require("../../assets/image/guide/discount.png"),
@@ -107,8 +106,8 @@ export default class DetailPage extends Vue {
       time: "2018.05.31-2018.06.30",
       cardType: true,
       isMask: false,
-      finish: "抢光了，下次早点来哦"
-    }
+      finish: "抢光了，下次早点来哦",
+    },
   ];
 
   mounted() {

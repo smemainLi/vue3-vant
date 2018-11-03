@@ -1,13 +1,19 @@
 <template>
+  <!-- 积分停车页面 -->
   <div class="parking">
     <div class="car-info">
       <div class="car-photo">
         <img class="car-image" src="../../assets/image/parking/car.png" alt="">
       </div>
-      <car-num></car-num>
+      <!-- 车牌号码组件 -->
+      <!--绑定isCarNum()方法，@hasCarNum的hasCarNum为子组件中$emit()中第一个参数，hasCarNum为回调方法，
+          在hasCarNum后面不能加括号，不然会被默认为空，拿不到子组件传过来的值-->
+      <car-num @hasCarNum="hasCarNum"></car-num>
     </div>
-    <router-link :to="{path:'/parking/parkingFee'}">
-      <commonBtn></commonBtn>
+    <!-- 如果已经绑定车辆了，点击按钮跳转'/parking/parkingFee'，否则跳转'/member/carNumber' -->
+    <router-link :to="isCarNum?{path:'/parking/parkingFee'}:{path:'/member/carNumber'}">
+      <!-- 按钮组件 -->
+      <commonBtn :btnName="btnName"></commonBtn>
     </router-link>
 
     <div class="tips">
@@ -30,8 +36,19 @@ import commonBtn from '../../components/common/button.vue';
   }
 })
 export default class Parking extends Vue {
-  @Provide()
-  btnName: string = "查询";
+  btnName: string = "";
+  isCarNum: boolean = false;
+
+  /**
+   * 回调方法，接收子组件传的参数
+   */
+  hasCarNum(isCarNum) {
+    console.log(isCarNum);
+    this.isCarNum = isCarNum;
+    //如果已经有绑定的车辆了，按钮文字显示为“查询”，否则显示为“绑定车辆”
+    if (isCarNum) this.btnName = "查询";
+    else this.btnName = "绑定车辆";
+  }
 }
 </script>
 

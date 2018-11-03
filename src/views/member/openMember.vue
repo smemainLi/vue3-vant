@@ -2,26 +2,28 @@
   <div class="open-member">
     <div class="content">
       <!-- 邀请码 -->
-      <myInput class="myInput" placeholder='请输入邀请码（选填）' type="number" icon='icon-invite'></myInput>
+      <myInput v-model="data.invitationCode" class="myInput" placeholder='请输入邀请码（选填）' icon='icon-invite'></myInput>
 
       <!-- 手机号 -->
-      <myInput class="myInput" placeholder='请输入手机号' type="number" icon='icon-phone-number'></myInput>
+      <myInput v-model="data.phoneNum" class="myInput" placeholder='请输入手机号' icon='icon-phone-number'></myInput>
 
 
       <!-- 图形验证码 -->
       <div class="only">
-        <myInput class="myInput width" placeholder='请输入图形验证码' icon='icon-graphics'></myInput>
-        <div class="smallDiv"></div>
+        <myInput v-model="data.vcode" class="myInput width" placeholder='请输入图形验证码' icon='icon-graphics'></myInput>
+        <div class="smallDiv">
+          <img class="img" :src="`data:image/png;base64,${baseUrl}`" alt="">
+        </div>
       </div>
 
       <!-- 验证码 -->
       <div class="only">
-        <myInput class="myInput width" placeholder='请输入验证码' icon='icon-verification-code'></myInput>
-        <div class="smallDiv color">获取验证码</div>
+        <myInput v-model="data.smsCode" class="myInput width" placeholder='请输入验证码' icon='icon-verification-code'></myInput>
+        <div class="smallDiv" v-text="(countDown===0||countDown===60)? '获取验证码':`${countDown}s`" @click="getCode"></div>
       </div>
       
       <!-- 设置密码 -->
-      <myInput class="myInput" placeholder='请设置登录密码（6-12位）' icon='icon-lock'></myInput>
+      <myInput v-model="data.pwd" class="myInput" placeholder='请设置登录密码（6-12位）' icon='icon-lock'></myInput>
 
       <!-- 完成 -->
       <button class="button" @click="openMember">同意协议并注册</button>
@@ -37,27 +39,111 @@
         </router-link>
       </div>
     </div>
-
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
 import myInput from '@/components/common/myInput.vue'
+import { Action } from 'vuex-class'
+import md5 from 'js-md5';
 
+@Component({components: { myInput}})
 
-
-
-@Component({
-  components: {
-    myInput
-  }
-})
 export default class OpenMember extends Vue {
+  @Action('getGraphCode')   getGraphCode       // 获取图形验证码
+  @Action('getSmsCode')     getSmsCode         // 获取短信验证码
+  @Action('openMember')     openMemberMethod   // 开通会员卡
+ 
+  data = {
+    invitationCode:"",    //邀请码
+    phoneNum:"",	        //手机号码
+    pwd:"",	              //密码
+    smsCode	:"",          //短信验证码
+    vcode:""              //图形验证码
+  }
 
-  openMember(){
+  baseUrl:string = ""     //图形验证码（base64）
+  countDown:number = 60   //倒计时
+  time:any                //计时器
+
+   // 获取手机验证码
+  getCode():void{
+    if(this.countDown!==60) return
+    this.getSmsCode({phoneNum:this.data.phoneNum,
+                      vcode:this.data.vcode})
+    .then(res=>{
+      // 60s倒计时
+      this.countDownTime()
+    })
+    .catch(err=>{
+      this.$toast.fail(err);
+      // 输入图形验证码错误后，就更新一个图形验证码
+      this.getVcodeUrl()
+    })
+  }
+
+    // 计时器
+  countDownTime():void{
+    let _this = this
+    this.countDown = 60
+    this.time = setInterval(function(){
+      _this.countDown--
+      if(_this.countDown === 0){
+        clearInterval(_this.time)
+        _this.countDown = 60
+        // 60s 之后重新请求一个图形验证码
+        _this.getVcodeUrl()
+      }
+    },1000)
+  }
+
+// 开通会员卡
+  openMember():void{
     // 跳到我的卡券包
-    this.$router.push({name:'coupon'})
+    if(!this.testInfo())  return
+    this.openMemberMethod({...this.data,pwd:md5(this.data.pwd)}).then(res=>{
+      this.$toast.success("注册成功")
+      this.$router.push({name:'coupon'})
+    }).catch(err=>{
+      this.$toast.fail(err)
+    })
+  }
+
+// 检验信息是否填写完整和密码是否在6-12这个区间
+  testInfo(){
+    // 信息是否都填写，邀请码可不填
+     for (let item in this.data) {
+      if (this.data[item] === ''&&item!=='invitationCode') {
+        this.$toast.fail("请完善信息后再提交");
+        return false
+      }
+    }
+    // 密码
+    let data = this.data
+    // 6 - 12这个区间才正确
+    if(data.phoneNum.length!==11){
+      this.$toast.fail("请输入完整的手机号码");
+      return false
+    }else if(data.pwd.length<6||data.pwd.length>12){
+      this.$toast.fail("密码要在6-12位");
+      return false
+    }
+    return true
+  }
+
+
+// 获取图形验证码
+  getVcodeUrl():void{
+    this.getGraphCode().then(res=>{
+      this.baseUrl = res.data.vcodeImage
+    }).catch(err=>{
+      this.$toast.fail(err)
+    })
+  }
+
+  created(){
+    this.getVcodeUrl()
   }
 
 }
@@ -78,10 +164,18 @@ export default class OpenMember extends Vue {
       height: 88px;
       width: 178px;
       line-height: 88px;
+      text-align: center;
       border-radius:10px;
       border:1px solid #E3E3E3;
-      background-color:#E3E3E3;
+      background-color:$color-fb;
       margin-left: 12px;
+      object-fit: cover;
+
+      .img{
+        height: 100%;
+        width: 100%;
+        border-radius: 10px;
+      }
     }
   }
 

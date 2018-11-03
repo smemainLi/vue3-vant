@@ -1,32 +1,58 @@
 <template>
   <div class="carNum">
-    <div class="car-num-box box-font box-margin">粤</div>
-    <div class="car-num-box box-font">C</div>
+    <div class="car-num-box car-num-num box-font box-margin" v-cloak>{{carNumArr[0]}}</div>
+    <div class="car-num-box car-num-num box-font" v-cloak>{{carNumArr[1]}}</div>
     <div class="car-num-bar"></div>
-    <div class="car-num-box">M</div>
-    <div class="car-num-box">P</div>
-    <div class="car-num-box">8</div>
-    <div class="car-num-box">8</div>
-    <div class="car-num-box">8</div>
+    <div class="car-num-box car-num-num" v-cloak>{{carNumArr[2]}}</div>
+    <div class="car-num-box car-num-num" v-cloak>{{carNumArr[3]}}</div>
+    <div class="car-num-box car-num-num" v-cloak>{{carNumArr[4]}}</div>
+    <div class="car-num-box car-num-num" v-cloak>{{carNumArr[5]}}</div>
+    <div class="car-num-box car-num-num" v-cloak>{{carNumArr[6]}}</div>
     <div class="car-num-box">
-      <div class="plus-photo">
-        <img class="plus-image" src="../../../assets/image/parking/plus.png" alt="">
+      <div class="car-num-num" v-show="carNumArrLength===8" v-cloak>{{carNumArr[7]}}</div>
+      <div class="new-energy-vehicle" v-show="!(carNumArrLength===8)">
+        <div class="plus-photo">
+          <img class="plus-image" src="../../../assets/image/parking/plus.png" alt="">
+        </div>
+        <div class="new-energy">新能源</div>
       </div>
-      <!-- <div class="new-energy">新能源</div> -->
     </div>
   </div>
 </template>
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
-
+import { Action } from "vuex-class"
 
 @Component({
   components: {
   }
 })
 export default class CarNum extends Vue {
+  @Action("queryPlateNumber") queryPlateNumber
+
+  carNumArr: Array<string> = [];
+  carNumArrLength: number = 0;
+
+  /**
+   * 获取车牌号码
+   */
+  async getPlateNumber() {
+    await this.queryPlateNumber().then((res) => {
+      //向父组件传递参数，第一个参数是父组件中绑定的自定义回调方法，第二个参数为传递的参数
+      this.$emit('hasCarNum', res.data.isCarNum);
+      this.carNumArr = res.data.carNum.split('');
+      this.carNumArrLength = this.carNumArr.length;
+    }).catch((err) => {
+      this.$toast.fail(err);
+    });
+  }
+
+  mounted() {
+    this.getPlateNumber();
+  }
 }
 </script>
+
 <style lang="scss" scoped>
 .carNum {
   margin: auto;
@@ -45,7 +71,6 @@ export default class CarNum extends Vue {
       margin: 7px 19px 0 16px;
       width: 24px;
       height: 24px;
-      /* box-sizing: border-box; */
       border: 1px dashed $color-88;
       .plus-image {
         display: block;
@@ -56,6 +81,9 @@ export default class CarNum extends Vue {
     .new-energy {
       font-size: 15px;
     }
+  }
+  .car-num-num {
+    line-height: 61px;
   }
   .box-margin {
     margin-left: 52px;

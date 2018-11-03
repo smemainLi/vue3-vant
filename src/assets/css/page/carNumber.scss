@@ -1,0 +1,178 @@
+.dispense {
+  height: 100%;
+  background-color: $color-ff;
+  text-align: center;
+  .carNum {
+    margin: auto;
+    padding-top: 111px;
+    .car-num-box {
+      float: left;
+      margin-right: 16px;
+      width: 61px;
+      height: 61px;
+      font-size: 39px;
+      color: $color-88;
+      text-align: center;
+      box-sizing: border-box;
+      border: 1px dashed $color-d2;
+      .plus-photo {
+        margin: 7px 19px 0 16px;
+        width: 24px;
+        height: 24px;
+        border: 1px dashed $color-88;
+        .plus-image {
+          display: block;
+          width: 24px;
+          height: 24px;
+        }
+      }
+      .new-energy {
+        font-size: 15px;
+      }
+    }
+    input[type='checkbox'] {
+      position: absolute;
+      right: 59px;
+      width: 61px;
+      height: 61px;
+      border: 0;
+      background-color: rgba($color: #000000, $alpha: 0)
+    }
+    .car-num-num {
+      line-height: 61px;
+    }
+    .is-click,
+    .is-num-click {
+      border: 1px dashed #fbde19;
+    }
+    .box-margin {
+      margin-left: 52px;
+    }
+    .box-font {
+      color: $color-35;
+    }
+    .car-num-bar {
+      float: left;
+      width: 24px;
+      height: 5px;
+      margin: 21px 16px 0 0;
+      background: $color-f5;
+    }
+  }
+  .keyboard {
+    width: 100%;
+    height: 502px;
+    position: fixed;
+    bottom: -502px;
+    background: #eeeeee;
+    z-index: 10;
+    &.animationDown {
+      animation: slide_dowms 0.3s ease-out;
+      animation-fill-mode: forwards;
+    }
+    &.animationUp {
+      animation: slide_ups 0.3s ease-out;
+      animation-fill-mode: forwards;
+    }
+    .btn-complete {
+      height: 72px;
+      text-align: right;
+      color: #ffc200;
+      font-size: 30px;
+      width: 100%;
+      background: #fff;
+      border: none;
+      border-top: 1px solid #eee;
+      margin-bottom: 30px;
+      span {
+        margin-right: 30px;
+      }
+    }
+    .keyboard-row {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 8px;
+      color: #333;
+      &:first-child {
+        margin-top: 0;
+      }
+      .keyboard-row-bottom {
+        display: flex;
+        justify-content: space-between;
+      }
+      .keyboard-row-item {
+        width: 66px;
+        height: 80px;
+        background: #fff;
+        font-size: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #ccc;
+        /*no*/
+        border-radius: 10px;
+        color: #333;
+        &.bottom {
+          height: 80px;
+          width: 66px;
+          line-height: 80px;
+          background: #fff;
+          color: #333;
+          /*margin-right: 0.08rem;*/
+        }
+        &.clear {
+          width: 140px;
+          height: 80px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 64px;
+          line-height: 80px;
+          color: $color-00;
+          img {
+            width: 62px;
+          }
+        }
+      }
+      .none-botton {
+        border: none;
+        height: 80px;
+        width: 66px;
+        visibility: hidden;
+      }
+    }
+    button {
+      &:active {
+        background: #f4f4f4 !important;
+        color: #999 !important;
+      }
+    }
+  }
+  @keyframes slide_ups {
+    from {
+      bottom: -502px;
+    }
+    to {
+      bottom: 0px;
+    }
+  }
+  @keyframes slide_dowms {
+    from {
+      bottom: 0px;
+    }
+    to {
+      bottom: -502px;
+    }
+  }
+  button:disabled {
+    background: #f4f4f4 !important;
+    color: #8f8f8f !important;
+  }
+  .active {
+    &:active {
+      background: #f4f4f4 !important;
+      color: #999 !important;
+    }
+  }
+}

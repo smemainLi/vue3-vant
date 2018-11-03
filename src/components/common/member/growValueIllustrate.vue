@@ -2,23 +2,27 @@
   <div class="grow-value-illustrate">
     <div class="top">
       <div class="upright"></div>
-      <div class="title">成长值说明</div>
+      <div class="title" v-text="title"></div>
     </div>
-    <div class="bottom">
-      成长体系是为了给处于不同成长阶段的童鞋提供更贴心、更强大的服务, 以满足不同成长阶段的童鞋的需要而出现的。
+    <div class="bottom" v-html="content">
     </div>
   </div>
 </template>
 <script lang="ts">
 import { Component, Provide, Vue, Watch } from "vue-property-decorator";
-@Component({
-  components: {
+@Component({ 
+  props:{
+    title:{
+      type:String,
+      default:''
+    },
+    content:{
+      type:String,
+      default:''
+    }
   }
-})
-export default class GrowValueIllustrate extends Vue {
-
-
-}
+ })
+export default class GrowValueIllustrate extends Vue { }
 </script>
 
 <style lang="scss" scoped>

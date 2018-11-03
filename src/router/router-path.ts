@@ -47,7 +47,7 @@ export const member = (r: any) => require.ensure([], () => r(require('../views/m
 export const openMember = (r: any) => require.ensure([], () => r(require('../views/member/openMember.vue')), e => console.log(e), 'openMember')
 export const memberRank = (r: any) => require.ensure([], () => r(require('@/views/member/memberRank.vue')), e => console.log(e), 'memberRank')
 export const selectData = (r: any) => require.ensure([], () => r(require('@/views/member/selectData.vue')), e => console.log(e), 'selectData')
-export const cardNumber = (r: any) => require.ensure([], () => r(require('@/views/member/cardNumber.vue')), e => console.log(e), 'cardNumber')
+export const carNumber = (r: any) => require.ensure([], () => r(require('@/views/member/carNumber.vue')), e => console.log(e), 'carNumber')
 
 // 账号登录
 export const login = (r: any) => require.ensure([], () => r(require('../views/member/login.vue')), e => console.log(e), 'login')

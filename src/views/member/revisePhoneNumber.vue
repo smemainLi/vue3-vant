@@ -4,7 +4,7 @@
 
     <div class="center">
       <myInput icon="icon-graphics" class="input-two" placeholder="请输入图形验证码"></myInput>
-      <div class="identifying"></div>
+      <div class="identifying" v-text="(countDown===0||countDown===60)? '获取验证码':`${countDown}s`" @click="smsCode"></div>
     </div>
 
     <div class="center">
@@ -21,17 +21,55 @@
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
 import  path  from "../../config/componentsPath"
+import { Action } from 'vuex-class'
 
-@Component({
-  components: {
-    myInput:path.myInput
-  }
-})
+// changePhone
+@Component({components: { myInput:path.myInput }})
+
 export default class RevisePhoneNumber extends Vue {
+  @Action('changePhone')  changePhone     // 修改手机号码
+  @Action('getGraphCode') getGraphCode   // 获取图形验证码
+  @Action('getSmsCode')   getSmsCode       // 获取手机验证码
 
+  data = {
+    imgUrl:'',
+    smsCode:'',
+    newPhoneNum:''
+  }
+  countDown:number=60
+  time:any
+
+// 图形验证码
+  graphCode(){
+    this.getGraphCode().then(res=>{
+      this.data.imgUrl = res.data.vcodeImage
+    }).catch(err=>{
+      this.$toast.fail(err)
+    })
+  }
  
+  smsCode(data){
+    this.getSmsCode(data).then(res=>{
+
+    })
+  }
+
+    // 计时器
+  countDownTime() {
+    let _this = this
+    this.countDown = 60
+    this.time = setInterval(function () {
+      _this.countDown--
+      if (_this.countDown === 0) {
+        clearInterval(_this.time)
+        _this.countDown = 60
+        _this.graphCode()
+      }
+    }, 1000)
+  }
 
   mounted () {
+    this.graphCode()
   }
 }
 </script>

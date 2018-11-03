@@ -1,8 +1,10 @@
 import Vue from "vue";
 import Router from "vue-router";
+import wx from 'weixin-js-sdk';
 import * as routerPath from '@/router/router-path';
-import { isLogin, getAuthorizeUrl } from '@/service/getData'
+import { isLogin, getAuthorizeUrl, getJsSdkConfig } from '@/service/getData'
 import { getCookie } from '@/config/utils'
+import { Toast } from 'vant';
 
 
 Vue.use(Router);
@@ -59,7 +61,7 @@ const router = new Router({
     { path: "/member/openMember", name: "openMember", meta: { title: '开通会员卡' }, component: routerPath.openMember },
     { path: "/member/memberRank", name: "memberRank", meta: { title: '会员等级' }, component: routerPath.memberRank },
     { path: "/member/selectData", name: "selectData", meta: { title: '我的资料' }, component: routerPath.selectData },
-    { path: "/member/cardNumber", name: "cardNumber", meta: { title: '车牌号' }, component: routerPath.cardNumber },
+    { path: "/member/carNumber", name: "carNumber", meta: { title: '车牌号' }, component: routerPath.carNumber },
 
     // 账号登录
     { path: "/login", name: "login", meta: { title: '账号登录' }, component: routerPath.login },
@@ -71,21 +73,35 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title;
-  /* isLogin().then(res => {
-    if (!res.data.login && to.path !== "/login" && to.path !== "/") next({ path: "/login" })
+  Toast.clear()  //关闭提示框
+  //判断是否登录过
+  isLogin().then(res => {
+    if (!res.data.isLogin && to.path !== "/login" && to.path !== "/") next({ path: "/login" })
   })
 
-  // 微信授权
-  if (!getCookie('qi_openid')) {
+  /**
+   * 判断微信是否授权，如果未授权，请求授权
+   * 如果已经授权，可以请求sdk认证
+   */
+  /* if (!getCookie('qi_openid')) {
+    // 微信授权
     getAuthorizeUrl(to.path).then(res => {
-      const r = res;
-      console.log(res);
       location.href = res.data.authorizeUrl;
+    })
+  } else {
+    // sdk认证
+    getJsSdkConfig(to.path).then(res => {
+      wx.config({
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: res.data.appid, // 必填，公众号的唯一标识
+        timestamp: res.data.timestamp, // 必填，生成签名的时间戳
+        nonceStr: res.data.noncestr, // 必填，生成签名的随机串
+        signature: res.data.sign,// 必填，签名
+        jsApiList: ['getLocation'] // 必填，需要使用的JS接口列表
+      });
     })
   } */
 
-  // sdk认证
-  // ......
 
   next();
 })

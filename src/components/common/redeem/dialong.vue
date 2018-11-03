@@ -72,10 +72,10 @@ export default class Dialongs extends Vue {
       overflow: hidden;
       img{
         position: absolute;
-        right: -60px;
+        right: 26px;
         top:37px;
-        height: 70px;
-        // width: 48px;
+        height: 40px;
+        width: 40px;
       }
     }
     .center{

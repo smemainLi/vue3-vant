@@ -5,12 +5,11 @@
 import { Component, Inject, Vue } from "vue-property-decorator";
 
 @Component({
+  props: ['btnName'],
   components: {
   }
 })
 export default class CommonBtn extends Vue {
-  @Inject()
-  btnName: any;
 }
 </script>
 <style lang="scss" scoped>

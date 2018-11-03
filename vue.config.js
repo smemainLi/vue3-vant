@@ -1,4 +1,12 @@
-const path = require('path')
+const path = require('path');
+
+const proxys = {
+  '/wx': {
+    target: 'http://10.10.21.57:9090',
+    ws: true,
+    changeOrigin: true
+  }
+}
 
 module.exports = {
   /* baseUrl: process.env.NODE_ENV === "production" ? "http://abit.wyw.com" : "", */
@@ -12,19 +20,15 @@ module.exports = {
     https: false,
     disableHostCheck: true,
     hotOnly: false,
-    proxy: null,
-    /* {
-      '/api': {
-        target: 'wyw-wx.qi-cloud.com',
-        ws: true,
-        changeOrigin: true,
-      }
-    } */
+    proxy: process.env.NODE_ENV === 'development' ? proxys : null
   },
+
+
   chainWebpack: config => {
     const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
     types.forEach(type => addStyleResource(config.module.rule('scss').oneOf(type)))
   },
+
 }
 
 

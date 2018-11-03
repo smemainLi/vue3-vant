@@ -1,12 +1,12 @@
 <template>
-  <div class="member">
+  <div class="member" v-show="showIndex">
     <!-- 会员信息头部 -->
-    <dataTop :userInfo="userInfo"></dataTop>
+    <dataTop :userInfo="userInfo" @showDialog="showDialog"></dataTop>
 
     <!-- 功能卡片tab 上-->
     <div class="center">
-      <dataCard borderColor title="我的资料" text="完善即+5积分" component="selectData"></dataCard>
-      <dataCard title="135***66896"  text="修改手机号码" component="revisePhoneNumber" :imgUrl="require('../../assets/image/member/phone.png')"></dataCard>
+      <dataCard borderColor title="我的资料" :text="(userInfo.infoPerfect&&userInfo.infoPerfect.isFinish)? '':`完善即+${userInfo.infoPerfect? userInfo.infoPerfect.integral:''}积分`" component="selectData"></dataCard>
+      <dataCard :title="userInfo.phone"  text="修改手机号码" component="revisePhoneNumber" :imgUrl="require('../../assets/image/member/phone.png')"></dataCard>
     </div>
 
     <!-- 功能卡片tab 下-->
@@ -17,37 +17,74 @@
 
     <!-- bar -->
     <bar class="bar"></bar>
+
+
+    <button class="button" @click="outLogin">退出登陆</button>
+
+  <!-- 二维码弹出框 -->
+    <memberIndexDialog :show="show" v-model="show"></memberIndexDialog>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Provide, Vue } from "vue-property-decorator";
+import memberIndexDialog from "@/components/common/member/memberIndexDialog.vue"
+import { Component, Provide, Vue, Watch } from "vue-property-decorator";
 import dataTop from "@/components/common/member/dataTop.vue"
 import dataCard from "@/components/common/member/dataCard.vue"
 import bar from "@/components/common/member/bar.vue"
+import { Action } from 'vuex-class'
 
-  @Component({
-    components: {
-      dataTop,
-      dataCard,
-      bar
-    }
-  })
-
+@Component({components: {dataTop,dataCard,bar,memberIndexDialog}})
 
 export default class Member extends Vue {
-  userInfo={
-    name:"小小星星高高挂",                               //用户名
-    myIntegral:"16850",                                 //我的积分
-    integrationRanking:"112",                           //积分排名
-    imgUrl:require("@/assets/image/coupon/store.png"),  //头像
-    qrCode:require("@/assets/image/member/QR-code.png") //二维码
+  @Action('memberIndexInfo')   memberIndexInfo         // 首页数据
+  @Action('loginOut')          loginOut                // 退出登陆
+
+  userInfo:any={ }
+  show:boolean=false;
+  showIndex:Boolean=false;
+  showDialog(showValue){
+    this.show = showValue
+  }
+
+
+// 获取展示数据
+  memberInfo(){
+     this.memberIndexInfo().then(res=>{
+      this.userInfo = res.data
+      this.showIndex = true
+    }).catch(err=>{
+      this.$toast.fail(err);
+    })
+  }
+
+// 退出登陆
+  outLogin(){
+    this.loginOut().then(res=>{
+      let _this = this
+      this.$toast.success("成功退出登陆");
+      setTimeout(function(){
+        _this.$router.push({name:"login"})
+      },1000)
+    }).catch(err=>{
+      this.$toast.fail(err);
+    })
+  }
+
+  created(){
+    this.memberInfo()
   }
 }
+
+
+
+
 </script>
 
 <style lang="scss" scoped>
 .member{
+  height: calc(100%-100px);
+  // overflow: scroll;
   .center{
     margin: 24px 0;
   }
@@ -56,7 +93,20 @@ export default class Member extends Vue {
     bottom:0;
     left: 0;
   }
-}
 
+  .button{
+    display: block;
+    height: 88px;
+    width: 686px;
+    padding: 0;
+    border:0;
+    color:$color-35;
+    font-size: $size36;
+    font-weight: 500;
+    background-color: $color-fb;
+    margin:0 auto;
+    margin-top:60px;
+  }
+}
 
 </style>

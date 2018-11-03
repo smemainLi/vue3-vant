@@ -3,26 +3,26 @@
     <div class="member-top">
       <div class="msg">
         <div class="img-content">
-          <img :src="userInfo.imgUrl" alt="">
+          <img :src="userInfo.headImage" alt="">
         </div>
         <div class="info">
           <div class="personal-info">
             <div v-text="userInfo.name"></div>
-            <router-link tag="div" :to="{name:'memberRank'}" class="grade">青铜</router-link>
+            <router-link tag="div" :to="{name:'memberRank'}" class="grade" v-text="userInfo.level"></router-link>
           </div>
-          <div class="QR-code">
-            <img :src="userInfo.qrCode" alt="">
+          <div class="QR-code" @click="dialog()">
+            <img src="@/assets/image/member/QR-code.png" alt="">
           </div>
         </div>
       </div>
     </div>
     <div class="integration">
       <div class="model">
-        <div v-text="userInfo.integrationRanking"></div>
+        <div v-text="userInfo.integralRanking"></div>
         <div class="color">积分排名</div>
       </div>
       <div class="model">
-        <div v-text="userInfo.myIntegral"></div>
+        <div v-text="userInfo.integral"></div>
         <div class="color">我的积分</div>
       </div>
       <div class="model">
@@ -40,16 +40,20 @@ import { Component, Provide, Vue } from "vue-property-decorator";
  * 
  *     userInfo  --- Object
  *        name                    用户名字
- *        myIntegral              我的积分
- *        integrationRanking      积分排名
- *        imgUrl                  头像url
- *        qrCode                  二维码
+ *        integral                我的积分
+ *        integralRanking         积分排名
+ *        headImage               头像url
  */
 
 @Component({
   props:["userInfo"]
 })
 export default class DataTop extends Vue {
+  defaultHeadImage:string = require('@/assets/image/coupon/store.png')
+
+  dialog(){
+    this.$emit('showDialog',true)
+  }
 }
 </script>
 
@@ -89,13 +93,15 @@ export default class DataTop extends Vue {
         align-items: center;
 
         .personal-info{
-          display: flex;
-          flex-direction:column;
+          // display: flex;
+          // flex-direction:column;
           padding-right: 33px;
           .grade{
             background-color: #F56E72;
             width:68px;
             height:32px;
+            float: left;
+            white-space:nowrap;
             font-size: $size22;
             text-align: center;
             border-radius:16px;
@@ -136,7 +142,7 @@ export default class DataTop extends Vue {
       align-items: center;
       justify-content: center;
       .color{
-        color: #888888
+        color: #888888 !important
       }
 
       .model-only{
