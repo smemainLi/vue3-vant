@@ -11,16 +11,34 @@ Vue.prototype.$momentTime = function momentTime(time:Date,formatText:string = 'Y
   return moment(time).format(formatText)
 }
 
-class Utils{
-  constructor(){
 
+class $ListenScroll{
+  scrollMounted:any
+  constructor(callback){
+    this.scrollMounted = ()=>{
+        // scrollTop是滚动条滚动时，距离顶部的距离
+      let scrollTop = (<any>document.documentElement).scrollTop||document.body.scrollTop;
+      // windowHeight是可视区的高度
+      let scrollHeight = (<any>document.documentElement).scrollHeight||document.body.scrollHeight;
+      // scrollHeight是滚动条的总高度
+      let windowHeight  = (<any>document.documentElement).clientHeight || document.body.clientHeight;
+      if(scrollTop+windowHeight===scrollHeight){
+        callback()
+      }
+    }
   }
-
-
-
+// 监听scroll
+  monitoringScroll(){
+    window.addEventListener('scroll', this.scrollMounted)
+  }
+// 移除监听事件，并要在destroyed钩子清除
+  removeScroll(){
+    window.removeEventListener("scroll",this.scrollMounted)
+  }
 }
 
-
+// 在使用的组件中，new this.$Utils()一个实例并传入一个触发的方法
+Vue.prototype.$ListenScroll = $ListenScroll
 
 
 

@@ -24,7 +24,7 @@ export const ar = (r: any) => require.ensure([], () => r(require('../views/ar/in
 export const coupon = (r: any) => require.ensure([], () => r(require('@/views/coupon/index.vue')), e => console.log(e), 'coupon')
 export const allCoupon = (r: any) => require.ensure([], () => r(require('@/views/coupon/coupon/allCoupon.vue')), e => console.log(e), 'allCoupon')
 export const expire = (r: any) => require.ensure([], () => r(require('@/views/coupon/coupon/expire.vue')), e => console.log(e), 'expire')
-export const use = (r: any) => require.ensure([], () => r(require('@/views/coupon/coupon/alreadyUse.vue')), e => console.log(e), 'alreadyUse')
+export const alreadyUse = (r: any) => require.ensure([], () => r(require('@/views/coupon/coupon/alreadyUse.vue')), e => console.log(e), 'alreadyUse')
 export const waitUse = (r: any) => require.ensure([], () => r(require('@/views/coupon/coupon/waitUse.vue')), e => console.log(e), 'waitUse')
 export const allCashCoupon = (r: any) => require.ensure([], () => r(require('@/views/coupon/cashCoupon/allCashCoupon.vue')), e => console.log(e), 'allCashCoupon')
 export const cashCouponUse = (r: any) => require.ensure([], () => r(require('@/views/coupon/cashCoupon/cashCouponUse.vue')), e => console.log(e), 'cashCouponUse')
@@ -48,6 +48,7 @@ export const openMember = (r: any) => require.ensure([], () => r(require('../vie
 export const memberRank = (r: any) => require.ensure([], () => r(require('@/views/member/memberRank.vue')), e => console.log(e), 'memberRank')
 export const selectData = (r: any) => require.ensure([], () => r(require('@/views/member/selectData.vue')), e => console.log(e), 'selectData')
 export const carNumber = (r: any) => require.ensure([], () => r(require('@/views/member/carNumber.vue')), e => console.log(e), 'carNumber')
+export const protocol = (r: any) => require.ensure([], () => r(require('@/views/member/protocol.vue')), e => console.log(e), 'protocol')
 
 // 账号登录
 export const login = (r: any) => require.ensure([], () => r(require('../views/member/login.vue')), e => console.log(e), 'login')

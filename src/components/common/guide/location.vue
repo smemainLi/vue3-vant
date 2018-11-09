@@ -7,7 +7,8 @@
     </div>
     <div class="site" v-cloak>{{site}}</div>
     <div class="telephone">
-      <i class="icon-telephone"></i>
+      <a href="tel:13726298724"><i class="icon-telephone"></i></a>
+
     </div>
   </div>
 </template>
@@ -49,6 +50,10 @@ export default class Location extends Vue {
     color: #fbdf12;
     font-size: 66px;
     line-height: 134px;
+    a {
+      text-decoration: none;
+      color: #fbdf12;
+    }
   }
 }
 </style>

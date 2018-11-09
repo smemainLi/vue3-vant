@@ -15,6 +15,9 @@ declare global {
 
 declare module 'vue/types/vue' {
   interface Vue {
-    $momentTime:any
+    $momentTime:any,      //格式化时间
+    $ListenScroll:any,    //监听scroll
+    $Coupon:any,           //优惠券等的请求
+    $wx:any
   }
 }

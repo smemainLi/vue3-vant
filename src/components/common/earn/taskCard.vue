@@ -2,23 +2,23 @@
   <div class="task-card">
     <div class="content">
       <div class="content-left">
-        <div class="value" v-text="value"></div>
+        <div class="value" v-text="`+${number}分`"></div>
         <div v-if="btnText==='去分享'||btnText==='今天已分享'" class="value-title">
-          分享店铺、活动到朋友圈即可，每天可获得
-          <span style="color:#F56E72" v-text="number"></span>
+          分享店铺到朋友圈即可，每天可获得
+          <span style="color:#F56E72" v-text="`1`"></span>
           次
         </div>
         <div v-else-if="btnText==='去邀请'" class="value-title">
           邀请1人注册可获
-            <span style="color:#F56E72" v-text="number"></span>
+            <span style="color:#F56E72" v-text="`${number}分`"></span>
           积分，上不封顶
         </div>
         <div class="value-title" v-else v-text="content"></div>
       </div>
       <button @click="skip(btnText)" :class='{"bg-color":!isActive}' v-text="btnText"></button>
-      <div class="invite" v-if="btnText==='去邀请'">
+      <div class="invite" v-if="btnText==='去邀请'" v-cloak>
         <img src="../../../assets/image/earn/number.png" alt="">
-        已邀请99人
+        已邀请{{value}}人
       </div>
     </div>
   </div>
@@ -40,12 +40,12 @@ import { Component, Provide, Vue } from "vue-property-decorator";
       default:false
     },
     number:{     // 分享次数或者是邀请可获积分
-      type:String,
-      default:''
+      type:Number,
+      default:0
     },
-    value:{     // 分值左边的那些
-      type:String,
-      default:"+5分"
+    value:{     // 人数
+      type:Number,  
+      default:0
     },
     content:{  // 完善资料
       type:String,
@@ -61,9 +61,9 @@ export default class TaskCard extends Vue {
     if(name==="去完善"){
       this.$router.push({name:'selectData'})
     }else if(name==='去分享'){
-      this.$emit('goShare')
+      this.$emit('goShare',"share")
     }else if(name==="去邀请"){
-      this.$emit('goShare')
+      this.$emit('goShare',"invitation")
     }
   }
 }

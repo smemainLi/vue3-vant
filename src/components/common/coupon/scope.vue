@@ -42,7 +42,8 @@ export default class Scope extends Vue {
 	padding-top:10px;
 	padding-bottom: 92px;
 	background-color: $color-ff;
-	min-height:405px;
+	// min-height:405px;
+	min-height: 150px;
 
   .time{
 		height: 108px;

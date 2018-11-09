@@ -2,7 +2,7 @@
   <div class="open-member">
     <div class="content">
       <!-- 邀请码 -->
-      <myInput v-model="data.invitationCode" class="myInput" placeholder='请输入邀请码（选填）' icon='icon-invite'></myInput>
+      <!-- <myInput v-model="data.invitationCode" :inputValue="data.invitationCode" class="myInput" placeholder='请输入邀请码（选填）' icon='icon-invite'></myInput> -->
 
       <!-- 手机号 -->
       <myInput v-model="data.phoneNum" class="myInput" placeholder='请输入手机号' icon='icon-phone-number'></myInput>
@@ -32,7 +32,7 @@
       <div class="foot">
         <div class="agree">
           <div>已阅读并同意</div>
-          <div class="color2">《用户协议》</div>
+          <router-link tag="div" :to="{name:'protocol', params:{type:1}}" class="color2">《用户协议》</router-link>
         </div>
         <router-link tag="div" :to="{name:'login'}">
           已有账号
@@ -144,6 +144,12 @@ export default class OpenMember extends Vue {
 
   created(){
     this.getVcodeUrl()
+    let inviteCode = this.$route.query.inviteCode
+    this.$nextTick(()=>{
+      if(inviteCode){
+          this.$set(this.data,'invitationCode',inviteCode)
+        }
+      })
   }
 
 }

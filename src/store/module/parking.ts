@@ -7,7 +7,7 @@ const actions = {
   /**
    * 缴费记录
    */
-  parkingPayRecord: ({ commit }) => { return request("/wx/member/parking/payrecord") },
+  parkingPayRecord: ({ commit }, data) => { return request("/wx/member/parking/payrecord", data) },
 
   /**
    * 获取车牌号码

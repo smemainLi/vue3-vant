@@ -7,7 +7,6 @@
       </div>
       <div class="num" v-cloak>{{item.num}}</div>
     </div>
-
   </div>
 </template>
 <script lang="ts">
@@ -24,24 +23,41 @@ interface voteInfo {
   }
 })
 export default class Vote extends Vue {
+  fullPoint = 100;
+
   voteInfo: Array<voteInfo> = [
     {
       percentage: "70",
       emoticon: require("../../../assets/image/guide/like.png"),
-      num: "6842",
+      num: "100",
     },
     {
       percentage: "50",
       emoticon: require("../../../assets/image/guide/ordinary.png"),
-      num: "400",
+      num: "55",
     },
     {
       percentage: "10",
       emoticon: require("../../../assets/image/guide/dislike.png"),
-      num: "10",
+      num: "36",
     },
   ];
 
+  test() {
+    for (let i = 0; i < this.voteInfo.length; i++) {
+      const element = this.voteInfo[i];
+      console.log(Number.parseInt(element.num) / this.fullPoint);
+      if (Number.parseInt(element.num) / this.fullPoint >= 0.9) {
+        this.fullPoint += this.fullPoint * 0.1;
+        console.log(this.fullPoint);
+        return;
+      }
+    }
+  }
+
+  mounted() {
+    this.test();
+  }
 
 }
 </script>

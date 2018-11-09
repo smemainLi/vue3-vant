@@ -2,28 +2,29 @@
   <div class="store">
     <div class="introduce">
       <div class="shop-picture">
-        <img class="shop-image" src="../../../assets/image/coupon/store.png" alt="">
-        <div class="per-capita" v-cloak>{{introduce.perCapita}}</div>
+        <img class="shop-image" :src="[introduce.storeLogo?introduce.storeLogo:defaultImg]" alt="">
+        <div class="per-capita" v-show="introduce.perCapita" v-cloak>人均{{introduce.perCapita}}元</div>
       </div>
       <div class="describe">
         <div class="store-name" v-cloak>{{introduce.storeName}}</div>
-        <div class="store-brief" v-cloak>{{introduce.storeBrief}}</div>
+        <div :class="['store-brief',introduce.storeBrief?'':'store-no-brief']" v-cloak>{{introduce.storeBrief}}</div>
         <div class="store-label">
-          <Tag :tagItem="item" v-for="(item,index) in tags" :key="index" v-cloak>{{introduce.storeLabel1}}</Tag>
+          <Tag :tagItem="item" v-for="(item,index) in introduce.tags" :key="index" v-cloak>{{introduce.storeLabel1}}</Tag>
         </div>
       </div>
       <div class="floor" v-cloak>{{introduce.floor}}</div>
     </div>
     <div class="discount">
-      <div class="benefit row">
+      <div class="benefit row" v-show="introduce.benefitContent">
         <div class="title">{{introduce.benefitTitle}}</div>
         <div class="content" v-cloak>{{introduce.benefitContent}}</div>
       </div>
-      <div class="ticket row">
+      <div class="ticket row" v-show="introduce.ticketContent">
         <div class="title">{{introduce.ticketTitle}}</div>
         <div class="content" v-cloak>{{introduce.ticketContent}}</div>
       </div>
-      <div class="voucher row">
+
+      <div class="voucher row" v-show="introduce.voucherContent">
         <div class="title">{{introduce.voucherTitle}}</div>
         <div class="content" v-cloak>{{introduce.voucherContent}}</div>
       </div>
@@ -35,12 +36,13 @@ import { Component, Provide, Vue } from "vue-property-decorator";
 import Tag from './tag.vue'
 
 @Component({
-  props: ["introduce", "tags"],
+  props: ["introduce"],
   components: {
     Tag
   }
 })
 export default class Tab extends Vue {
+  defaultImg = require('../../../assets/image/coupon/store.png');
 }
 </script>
 <style lang="scss" scoped>
@@ -87,11 +89,16 @@ export default class Tab extends Vue {
         font-size: 24px;
         padding-top: 12px;
       }
+      .store-no-brief {
+        height: 32px;
+        visibility: hidden;
+      }
       .store-label {
-        margin-top: 33px;
+        margin-top: 28px;
       }
     }
     .floor {
+      color: $color-00;
       float: right;
       margin-right: 39px;
       font-size: 32px;
@@ -113,7 +120,12 @@ export default class Tab extends Vue {
       .content {
         color: $color-88;
         display: inline-block;
+        line-height: 26px;
         margin-left: 19px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 668px;
       }
     }
     .benefit {

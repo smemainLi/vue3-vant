@@ -1,33 +1,37 @@
 <template>
   <div class="card">
-    <div :class="['no-card',carkInfoLen===0?'':'have-card']">
+    <div :class="['no-card',cardInfo.length===0?'':'have-card']">
       <img class="no-card-image" src="../../../assets/image/guide/noCard.png" alt="">
     </div>
-    <div :class="['store-card',carkInfoLen!==0?'':'no-store-card']" v-for="(item,index) in cardInfo" :key="index">
-      <div :class="['no-mask',item.isMask?'mask':'']" v-cloak>{{item.finish}}</div>
-      <div class="bg-photo">
-        <img class="bg-image" :src="item.bgImage" alt="">
-      </div>
-      <div :class="['upper-part',item.cardType?'is-discount':'']">
-        <div class="par-value" v-cloak>{{item.parValue}}</div>
-        <div class="full-reduction" v-cloak>{{item.fullReduction}}</div>
-      </div>
-      <div :class="[item.cardType?'discount-cut-line':'cut-line']"></div>
-      <div class="lower-part">
-        <div class="lower-part-range">
-          <div :class="['circle',item.cardType?'discount-circle':'']">●</div>
-          <div class="range" v-cloak>{{item.range}}</div>
+    <div :class="['store-card',cardInfo.length!==0?'':'no-store-card']" v-for="(item,index) in cardInfo" @click="[!item.isMask&&item.isOffer?getCard(item):'']" :key="index">
+      <div class="">
+        <div :class="['no-mask',item.isMask?'mask':'']" v-cloak>{{item.finish}}</div>
+        <div class="bg-photo">
+          <img class="bg-image" :src="item.bgImage" alt="">
         </div>
-        <div class="lower-part-time">
-          <div :class="['circle',item.cardType?'discount-circle':'']">●</div>
-          <div class="time" v-cloak>{{item.time}}</div>
+        <div :class="['upper-part',item.cardType?'is-discount':'']">
+          <div class="par-value" v-cloak>{{item.parValue}}</div>
+          <div class="full-reduction" v-cloak>{{item.fullReduction}}</div>
+        </div>
+        <div :class="[item.cardType?'discount-cut-line':'cut-line']"></div>
+        <div class="lower-part">
+          <div class="lower-part-range">
+            <div :class="['circle',item.cardType?'discount-circle':'']">●</div>
+            <div class="range" v-cloak>{{item.range}}</div>
+          </div>
+          <div class="lower-part-time">
+            <div :class="['circle',item.cardType?'discount-circle':'']">●</div>
+            <div class="time" v-cloak>{{item.time}}</div>
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 </template>
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
+import { Action } from 'vuex-class';
 
 @Component({
   props: ["cardInfo"],
@@ -35,10 +39,23 @@ import { Component, Provide, Vue } from "vue-property-decorator";
   }
 })
 export default class Card extends Vue {
-  mask = true;
-  cardInfo;
-  carkInfoLen = this.cardInfo.length;
+  @Action rushQuan
 
+
+  mask = true;
+
+  getCard(card) {
+    let data = {
+      id: card.cardId,
+      type: card.cardType
+    };
+    this.rushQuan(data).then((res) => {
+      console.log(res);
+      this.$toast.success('抢成功！')
+    }).catch((err) => {
+      this.$toast.fail(err);
+    });
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -48,7 +65,7 @@ export default class Card extends Vue {
   box-sizing: border-box;
   position: relative;
   background-color: $color-ff;
-  z-index: -3;
+  z-index: 1;
   .no-card {
     height: 410px;
     .no-card-image {

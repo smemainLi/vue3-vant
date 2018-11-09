@@ -20,7 +20,7 @@
     </div>
     <div class="foot">
       <div v-cloak>{{ memberLevel.nextLevelName===""? "您已经是最高级会员":`再获取${memberLevel.needCondition}即可升级成${memberLevel.nextLevelName}` }}</div>
-      <div v-text="memberLevel.nextLevelName"></div>
+      <div v-text="memberLevel.nextCondition"></div>
     </div>
   </div>
 </template>

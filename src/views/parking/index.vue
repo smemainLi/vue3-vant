@@ -1,6 +1,7 @@
 <template>
   <!-- 积分停车页面 -->
   <div class="parking">
+    <div class="charge-description">收费说明>></div>
     <div class="car-info">
       <div class="car-photo">
         <img class="car-image" src="../../assets/image/parking/car.png" alt="">
@@ -58,6 +59,13 @@ export default class Parking extends Vue {
   height: 100%;
   background-color: $color-ff;
   text-align: center;
+  .charge-description {
+    position: absolute;
+    top: 51px;
+    right: 32px;
+    font-size: 28px;
+    color: $color-35;
+  }
   .car-info {
     padding-top: 10px;
     width: 750px;

@@ -1,8 +1,8 @@
 <template>
   <div class="couponCode">
     <div class="top">
-      <div class="coupon" v-text="`券码：${couponTime.code}`"></div>
-	    <button :class="['button',couponTime.isUse? 'yes':'']" v-text="couponTime.useText"></button>
+      <div class="coupon" v-text="`券码：${couponTime.quanCode}`"></div>
+	    <button :class="['button',couponTime.isUse? 'yes':'']" v-text="couponTime.statusName"></button>
     </div>
     <div class="bottom" v-if="'time' in couponTime">
       <div class="time">消费时间</div>
@@ -55,6 +55,10 @@ export default class CouponCodeAndTime extends Vue {
     .coupon{
       height: 37px;
       // height: 35px;
+      width: 70%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
       line-height: 37px;
       font-size: $size32;
       border-left: 11px solid $color-fb;

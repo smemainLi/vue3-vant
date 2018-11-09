@@ -3,9 +3,9 @@
     <!-- 等级信息 -->
   <rankTop class="top" :memberLevel="memberLevel"></rankTop>
 
-   <!-- 成长值 -->
+   <!-- 获取成长值方法 -->
   <growUpValue>
-    <growUpValueCard :borderColor="content.length==(index+1)? false:true" v-for="(item,index) in content" :key="index"></growUpValueCard>
+    <growUpValueCard :getValueText="memberArr.includes(key)? memberRule[key+'Text']:''" :getValue="item" v-if="memberRule[key+'Status']===1? true:false" v-for="(item,key,index) in memberRule" :key="index"></growUpValueCard>
   </growUpValue>
 
   <!-- 成长值说明 -->
@@ -39,68 +39,59 @@ export default class MemberInfo extends Vue {
 
   // 等级相关信息
   memberLevel = {
-    image:'',
-    name:"",
-    needCondition:"",
-    nextCondition:"",
-    nextLevelName:"",
-    nowCondition:""
+    image:'',            //等级图标
+    name:"",             //等级名称
+    needCondition:"",    //距离下一级需要成长值
+    nextCondition:"",    //下一级目标成长值
+    nextLevelName:"",    //下一等级名称
+    nowCondition:""      //当前成长值
   }
 
-  @Action('memberRights')   memberRights         // 会员权益
+  // 获取成长值   //0：禁用，1：启用
+  memberRule = { }
+  
+  memberArr = ['daySign','lottery','parkingPayment','snatchRedArEnvelopes','verificationCoupon','verificationVouchers']
+  memberBol = ['daySignStatus','lotteryStatus','parkingPaymentStatus','snatchRedArEnvelopesStatus','verificationCouponStatus','verificationVouchersStatus']
+  memberText = {
+    daySignText:"每日签到获得成长值",
+    lotteryText:"抽奖1次获得成长值",
+    parkingPaymentText:"积分停车1次获得成长值",
+    snatchRedArEnvelopesText:"抢AR红包获得成长值",
+    verificationCouponText:"核销优惠券一次获得成长值",
+    verificationVouchersText:"核销代金券获得成长值"
+  }
+  // {
+  //   daySign:Number,                       //每日签到获得成长值
+  //   daySignStatus:Number,   
+  //   lottery:Number,                       //抽奖1次获得成长值
+  //   lotteryStatus:Number, 
+  //   parkingPayment:Number,                //积分停车1次获得成长值
+  //   parkingPaymentStatus:Number,    
+  //   snatchRedArEnvelopes:Number,          //抢AR红包获得成长值
+  //   snatchRedArEnvelopesStatus:Number,      
+  //   verificationCoupon:Number,            //核销优惠券一次获得成长值
+  //   verificationCouponStatus:Number,
+  //   verificationVouchers:Number,          //核销代金券获得成长值
+  //   verificationVouchersStatus:Number
+  // }
+
   @Action('memberIndex')    memberIndex          // 等级首页展示
 
 
    RightsMethod(){
      this.memberIndex().then(res=>{
-       this.conditionDesc.title = res.data.conditionDesc.name
-       this.conditionDesc.contents = res.data.conditionDesc.content
-       this.memberLevel = res.data.memberLevel
+      this.conditionDesc.title = res.data.conditionDesc.name
+      this.conditionDesc.contents = res.data.conditionDesc.content
+      this.memberLevel = res.data.memberLevel
+      this.memberRule = {...res.data.memberRule,...this.memberText}
+     }).catch(err=>{
+       this.$toast.fail(err)
      })
    }
 
-  //  Rights(){
-  //   this.memberRights().then(res=>{
-  //     this.title = res.data.name
-  //     this.contents = res.data.content
-  //   }).catch(err=>{
-  //     this.$toast.fail(err)
-  //   })
-  //  }
-
    mounted () {
     this.RightsMethod()
-    // this.Rights()
    }
-
-  
-  content:Array<any> = [
-    {
-      textLeft:'核销1张优惠券',
-      textRight:"+5",
-    },
-    {
-      textLeft:'核销1张代金券',
-      textRight:"+5",
-    },
-    {
-      textLeft:'积分停车1次',
-      textRight:"+5",
-    },
-    {
-      textLeft:'打卡',
-      textRight:"+5",
-    },
-    {
-      textLeft:'抽奖一次',
-      textRight:"+5",
-    },
-    {
-      textLeft:'抢AR红包1次',
-      textRight:"+5",
-    },
-    
-  ]
 
 }
 </script>

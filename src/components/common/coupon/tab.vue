@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Provide, Vue } from "vue-property-decorator";
+import { Component, Provide, Vue, Watch } from "vue-property-decorator";
 
 //   swipeable  tab切换页是否可以滑动
 
@@ -34,14 +34,19 @@ import { Component, Provide, Vue } from "vue-property-decorator";
 			type:Boolean,
 			default:false
 		}
-	},
-  components: {
-  }
+	}
 })
 
 export default class Tab extends Vue {
 	title:Array<string> = ["待使用","已使用","已过期"]  //tab栏的title
 	active:number = 0   //激活当前的index
+
+
+	@Watch("active")
+	activeChange(news,old){
+		this.$emit("activeChange",news)
+	}
+
 }
 </script>
 <style lang="scss" scoped>

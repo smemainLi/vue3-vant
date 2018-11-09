@@ -15,7 +15,7 @@ import { Component, Provide, Vue, Watch } from "vue-property-decorator";
  *     二、指定input的type类型 ===》type
  *     三、input的placeholder  ===》placeholder
  *     四、input的左边图标 ===》icon （使用字体图标）
- *     五、phoneNumber和第一个参数一样
+ *     五、inputValue和第一个参数一样
 */
 @Component({
   model: {

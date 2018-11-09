@@ -5,7 +5,12 @@ import * as routerPath from '@/router/router-path';
 import { isLogin, getAuthorizeUrl, getJsSdkConfig } from '@/service/getData'
 import { getCookie } from '@/config/utils'
 import { Toast } from 'vant';
+import { wxMethod } from "../config/wxMethod"  //封装的js sdk的方法
+import store from "../store/index"
+import json from "../lang/wx"
 
+// 设置轻提示默认为1000ms
+Toast.setDefaultOptions({ duration: 1000 })
 
 Vue.use(Router);
 const router = new Router({
@@ -26,7 +31,7 @@ const router = new Router({
 
     // 找商家
     { path: "/guide/index", name: "guide", meta: { title: '找商家' }, component: routerPath.guide },
-    { path: "/guide/detailPage", name: "detailPage", meta: { title: '店铺详情' }, component: routerPath.detailPage },
+    { path: "/guide/detailPage/:merchantId", name: "detailPage", meta: { title: '店铺详情' }, component: routerPath.detailPage },
 
     // 抢优惠
     { path: "/offer/index", name: "offer", meta: { title: '抢优惠' }, component: routerPath.offer },
@@ -36,19 +41,21 @@ const router = new Router({
 
     // 我的券包
     { path: "/coupon/index", name: "coupon", meta: { title: '我的券包' }, component: routerPath.coupon },
+    // 优惠券
     { path: "/coupon/allCoupon", name: "allCoupon", meta: { title: '优惠券' }, component: routerPath.allCoupon },
-    { path: "/coupon/expire", name: "expire", meta: { title: '优惠券' }, component: routerPath.expire },
-    { path: "/coupon/use", name: "use", meta: { title: '优惠券' }, component: routerPath.use },
-    { path: "/coupon/waitUse", name: "waitUse", meta: { title: '优惠券' }, component: routerPath.waitUse },
+    { path: "/coupon/expire/:id", name: "expire", meta: { title: '优惠券' }, component: routerPath.expire, props: true },
+    { path: "/coupon/alreadyUse/:id", name: "alreadyUse", meta: { title: '优惠券' }, component: routerPath.alreadyUse, props: true },
+    { path: "/coupon/waitUse/:id", name: "waitUse", meta: { title: '优惠券' }, component: routerPath.waitUse, props: true },
+    // 代金券
     { path: "/coupon/allCashCoupon", name: "allCashCoupon", meta: { title: '代金券' }, component: routerPath.allCashCoupon },
-    { path: "/coupon/cashCouponUse", name: "cashCouponUse", meta: { title: '代金券' }, component: routerPath.cashCouponUse },
-    { path: "/coupon/cashCouponWaitUse", name: "cashCouponWaitUse", meta: { title: '代金券' }, component: routerPath.cashCouponWaitUse },
-    { path: "/coupon/cashCouponExpire", name: "cashCouponExpire", meta: { title: '代金券' }, component: routerPath.cashCouponExpire },
+    { path: "/coupon/cashCouponUse/:id", name: "cashCouponUse", meta: { title: '代金券' }, component: routerPath.cashCouponUse, props: true },
+    { path: "/coupon/cashCouponWaitUse/:id", name: "cashCouponWaitUse", meta: { title: '代金券' }, component: routerPath.cashCouponWaitUse, props: true },
+    { path: "/coupon/cashCouponExpire/:id", name: "cashCouponExpire", meta: { title: '代金券' }, component: routerPath.cashCouponExpire, props: true },
+    // 兑换券
     { path: "/coupon/exchangeVoucherIndex", name: "exchangeVoucherIndex", meta: { title: '兑换券' }, component: routerPath.exchangeVoucherIndex },
-    { path: "/coupon/exchangeVoucherWaitUse", name: "exchangeVoucherWaitUse", meta: { title: '兑换券' }, component: routerPath.exchangeVoucherWaitUse },
-    { path: "/coupon/exchangeVoucherUse", name: "exchangeVoucherUse", meta: { title: '兑换券' }, component: routerPath.exchangeVoucherUse },
-    { path: "/coupon/exchangeVoucherExpire", name: "exchangeVoucherExpire", meta: { title: '兑换券' }, component: routerPath.exchangeVoucherExpire },
-
+    { path: "/coupon/exchangeVoucherWaitUse/:id", name: "exchangeVoucherWaitUse", meta: { title: '兑换券' }, component: routerPath.exchangeVoucherWaitUse, props: true },
+    { path: "/coupon/exchangeVoucherUse/:id", name: "exchangeVoucherUse", meta: { title: '兑换券' }, component: routerPath.exchangeVoucherUse, props: true },
+    { path: "/coupon/exchangeVoucherExpire/:id", name: "exchangeVoucherExpire", meta: { title: '兑换券' }, component: routerPath.exchangeVoucherExpire, props: true },
     // 积分兑换
     { path: "/redeem/index", name: "redeem", meta: { title: '积分兑换' }, component: routerPath.redeem },
     { path: "/redeem/integralDetail", name: "integralDetail", meta: { title: '积分明细' }, component: routerPath.integralDetail },
@@ -62,6 +69,7 @@ const router = new Router({
     { path: "/member/memberRank", name: "memberRank", meta: { title: '会员等级' }, component: routerPath.memberRank },
     { path: "/member/selectData", name: "selectData", meta: { title: '我的资料' }, component: routerPath.selectData },
     { path: "/member/carNumber", name: "carNumber", meta: { title: '车牌号' }, component: routerPath.carNumber },
+    { path: "/protocol/:type", name: "protocol", meta: { title: '用户协议' }, component: routerPath.protocol, props: true },
 
     // 账号登录
     { path: "/login", name: "login", meta: { title: '账号登录' }, component: routerPath.login },
@@ -72,37 +80,63 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+  const inviteCode = to.query.inviteCode
+  // console.log(inviteCode,'===============')
   document.title = to.meta.title;
+
   Toast.clear()  //关闭提示框
   //判断是否登录过
   isLogin().then(res => {
-    if (!res.data.isLogin && to.path !== "/login" && to.path !== "/") next({ path: "/login" })
+    store.commit('isLogins', res.data.isLogin)
+    if(inviteCode){
+      if (!res.data.isLogin) next({ path: `/member/openMember/?inviteCode=${inviteCode}` })
+    } else {
+      if (!res.data.isLogin && to.path !== "/login" && to.path !== "/" && to.path !== "/member/openMember") next({ path: "/login" })
+      else if (res.data.isLogin) {//如果已经登录过了
+        if (to.path === '/member/openMember') next({ path: "/" })
+        // /**
+        //  * 登录之后进行微信鉴权
+        //  * 判断微信是否授权，如果未授权，请求授权
+        //  * 如果已经授权，可以请求sdk认证
+        //  */
+        // if (!getCookie('qi_openid')) {
+        //   // 微信授权
+        //   getAuthorizeUrl(to.path).then(res => {
+        //     location.href = res.data.authorizeUrl;
+        //   })
+        // } else {
+        //   // sdk认证
+        //   // const _this = this
+        //   getJsSdkConfig(to.path).then(res => {
+        //     wx.config({
+        //       debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        //       appId: res.data.appid, // 必填，公众号的唯一标识
+        //       timestamp: res.data.timestamp, // 必填，生成签名的时间戳
+        //       nonceStr: res.data.noncestr, // 必填，生成签名的随机串
+        //       signature: res.data.sign,// 必填，签名
+        //       jsApiList: ['getLocation', 'updateTimelineShareData', 'updateAppMessageShareData'] // 必填，需要使用的JS接口列表
+        //     });
+
+        //     const isEarn = to.name === "earn"
+        //     wx.ready(function () {
+        //       // （朋友圈）如果是积分的就使用不一样的分享页面
+        //       wxMethod.updateTimelineShareData(
+        //         isEarn ?
+        //           // 赚积分页面                   //公共
+        //           json.earnShareCircleOfFriends : json.publicShareCircleOfFriends
+        //       )
+
+        //       // 分享给好友
+        //       wxMethod.updateAppMessageShareData(
+        //         isEarn ?
+        //           json.earnShareOfFriends : json.publicShareOfFriends
+        //       )
+        //     })
+        //   })
+        // }
+      }
+    }
   })
-
-  /**
-   * 判断微信是否授权，如果未授权，请求授权
-   * 如果已经授权，可以请求sdk认证
-   */
-  /* if (!getCookie('qi_openid')) {
-    // 微信授权
-    getAuthorizeUrl(to.path).then(res => {
-      location.href = res.data.authorizeUrl;
-    })
-  } else {
-    // sdk认证
-    getJsSdkConfig(to.path).then(res => {
-      wx.config({
-        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-        appId: res.data.appid, // 必填，公众号的唯一标识
-        timestamp: res.data.timestamp, // 必填，生成签名的时间戳
-        nonceStr: res.data.noncestr, // 必填，生成签名的随机串
-        signature: res.data.sign,// 必填，签名
-        jsApiList: ['getLocation'] // 必填，需要使用的JS接口列表
-      });
-    })
-  } */
-
-
   next();
 })
 

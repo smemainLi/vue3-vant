@@ -1,15 +1,15 @@
 <template>
 	<div class="content-model">
 		<div class="content-box">
-			<img src="@/assets/image/coupon/store.png" alt="">
+			<img :src="(contentText.mechantLogo===''||contentText.mechantLogo===null)? require('@/assets/image/coupon/mechantLogo.png'):contentText.mechantLogo" alt="">
 			<div class="content-title">
-				<span class='title' v-text="contentText.title"></span>
-				<span class="coupon-text" v-text="contentText.coupon">满100减200</span>
+				<span class='title' v-text="contentText.mechantName"></span>
+				<span class="coupon-text" v-text="contentText.name"></span>
 			</div>
 		</div>
 
 		<!-- 以下主要针对优惠券等的主页面和待使用等的页面区分 > 和 button -->
-	<button v-if="'isUse' in contentText" :class="['button',contentText.isUse? 'yes':'']" v-text="contentText.useText"></button>
+	<button v-if="'isUse' in contentText" :class="['button',contentText.isUse? 'yes':'']" v-text="contentText.statusName"></button>
 	<van-icon v-else class="icon" name="arrow" />
 </div>
 </template>
@@ -18,9 +18,7 @@
 import { Component, Provide, Vue } from "vue-property-decorator";
 
 @Component({
-	props:['contentText'], 
-  components: {
-  }
+	props:['contentText']
 })
 
 export default class CashContentModel extends Vue {

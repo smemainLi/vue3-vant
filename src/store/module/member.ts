@@ -1,12 +1,18 @@
 import { request } from "@/config/request"
 
 const state = {
+  isLogin:false
 }
 
 const getters = {
 }
 
 const mutations = {
+  isLogins(state,data){
+    state.isLogin = data
+    console.log(data,"state-----------------")
+    console.log(state,"state")
+  }
 }
 
 const actions = {
@@ -71,8 +77,12 @@ const actions = {
     return request("/wx/member/memberInfo/memberLevel/memberRights")
   },
   // 会员等级首页展示
-  memberIndex({ commit }, data) {
-    return request("/wx/member/memberInfo/memberLevel/index", data)
+  memberIndex({ commit },data={type:2}){
+    return request("/wx/member/memberInfo/memberLevel/index",data)
+  },
+  // 用户协议（开通会员卡）
+  feesDesc({commit},data){
+    return request("/wx/member/parking/feesDesc",data)
   }
 
 }

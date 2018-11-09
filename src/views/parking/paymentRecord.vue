@@ -9,10 +9,10 @@ import record from "../../components/common/parking/record.vue";
 import { Action } from "vuex-class";
 
 interface recordInfo {
-  money: string;
-  number: string;
-  integral: string;
-  time: string;
+  money: string;//消费的金额
+  number: string;//车牌号码
+  integral: string;//抵扣积分
+  time: string;//抵扣时间
 }
 
 @Component({
@@ -21,142 +21,68 @@ interface recordInfo {
   }
 })
 export default class PaymentRecord extends Vue {
-  @Action("parkingPayRecord")
-  parkingPayRecord;
-
   pageNo: number = 1; //页码
   pageSize: number = 6; //每页有多少条记录
-  noRecord: boolean = true; //没有数据
+  noRecord: boolean = false; //没有更多数据
+  recordInfo: Array<recordInfo> = [];//存储缴费记录
 
-  recordInfo: Array<recordInfo> = [
-    {
-      money: "￥5",
-      number: "粤CY8767",
-      integral: "8989积分",
-      time: "2018-07-27  10:45:25"
-    },
-    {
-      money: "￥5",
-      number: "粤CY8767",
-      integral: "8989积分",
-      time: "2018-07-27  10:45:25"
-    },
-    {
-      money: "￥5",
-      number: "粤CY8767",
-      integral: "8989积分",
-      time: "2018-07-27  10:45:25"
-    },
-    {
-      money: "￥5",
-      number: "粤CY8767",
-      integral: "8989积分",
-      time: "2018-07-27  10:45:25"
-    },
-    {
-      money: "￥5",
-      number: "粤CY8767",
-      integral: "8989积分",
-      time: "2018-07-27  10:45:25"
-    },
-    {
-      money: "￥5",
-      number: "粤CY8767",
-      integral: "8989积分",
-      time: "2018-07-27  10:45:25"
-    },
-    {
-      money: "￥5",
-      number: "粤CY8767",
-      integral: "8989积分",
-      time: "2018-07-27  10:45:25"
-    },
-    {
-      money: "￥5",
-      number: "粤CY8767",
-      integral: "8989积分",
-      time: "2018-07-27  10:45:25"
-    },
-    {
-      money: "￥5",
-      number: "粤CY8767",
-      integral: "8989积分",
-      time: "2018-07-27  10:45:25"
-    },
-    {
-      money: "￥5",
-      number: "粤CY8767",
-      integral: "8989积分",
-      time: "2018-07-27  10:45:25"
-    }
-  ];
+  @Action("parkingPayRecord") parkingPayRecord
+
+
 
   /**
-   * 未做分页处理
+   * 获取缴费记录
    */
   getParkingPayRecord() {
     let data = {
       pageNo: this.pageNo,
       pageSize: this.pageSize
     };
-    this.parkingPayRecord(data)
-      .then(res => {
-        console.log(res);
-        const recordList = res.data.list;
-        this.noRecord = false;
-        if (recordList.length === 0) {
-          this.noRecord = true;
+    this.parkingPayRecord(data).then(res => {
+      const recordList = res.data.list;
+      this.noRecord = false;
+      this.pageNo += 1;
+      if (recordList.length === 0) {
+        this.noRecord = true;
+        this.$toast.success("全部加载完了");//防止第一次不触发提示
+      }
+      for (const key in recordList) {
+        if (recordList.hasOwnProperty(key)) {
+          // 只遍历自身属性
+          const recordItem: recordInfo = {
+            money: `￥${recordList[key].fee}`,
+            number: recordList[key].carNum,
+            integral: `${recordList[key].deductionIntegral}积分`,
+            time: recordList[key].payTime
+          };
+          this.recordInfo.push(recordItem);
         }
-        for (const key in recordList) {
-          if (recordList.hasOwnProperty(key)) {
-            // 只遍历自身属性
-            const recordItem: recordInfo = {
-              money: `￥${recordList[key].fee}`,
-              number: recordList[key].carNum,
-              integral: `${recordList[key].deductionIntegral}积分`,
-              time: recordList[key].payTime
-            };
-            this.recordInfo.push(recordItem);
-          }
-        }
-      })
-      .catch(err => {
-        this.$toast.fail(err);
-      });
+      }
+    }).catch(err => {
+      this.$toast.fail(err);
+    });
   }
 
   scrollFn() {
     //真实内容的高度
-    var pageHeight = Math.max(
-      (<any>document).body.scrollHeight,
-      (<any>document).body.offsetHeight
-    );
+    var pageHeight = Math.max((<any>document).body.scrollHeight, (<any>document).body.offsetHeight);
     //视窗的高度
-    var viewportHeight =
-      window.innerHeight ||
-      (<any>document).documentElement.clientHeight ||
-      (<any>document).body.clientHeight ||
-      0;
+    var viewportHeight = window.innerHeight || (<any>document).documentElement.clientHeight || (<any>document).body.clientHeight || 0;
     //隐藏的高度
-    var scrollHeight =
-      window.pageYOffset ||
-      (<any>document).documentElement.scrollTop ||
-      (<any>document).body.scrollTop ||
-      0;
-    if (this.noRecord) {
-      //数据全部加载完了
-      this.$toast.success("全部加载完了");
-      return;
-    } else if (pageHeight - viewportHeight - scrollHeight < 10) {
-      //如果满足触发条件，执行
-      this.pageNo += 1;
-      this.getParkingPayRecord();
+    var scrollHeight = window.pageYOffset || (<any>document).documentElement.scrollTop || (<any>document).body.scrollTop || 0;
+    if (pageHeight - viewportHeight - scrollHeight === 0) {
+      if (this.noRecord) this.$toast.success("全部加载完了");
+      else this.getParkingPayRecord();//如果满足触发条件，执行
     }
   }
 
   mounted() {
-    /* this.getParkingPayRecord(); */
+    this.getParkingPayRecord();
     window.addEventListener("scroll", this.scrollFn);
+  }
+
+  destroyed() {
+    window.removeEventListener("scroll", this.scrollFn);
   }
 }
 </script>

@@ -1,18 +1,21 @@
 <template>
   <div class="revise-phone-number">
-    <myInput icon="icon-phone-number" class="input-one" placeholder="请输入手机号"></myInput>
+    <myInput icon="icon-phone-number" v-model="data.newPhoneNum" class="input-one" placeholder="请输入手机号"></myInput>
 
     <div class="center">
-      <myInput icon="icon-graphics" class="input-two" placeholder="请输入图形验证码"></myInput>
-      <div class="identifying" v-text="(countDown===0||countDown===60)? '获取验证码':`${countDown}s`" @click="smsCode"></div>
+      <myInput icon="icon-graphics" v-model="data.vcode" class="input-two" placeholder="请输入图形验证码"></myInput>
+      <div class="identifying" @click="graphCode">
+        <img class="img" :src="`data:image/png;base64,${imgUrl}`" alt="">
+      </div>
     </div>
 
     <div class="center">
-      <myInput icon="icon-graphics" class="input-two" placeholder="请输入验证码"></myInput>
-      <div class="identifying-two">获取验证码</div>
+      <myInput icon="icon-graphics" v-model="data.smsCode" class="input-two" placeholder="请输入验证码"></myInput>
+      <div class="identifying-two" v-text="(countDown===0||countDown===60)? '获取验证码':`${countDown}s`" @click="smsCode(data)"></div>
+      <!-- <div class="identifying-two">获取验证码</div> -->
     </div>
 
-    <button>确定</button>
+    <button @click="changePhoneMouted(data)">确定</button>
     <p>提示：更换手机号后，下次登录需用新的手机号登录</p>
   </div>
 </template>
@@ -27,34 +30,51 @@ import { Action } from 'vuex-class'
 @Component({components: { myInput:path.myInput }})
 
 export default class RevisePhoneNumber extends Vue {
-  @Action('changePhone')  changePhone     // 修改手机号码
-  @Action('getGraphCode') getGraphCode   // 获取图形验证码
+  @Action('changePhone')  changePhone      // 修改手机号码
+  @Action('getGraphCode') getGraphCode     // 获取图形验证码
   @Action('getSmsCode')   getSmsCode       // 获取手机验证码
 
   data = {
-    imgUrl:'',
+    newPhoneNum:'',
     smsCode:'',
-    newPhoneNum:''
+    vcode:''
   }
+
+  imgUrl:string=""
   countDown:number=60
   time:any
 
 // 图形验证码
   graphCode(){
     this.getGraphCode().then(res=>{
-      this.data.imgUrl = res.data.vcodeImage
+      this.imgUrl = res.data.vcodeImage
     }).catch(err=>{
       this.$toast.fail(err)
     })
   }
- 
-  smsCode(data){
-    this.getSmsCode(data).then(res=>{
 
+// 获取手机验证码
+  smsCode(data){
+    if (this.countDown !== 60) return
+    this.getSmsCode({phoneNum:data.newPhoneNum,vcode:data.vcode}).then(res=>{
+      this.$toast.success('验证码已发送');
+      this.countDownTime()
+    }).catch(err=>{
+      this.$toast.fail(err)
+      this.graphCode()
     })
   }
 
-    // 计时器
+// 修改手机号码
+  changePhoneMouted(){
+    this.changePhone().then(res=>{
+      this.$toast.success('修改完成')
+    }).catch(err=>{
+      this.$toast.fail(err)
+    })
+  }
+
+// 计时器
   countDownTime() {
     let _this = this
     this.countDown = 60
@@ -98,9 +118,17 @@ export default class RevisePhoneNumber extends Vue {
     }
     .identifying{
       background-color: $color-e3;
+      border:1px $color-e3 solid;
       width: 178px;
       height: 88px;
       border-radius: 10px;
+      object-fit: cover;
+
+      img{
+        height: 100%;
+        width: 100%;
+        border-radius: 10px;
+      }
     }
     .identifying-two{
       background-color: $color-fb;

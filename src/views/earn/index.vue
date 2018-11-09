@@ -1,14 +1,16 @@
 <template>
   <div class="guide">
   <!-- 签到 -->
-    <earnTitle :register="register"></earnTitle>
+    <earnTitle  :numberValue="numberValue" :integral="signIntegral" :register="register" :isShow="isShow" ref="earnTitle" :isRange="isRange" @receiveMethod="receiveMethod">
+
+    </earnTitle>
 
   <!-- 做任务赚积分 title -->
-    <couponTitle titleContent="做任务赚积分" class="coupon-title"></couponTitle>
+    <couponTitle v-if="infoPerfect.status||dayShare.status||invitation.status" titleContent="做任务赚积分"  class="coupon-title"></couponTitle>
     <!-- 做任务赚积分 -->
-    <taskCard class="task-crad" :isActive="true"></taskCard>
-    <taskCard class="task-crad" btnText="去分享" @goShare="goShare" :isActive="false" number="1"></taskCard>
-    <taskCard class="task-crad" btnText="去邀请" @goShare="goShare" :isActive="false" number="100"></taskCard>
+    <taskCard v-if="infoPerfect.status" class="task-crad" :isActive="infoPerfect.isInfoPerfect" :number="infoPerfect.integral"></taskCard>
+    <taskCard v-if="dayShare.status"  class="task-crad" :btnText="dayShare.isDayShare? '今天已分享':'去分享'" @goShare="goShare" :isActive="dayShare.isDayShare" :number="dayShare.integral"></taskCard>
+    <taskCard v-if="invitation.status" class="task-crad" btnText="去邀请" @goShare="goShare" :value="invitation.inviteSum" :isActive="false" :number="invitation.integral"></taskCard>
 
 <!-- 更多积分方式 title-->
     <couponTitle titleContent="更多积分方式" class="more"></couponTitle>
@@ -36,22 +38,148 @@ import earnTitle from "@/components/common/earn/earnTitle.vue"
 import couponTitle from "@/components/common/guide/couponTitle.vue"
 import taskCard from "@/components/common/earn/taskCard.vue"
 import moreIntegral from "@/components/common/earn/moreIntegral.vue"
+import { Action } from 'vuex-class'
+import json from "../../lang/wx"
+// import { wxMethod } from "../../config/wxMethod"
+
 
 @Component({
-  components: {
-    earnTitle:earnTitle,
-    couponTitle:couponTitle,
-    taskCard:taskCard,
-    moreIntegral:moreIntegral
-  }
+  components: {earnTitle:earnTitle, couponTitle:couponTitle, taskCard:taskCard, moreIntegral:moreIntegral}
 })
 export default class Guide extends Vue {
-  register:Boolean = false;   //是否签到
+  register:Boolean = false;      //是否签到
   show:Boolean = false
+  isShow:number = 0              //是否禁用签到
+  signIntegral:number = 0        //签到赠送积分
+  numberValue:number  = 0        //签到分值
+  isRangeText:string  = ""       //授权或者不在范围内的信息提示文本 
 
-  // 分享，子组件触发父组件的方法
-  goShare(){
-    this.show = true
+  infoPerfect = {status:0}       //完善资料
+  invitation  = {status:0}       //邀请
+  dayShare    = {status:0}       //分享
+
+// 腾讯地图获取的南方软件园坐标
+  dimension:number = 22.372540   //维度
+  longitude:number = 113.574840  //经度
+  isRange:boolean = false        //是否在商场范围大概是方圆1.1公里左右的范围
+
+  @Action("punchClock")            punchClock             //签到
+  @Action("exchangeVoucherIndex")  exchangeVoucherIndex   //首页展示
+  @Action("gotoInvite")            gotoInvite             //邀请码
+
+  // 签到 子组件触发父组件的方法
+  receiveMethod(){
+    this.punchClock().then(res=>{
+      this.$refs.earnTitle['showDialong'](this.isRangeText)
+      this.register = true
+    }).catch(err=>{
+      this.$toast.fail(err)
+    })
+  }
+
+  indexShow(){
+    this.exchangeVoucherIndex().then(res=>{
+      this.numberValue = res.data.daySign.integral
+      this.register = res.data.daySign.isDaySign
+      this.isShow = res.data.daySign.status
+      this.dayShare = res.data.dayShare
+      this.signIntegral =res.data.daySign.integral
+      this.invitation = res.data.invitation
+      this.infoPerfect = res.data.infoPerfect
+    })
+  }
+
+  share(){
+    // const _this = this
+    // this.$wx.ready(function () {      //需在用户可能点击分享按钮前就先调用
+    // _this.$wx.updateTimelineShareData({ 
+    //     title: '这是一个有趣的页面', // 分享标题
+    //     link: 'http://wyw-wx.test.qi-cloud.com', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+    //     imgUrl: 'https://ss1.baidu.com/-4o3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=a0417f4137292df588c3aa158c305ce2/9345d688d43f8794906df240df1b0ef41ad53ac9.jpg', // 分享图标
+    //     success: function () { 
+    //       console.log("这是js sdk成功")
+    //     }
+    //     })
+    //   })
+   }
+
+
+
+  // 分享,邀请，子组件触发父组件的方法
+  goShare(data){
+
+    if(data==="share"){
+      this.$router.push({name:'guide'})
+      return
+      }else if(data==="invitation"){
+      this.show = true
+    }
+  }
+
+  // 邀请码
+  InviteCode(){
+    this.gotoInvite().then(res=>{
+      // 朋友圈
+      let circleCode = json.earnShareCircleOfFriends.link
+      // 好友
+      let friends = json.earnShareOfFriends.link
+      circleCode = `${circleCode}?inviteCode=${res.data.inviteCode}`
+      friends = `${friends}?inviteCode=${res.data.inviteCode}`
+      json.earnShareOfFriends.title = friends
+      console.log(json.earnShareOfFriends.title,"===============    =======================")
+    }).catch(err=>{
+      this.$toast.fail(err);
+    })
+  }
+
+  wxMethod(){
+    let _this = this
+    this.$wx.ready(function () {
+    _this.$wx.getLocation({
+      type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+      success: function (res) {
+      let latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+      let longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+      let speed = res.speed; // 速度，以米/每秒计
+      let accuracy = res.accuracy; // 位置精度
+      //   0.01大概等于1.11KM
+      if((_this.dimension-latitude<0.01&&_this.dimension-latitude>-0.01)
+          &&(_this.longitude-longitude<0.01&&_this.longitude-longitude>-0.01)){
+        _this.isRange = true
+        console.log("在范围内")
+      }else{
+        _this.isRange = false
+      }
+      console.log(latitude,'======= 维度============')
+      console.log(longitude,'========= 经度 ==========')
+        }
+      })
+    _this.$wx.error( (err)=>{
+      console.log(err,"============= 这是位置错误信息 ==============")
+      _this.isRangeText = "位置授权失败，请重新授权" 
+      })
+    })
+  }
+
+  created(){
+    this.InviteCode()
+    this.wxMethod()
+    this.indexShow()
+
+    // this.$wx.ready(function(){
+    //   wxMethod.updateAppMessageShareData(
+    //     {
+    //       title:"我在万悦湾等你啦啦啦啦啦",
+    //       link:"http://wyw-wx.test.qi-cloud.com",
+    //       imgUrl: "https://ss1.baidu.com/-4o3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=a0417f4137292df588c3aa158c305ce2/9345d688d43f8794906df240df1b0ef41ad53ac9.jpg"
+    //     }
+    //   )
+    // })
+  }
+
+  mounted () {
+ 
+    console.log(document.cookie,'============= 123456 ============')
   }
 
 }

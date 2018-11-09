@@ -40,7 +40,7 @@ export default class ForgetPassword extends Vue {
   data = {
     phoneNum: "",            //手机号码
     vcode: "",               //图形验证码
-    smsCode: "",     //验证码
+    smsCode: "",             //验证码
     newPwd: "",              //密码
     resetPwd: ""             //再次输入密码
   }

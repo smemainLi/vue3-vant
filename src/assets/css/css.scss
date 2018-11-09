@@ -31,7 +31,6 @@ $color-a6:#A6B5F7;
 $color-e3:#E3E3E3;
 $color-90:#908224;
 $color-f3:#F3F3F3;
-
 body {
   background-color: #f5f5f5;
 }
@@ -67,6 +66,16 @@ textarea {
   outline: none;
   // border: 0px;
   appearance: none;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+//去除input类型为number的默认样式
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
 }
 
 // 取消chrome下textarea可拖动放大

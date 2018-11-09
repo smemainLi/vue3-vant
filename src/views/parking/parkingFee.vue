@@ -1,5 +1,6 @@
 <template>
   <div class="parkingFee">
+    <div class="charge-description">收费说明>></div>
     <deduction></deduction>
     <router-link :to="{path:'/parking/successDeduct'}">
       <commonBtn :class="[{commonBtn:!needToPay}]"></commonBtn>
@@ -79,6 +80,13 @@ body {
 <style lang="scss" scoped>
 .parkingFee {
   text-align: center;
+  .charge-description {
+    position: absolute;
+    top: 51px;
+    right: 32px;
+    font-size: 28px;
+    color: $color-35;
+  }
   .commonBtn {
     background-color: #d2d2d2;
     color: #f5f5f5;

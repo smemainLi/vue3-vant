@@ -1,6 +1,6 @@
 <template>
   <div class="discount">
-    <div class="discount-info">
+    <div class="discount-info" v-show="discountInfo.discountTitle">
       <div class="discount-title" v-cloak>{{discountInfo.discountTitle}}</div>
       <div class="discount-time" v-cloak>{{discountInfo.discountTime}}</div>
     </div>
@@ -21,14 +21,13 @@ export default class Ddiscount extends Vue {
 </script>
 <style lang="scss" scoped>
 .discount {
-  margin-top: 24px;
+  margin-top: 2px;
   .discount-info {
-    height: 170px;
+    height: 130px;
     background: url("../../../assets/image/guide/discountBg.png") no-repeat;
     background-size: 100% 170px;
-    padding: 50px 0 0 50px;
+    padding: 25px 0 0 50px;
     box-sizing: border-box;
-
     color: $color-35;
     .discount-title {
       font-size: 40px;

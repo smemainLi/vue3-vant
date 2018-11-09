@@ -1,7 +1,7 @@
 <template>
   <div class="tab">
-    <van-tabs v-model="active">
-      <van-tab v-for="(item,index) in category" :title="item" :key="index">
+    <van-tabs v-model="active" @click="selectCategory">
+      <van-tab v-for="(item,index) in category" :title="item.name" :key="index">
       </van-tab>
     </van-tabs>
   </div>
@@ -15,7 +15,14 @@ import { Component, Provide, Vue } from "vue-property-decorator";
   }
 })
 export default class Tab extends Vue {
-  active = 1;
+  active = 0;
+  category: any;
+
+  selectCategory(index: string, title: string) {
+    console.log(`子组件${this.category[index].id}`);
+    //向父组件传递参数，第一个参数是父组件中绑定的自定义回调方法，第二个参数为传递的参数
+    this.$emit("categoryId", this.category[index].id);
+  }
 }
 </script>
 <style lang="scss" scoped>

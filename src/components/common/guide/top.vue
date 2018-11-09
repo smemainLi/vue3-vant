@@ -2,7 +2,7 @@
   <div class="top">
     <div class="store-picture">
       <div class="store-head">
-        <img class="head-portrait" src="../../../assets/image/guide/head.png" alt="">
+        <img class="head-portrait" :src="storeLogo?storeLogo:defaultLogo" alt="店铺logo">
       </div>
       <div class="describe">
         <div class="store-name" v-cloak>{{metaTitle}}</div>
@@ -10,26 +10,40 @@
         <div class="per-capita" v-cloak>{{perCapita}}</div>
       </div>
       <div class="follow">
-        <i class="icon-attention"></i>
-        <!-- <img class="follow-image" src="../../../assets/image/guide/follow.png" alt=""> -->
-        <div class="follow-word" v-cloak>{{follow}}</div>
+        <i class="icon-attention" @click="follow()"></i>
+        <div class="follow-word" v-cloak>{{focus}}</div>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { Component, Provide, Vue } from "vue-property-decorator";
+import { Component, Provide, Vue, Watch } from "vue-property-decorator";
 
 @Component({
-  props: ["metaTitle"],
+  props: [""],
   components: {
   }
 })
 export default class Top extends Vue {
+
+  defaultLogo = require('../../../assets/image/guide/head.png');
+  storeLogo = "";
+  metaTitle = "ONLY服饰店";
   storeBrief = "年轻，时尚，就是好";
   perCapita = "人均：45";
-  follow = "关注";
+  isFocus = true;
+  focus = "关注";
 
+  follow() {
+    if (this.isFocus) {
+      (<any>document).getElementsByClassName('icon-attention')[0].style.color = '#f56e73';
+      this.focus = "取消";
+    } else {
+      (<any>document).getElementsByClassName('icon-attention')[0].style.color = '#d2d2d2';
+      this.focus = "关注";
+    }
+    this.isFocus = !this.isFocus;
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -61,7 +75,7 @@ export default class Top extends Vue {
       .icon-attention {
         display: block;
         font-size: 48px;
-        color: #f56e73;
+        color: #d2d2d2;
       }
       .follow-word {
         color: $color-00;

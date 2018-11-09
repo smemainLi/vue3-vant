@@ -5,7 +5,7 @@
         <i class="icon-personal-phone"></i>
         <input type="number" @touchstart.native.stop="show=true" onkeyup="value=value.replace(/[^\d]/g,'')" v-model="account" :placeholder="accountPlaceholder">
       </div>
-      <div class="input-file">
+      <div class="input-file password-input">
         <i class="icon-lock"></i>
         <input type="password" v-model="pwd" :placeholder="pwdPlaceholder">
       </div>
@@ -15,6 +15,7 @@
       <router-link tag="div" :to="{name:'openMember'}" class="no-account" v-cloak>{{noAccount}}</router-link>
       <router-link tag="div" :to="{name:'forgetPassword'}" class="forget-pwd" v-cloak>{{forgetPwd}}</router-link>
     </div>
+
   </div>
 </template>
 
@@ -54,12 +55,12 @@ export default class Login extends Vue {
 
   btnName: string = '登录';
 
-  async login() {
+  login() {
     let data = {
       account: this.account,
       pwd: md5(this.pwd)
     };
-    await this.authLogin(data).then((res) => {
+    this.authLogin(data).then((res) => {
       this.$toast.success({ duration: 1000, message: '登录成功！' });
       setTimeout(() => this.$router.go(-1), 1000);
 
@@ -81,11 +82,14 @@ export default class Login extends Vue {
         }
       });
     });
-  }
-
-  mounted() {
-    this.getLocation();
   } */
+
+  test() {
+  }
+  mounted() {
+    /* this.getLocation(); */
+    this.test();
+  }
 }
 </script>
 
@@ -98,7 +102,7 @@ export default class Login extends Vue {
     padding-top: 74px;
     .input-file {
       position: relative;
-      margin-top: 24px;
+      margin-bottom: 24px;
       i {
         position: absolute;
         left: 53px;
@@ -115,6 +119,9 @@ export default class Login extends Vue {
         border-radius: 10px;
         padding-left: 69px;
       }
+    }
+    .password-input {
+      margin-bottom: 0;
     }
   }
   .tips {
