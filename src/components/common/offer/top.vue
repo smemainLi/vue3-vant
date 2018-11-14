@@ -8,10 +8,10 @@
         <div class="store-name" v-cloak>{{mechantInfo.storeName}}</div>
         <div class="store-brief" v-cloak>{{mechantInfo.storeBrief}}</div>
       </div>
-      <div class="benefits">
+      <router-link class="benefits" tag="div" :to="{path:`/guide/detailPage/${mechantInfo.storeId}`}">
         <van-icon class="arrow-icon" name="arrow" />
         <div class="more-benefits" v-show="mechantInfo.isMore">更多优惠</div>
-      </div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -24,7 +24,8 @@ import { Component, Provide, Vue } from "vue-property-decorator";
   }
 })
 export default class Top extends Vue {
-  defaultImage = require('../../../assets/image/offer/head.png')
+  defaultImage = require('../../../assets/image/offer/head.png');
+  merchantId: string = "sdlfhskdfklsdf";
 }
 </script>
 <style lang="scss" scoped>

@@ -1,4 +1,5 @@
 import { request } from '@/config/request';
+import { setStore, getStore } from '@/config/utils';
 
 const state = {};
 const getters = {};
@@ -11,7 +12,11 @@ const actions = {
   /**
    * 获取店铺详情
    */
-  storeDetail: ({ commit }, data) => { return request('/wx/member/storeDiscount/store/storeDetail', data) }
+  storeDetail: ({ commit }, data) => { return request('/wx/member/storeDiscount/store/storeDetail', data) },
+  /**
+   * 修改对店铺的关注
+   */
+  updateFocus: ({ commit }, data) => { return request('/wx/member/storeDiscount/store/updateFocus', data) },
 };
 
 export default {

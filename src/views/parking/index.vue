@@ -1,7 +1,7 @@
 <template>
   <!-- 积分停车页面 -->
   <div class="parking">
-    <div class="charge-description">收费说明>></div>
+    <router-link class="charge-description" tag="div" :to="{path:`/protocol/${type}`}">收费说明>></router-link>
     <div class="car-info">
       <div class="car-photo">
         <img class="car-image" src="../../assets/image/parking/car.png" alt="">
@@ -39,6 +39,7 @@ import commonBtn from '../../components/common/button.vue';
 export default class Parking extends Vue {
   btnName: string = "";
   isCarNum: boolean = false;
+  type: number = 3;//文明文档的类型，3----停车收费
 
   /**
    * 回调方法，接收子组件传的参数

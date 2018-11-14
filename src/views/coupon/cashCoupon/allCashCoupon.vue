@@ -4,23 +4,17 @@
 
 			<!-- 待使用   -->
 			<div slot="待使用">
-				<!-- <router-link :to='{name:"cashCouponWaitUse"}'> -->
 					<ContentModel component="cashCouponWaitUse" :contentText="item" v-for="item in contentText1" :key="item.id"></ContentModel>
-				<!-- </router-link> -->
 			</div>
 
 			<!-- 已使用  -->
 			<div slot="已使用">
-				<!-- <router-link  :to="{name:'cashCouponUse'}" v-for="(item,index) in contentText2" :key="index"> -->
 					<ContentModel component="cashCouponUse" v-for="item in contentText2" :key="item.id" :contentText="item"></ContentModel>
-				<!-- </router-link> -->
 			</div>
 
 			<!-- 已过期 -->
 			<div slot="已过期">
-				<!-- <router-link  :to="{name:'cashCouponExpire'}" v-for="(item,index) in contentText3" :key="index"> -->
 					<ContentModel component="cashCouponExpire" :contentText="item" v-for="item in contentText3" :key="item.id"></ContentModel>
-				<!-- </router-link> -->
 			</div>
 			
 		</Tab>
@@ -112,7 +106,7 @@ export default class allCashCoupon extends Vue {
       pageNo       :this.usedPageNo,
       methodName   :this.couponUsed,
       arr          :this.contentText2,
-      isUse        :false,
+      isUse        :true,
       status       :this.usedStatus
     }
     this.$Coupon.Method(coupon)
@@ -128,7 +122,7 @@ export default class allCashCoupon extends Vue {
       pageNo       :this.expiredPageNo,
       methodName   :this.couponExpired,
       arr          :this.contentText3,
-      isUse        :false,
+      isUse        :true,
       status       :this.expiredStatus
     }
      if(this.expiredStatus) return

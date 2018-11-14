@@ -4,23 +4,17 @@
 
 			<!-- 待使用   -->
 			<div slot="待使用">
-				<!-- <router-link :to='{name:"exchangeVoucherWaitUse"}'> -->
 					<ContentModel component="exchangeVoucherWaitUse" :contentText="item" v-for="item in contentText1" :key="item.id"></ContentModel>
-				<!-- </router-link> -->
 			</div>
 
 			<!-- 已使用  -->
 			<div slot="已使用">
-				<!-- <router-link  :to="{name:'exchangeVoucherUse'}" v-for="(item,index) in contentText2" :key="index"> -->
 					<ContentModel component="exchangeVoucherUse" :contentText="item" v-for="item in contentText2" :key="item.id" ></ContentModel>
-				<!-- </router-link> -->
 			</div>
 
 			<!-- 已过期 -->
 			<div slot="已过期">
-				<!-- <router-link  :to="{name:'exchangeVoucherExpire'}" v-for="(item,index) in contentText3" :key="index"> -->
 					<ContentModel component="exchangeVoucherExpire" :contentText="item" v-for="item in contentText3" :key="item.id"></ContentModel>
-				<!-- </router-link> -->
 			</div>
 			
 		</Tab>
@@ -85,7 +79,7 @@ export default class ExchangeVoucherIndex extends Vue {
     }
   }
 
-// 优惠券
+// 兑换券
   // 待使用
   couponNotUsedMethod(){
     if(this.notUsedStatus) return
@@ -94,12 +88,12 @@ export default class ExchangeVoucherIndex extends Vue {
       methodName    :this.couponNotUsed,
       arr           :this.contentText1,
       isUse         :false,
-      status        :this.notUsedStatus
+      status        :this.notUsedStatus,
+      isExchange    :true  
     }
     this.$Coupon.Method(coupon).then(res=>{
-      this.contentText1  = res.arr.map(item=>{
-														return {...item,mechantLogo:item.goodsImage}
-													 })
+      
+      this.contentText1  = res.arr
       this.notUsedStatus = res.status
       this.notUsedPageNo    = res.pageNo
     })
@@ -111,14 +105,13 @@ export default class ExchangeVoucherIndex extends Vue {
       pageNo       :this.usedPageNo,
       methodName   :this.couponUsed,
       arr          :this.contentText2,
-      isUse        :false,
-      status       :this.usedStatus
+      isUse        :true,
+      status       :this.usedStatus,
+      isExchange   :true 
     }
     this.$Coupon.Method(coupon)
     .then(res=>{
-      this.contentText2  = res.arr.map(item=>{
-														return {...item, mechantLogo:item.goodsImage}
-													})
+      this.contentText2  = res.arr
       this.usedStatus    = res.status
       this.usedPageNo = res.pageNo
     })
@@ -129,16 +122,14 @@ export default class ExchangeVoucherIndex extends Vue {
       pageNo       :this.expiredPageNo,
       methodName   :this.couponExpired,
       arr          :this.contentText3,
-      isUse        :false,
-      status       :this.expiredStatus
+      isUse        :true,
+      status       :this.expiredStatus,
+      isExchange   :true 
     }
      if(this.expiredStatus) return
     this.$Coupon.Method(coupon)
     .then(res=>{
-			//  this.contentText3  = res.arr
-			this.contentText3 = res.arr.map(item=>{
-													return {...item, mechantLogo:item.goodsImage}
-													})
+      this.contentText3 = res.arr
       this.expiredStatus  = res.status
       this.expiredPageNo  = res.pageNo
     })

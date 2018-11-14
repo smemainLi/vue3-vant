@@ -9,7 +9,7 @@
         </div>
         <div class="center">
           <div class="stepper-box">
-            <div class="reduce some" @click="values<1? values:values--">
+            <div class="reduce some" @click="values<2? values:values--">
               <img src="@/assets/image/redeem/reduce.png" alt="">
             </div>
             <div>
@@ -19,7 +19,7 @@
               <img src="@/assets/image/redeem/add.png" alt="">
             </div>
           </div>
-          <div class="content-text">所需积分100</div>
+          <div class="content-text" v-text="`所需积分${dialongData*values}`"></div>
         </div>
         <div class="botton">
           <div class="botton-left" @click="dialongs=false">取消</div>
@@ -37,15 +37,22 @@ import { Component, Provide, Vue, Watch } from "vue-property-decorator";
  *    ！！！！！注意   有可能需要把所需积分100中的积分数量作为一个变量，目前还没添加此变量
  */
 
-@Component({})
+@Component({
+  props:{
+    dialongData:{
+      type:Number,
+      default:0
+    }
+  }
+})
 export default class Dialongs extends Vue {
-  values:Number = 0           //输入框的信息
+  values:Number = 1           //输入框的信息
   dialongs:Boolean = false    //弹出框是否隐藏和显示
 
 // 父组件触发子组件的方法
   showDialong(show:any):void{
     this.dialongs = show
-    this.values = 0   
+    this.values = 1   
   }
 }
 </script>

@@ -4,23 +4,17 @@
 
       <!-- 待使用   -->
       <div slot="待使用">
-        <!-- <router-link :to='{name:"waitUse"}'> -->
         <ContentModel component="waitUse" :contentText="item" v-for="item in contentText1" :key="item.id"></ContentModel>
-        <!-- </router-link> -->
       </div>
 
       <!-- 已使用  -->
       <div slot="已使用">
-        <!-- <router-link :to="{name:'use'}" v-for="(item,index) in contentText2" :key="index"> -->
         <ContentModel component="alreadyUse"  v-for="item in contentText2" :key="item.id" :contentText="item"></ContentModel>
-        <!-- </router-link> -->
       </div>
 
       <!-- 已过期 -->
       <div slot="已过期">
-        <!-- <router-link :to="{name:'expire'}" v-for="(item,index) in contentText3" :key="index"> -->
         <ContentModel component="expire" :contentText="item" v-for="item in contentText3" :key="item.id"></ContentModel>
-        <!-- </router-link> -->
       </div>
 
     </Tab>
@@ -103,7 +97,7 @@ export default class allCoupon extends Vue {
       pageNo       :this.usedPageNo,
       methodName   :this.couponUsed,
       arr          :this.contentText2,
-      isUse        :false,
+      isUse        :true,
       status       :this.usedStatus
     }
     this.$Coupon.Method(coupon)
@@ -119,7 +113,7 @@ export default class allCoupon extends Vue {
       pageNo       :this.expiredPageNo,
       methodName   :this.couponExpired,
       arr          :this.contentText3,
-      isUse        :false,
+      isUse        :true,
       status       :this.expiredStatus
     }
      if(this.expiredStatus) return
@@ -152,14 +146,6 @@ handleScroll () {
   destroyed () {
     this.listenScroll.removeScroll()
   }
-
-// {
-//       isUse: false,
-//       useText: '待使用',
-//       title: "小世界餐馆",
-//       coupon: '满两百减一百',
-//       imgUrl: require('@/assets/image/coupon/cashCoupon.png')
-//     }
 
   contentText1: Array<contentMsg> = [ ]
 

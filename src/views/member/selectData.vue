@@ -1,6 +1,9 @@
 <template>
   <div class="select-data">
     <selectCard @sexMothed="sexMothed" @dateMothed="dateMothed" :carCode="carCode" :sex="sex" :birthdate="birthdate"></selectCard>
+    <div class="btn" @click="outLogin">
+      退出登陆
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -16,6 +19,7 @@ export default class SelectData extends Vue {
   @Action('setSex')        setSex          //设置性别
   @Action('setBirthdate')  setBirthdate    //设置出生年月日
   @Action('datumInfo')     datumInfo       //我的资料信息
+  @Action('loginOut')      loginOut        // 退出登陆
 
   carCode:string=""     //车牌号码
   birthdate:string=""  //出生年月日
@@ -60,6 +64,19 @@ export default class SelectData extends Vue {
     })
   }
 
+// 退出登陆
+  outLogin(){
+    this.loginOut().then(res=>{
+      let _this = this
+      this.$toast.success("成功退出");
+      setTimeout(function(){
+        _this.$router.push({name:"login"})
+      },1000)
+    }).catch(err=>{
+      this.$toast.fail(err);
+    })
+  }
+
   created() {
     this.datumIndexInfo()
   }
@@ -68,4 +85,17 @@ export default class SelectData extends Vue {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.select-data{
+  .btn{
+    height: 88px;
+    line-height: 88px;
+    width: 100%;
+    text-align: center;
+    background-color: $color-ff;
+    margin-top: 23px;
+    color:$color-35;
+    font-size: $size36;
+  }
+}
+</style>

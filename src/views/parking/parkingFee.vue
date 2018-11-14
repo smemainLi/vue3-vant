@@ -1,6 +1,6 @@
 <template>
   <div class="parkingFee">
-    <div class="charge-description">收费说明>></div>
+    <router-link class="charge-description" tag="div" :to="{path:`/protocol/${type}`}">收费说明>></router-link>
     <deduction></deduction>
     <router-link :to="{path:'/parking/successDeduct'}">
       <commonBtn :class="[{commonBtn:!needToPay}]"></commonBtn>
@@ -36,6 +36,7 @@ export default class ParkingFee extends Vue {
   points = "3333";
   needToPay = true;
   buttonName = this.needToPay ? `使用${this.points}积分抵扣` : '暂无需支付';
+  type: number = 3;//文明文档的类型，3----停车收费
 
   @Provide()
   btnName: string = this.buttonName;

@@ -5,7 +5,7 @@
       <img src="@/assets/image/earn/earnBG.png" alt="" srcset="">
       <p class="text" v-if="isShow" v-text="`来到购物中心点击打卡，即可获得${numberValue}积分`"></p>
       <p class="scene" v-if="isShow" v-text="`现场签到+${numberValue}分`"></p>
-      <button v-if="isShow" :class="{'bg-color':register}" @click="receiveMethod()">立即签到</button>
+      <button v-if="isShow" :class="{'bg-color':register}" @click="receiveMethod()" v-text="register? '已签到':'立即签到'"></button>
     </div>
 
   <!-- 提示成功签到的弹出框 -->

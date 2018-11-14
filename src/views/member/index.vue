@@ -19,7 +19,6 @@
     <bar class="bar"></bar>
 
 
-    <button class="button" @click="outLogin">退出登陆</button>
 
   <!-- 二维码弹出框 -->
     <memberIndexDialog :show="show" v-model="show"></memberIndexDialog>
@@ -38,7 +37,6 @@ import { Action } from 'vuex-class'
 
 export default class Member extends Vue {
   @Action('memberIndexInfo')   memberIndexInfo         // 首页数据
-  @Action('loginOut')          loginOut                // 退出登陆
 
   userInfo:any={ }
   show:boolean=false;
@@ -53,19 +51,6 @@ export default class Member extends Vue {
      this.memberIndexInfo().then(res=>{
       this.userInfo = res.data
       this.showIndex = true
-    }).catch(err=>{
-      this.$toast.fail(err);
-    })
-  }
-
-// 退出登陆
-  outLogin(){
-    this.loginOut().then(res=>{
-      let _this = this
-      this.$toast.success("成功退出登陆");
-      setTimeout(function(){
-        _this.$router.push({name:"login"})
-      },1000)
     }).catch(err=>{
       this.$toast.fail(err);
     })
@@ -94,19 +79,19 @@ export default class Member extends Vue {
     left: 0;
   }
 
-  .button{
-    display: block;
-    height: 88px;
-    width: 686px;
-    padding: 0;
-    border:0;
-    color:$color-35;
-    font-size: $size36;
-    font-weight: 500;
-    background-color: $color-fb;
-    margin:0 auto;
-    margin-top:60px;
-  }
+  // .button{
+  //   display: block;
+  //   height: 88px;
+  //   width: 686px;
+  //   padding: 0;
+  //   border:0;
+  //   color:$color-35;
+  //   font-size: $size36;
+  //   font-weight: 500;
+  //   background-color: $color-fb;
+  //   margin:0 auto;
+  //   margin-top:60px;
+  // }
 }
 
 </style>

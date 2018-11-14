@@ -57,7 +57,7 @@ const router = new Router({
     { path: "/coupon/exchangeVoucherUse/:id", name: "exchangeVoucherUse", meta: { title: '兑换券' }, component: routerPath.exchangeVoucherUse, props: true },
     { path: "/coupon/exchangeVoucherExpire/:id", name: "exchangeVoucherExpire", meta: { title: '兑换券' }, component: routerPath.exchangeVoucherExpire, props: true },
     // 积分兑换
-    { path: "/redeem/index", name: "redeem", meta: { title: '积分兑换' }, component: routerPath.redeem },
+    { path: "/redeem/index", name: "redeem", meta: { title: '积分商城' }, component: routerPath.redeem },
     { path: "/redeem/integralDetail", name: "integralDetail", meta: { title: '积分明细' }, component: routerPath.integralDetail },
 
     // 赚积分
@@ -87,18 +87,18 @@ router.beforeEach((to, from, next) => {
   Toast.clear()  //关闭提示框
   //判断是否登录过
   isLogin().then(res => {
-    store.commit('isLogins', res.data.isLogin)
-    if(inviteCode){
+    store.commit('isLogins', { isLogin: res.data.isLogin })
+    if (inviteCode) {
       if (!res.data.isLogin) next({ path: `/member/openMember/?inviteCode=${inviteCode}` })
     } else {
       if (!res.data.isLogin && to.path !== "/login" && to.path !== "/" && to.path !== "/member/openMember") next({ path: "/login" })
       else if (res.data.isLogin) {//如果已经登录过了
         if (to.path === '/member/openMember') next({ path: "/" })
-        // /**
-        //  * 登录之后进行微信鉴权
-        //  * 判断微信是否授权，如果未授权，请求授权
-        //  * 如果已经授权，可以请求sdk认证
-        //  */
+        /**
+         * 登录之后进行微信鉴权
+         * 判断微信是否授权，如果未授权，请求授权
+         * 如果已经授权，可以请求sdk认证
+         */
         // if (!getCookie('qi_openid')) {
         //   // 微信授权
         //   getAuthorizeUrl(to.path).then(res => {

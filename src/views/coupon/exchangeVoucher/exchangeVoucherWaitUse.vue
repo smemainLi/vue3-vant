@@ -8,7 +8,7 @@
     <waitUse :codeMsg="codeMsg"></waitUse>
 
     <!-- 有效期及时间和适用范围 -->
-		  <scope :scopeMsg="scopeMsg" v-if="scopeMsg.length"></scope>
+		  <scope :scopeMsg="scopeMsg" v-if="scopeMsg.length!==0"></scope>
 
   </div>
 </template>
@@ -41,10 +41,15 @@ couponTime = {}   //券码和二维码
     this.integralExchangeDetail({id:this.id}).then(res=>{
      this.$nextTick(()=>{
       this.upperLimit = res.data.upperLimit
-      this.contentText = {...res.data,id:res.data.goodsId,mechantName:res.data.name,mechantLogo:res.data.goodsImage,name:`${res.data.deductionIntegral}积分兑换`}
+      this.contentText = {...res.data,id:res.data.goodsId,
+                          mechantName:res.data.name,
+                          mechantLogo:res.data.goodsImage,
+                          name:res.data.type===1? `${res.data.deductionIntegral}积分兑换${res.data.coinNum}个`
+                                                  :`${res.data.deductionIntegral}积分兑换`,
+                        }
       this.codeMsg = res.data
 		  this.couponTime = {...res.data,time:res.data.usedDate,isUse:true}
-      this.$Coupon.dataHandling(res,this.scopeMsg)
+      this.$Coupon.dataHandling(res,this.scopeMsg,true)
      })
     })
   }

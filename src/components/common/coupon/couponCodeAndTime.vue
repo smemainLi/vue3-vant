@@ -1,7 +1,7 @@
 <template>
   <div class="couponCode">
     <div class="top">
-      <div class="coupon" v-text="`券码：${couponTime.quanCode}`"></div>
+      <div class="coupon" v-text="`券码：${couponTime.quanCode? couponTime.quanCode:''}`"></div>
 	    <button :class="['button',couponTime.isUse? 'yes':'']" v-text="couponTime.statusName"></button>
     </div>
     <div class="bottom" v-if="'time' in couponTime">
@@ -23,7 +23,6 @@ import { Component, Provide, Vue } from "vue-property-decorator";
   couponTime ---- Object
       code     券码
       isUse    主要是控制按钮样式backgroundColor
-      useText  按钮文字
       time     消费时间 （如果不传此字段，就为待适用）
  *  */ 
 

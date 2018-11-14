@@ -6,7 +6,7 @@
 
       <!-- 券码 -->
       <div class="top">
-        <div class="coupon" v-text="`券码：${codeMsg.quanCode}`"></div>
+        <div class="coupon" v-text="`券码：${codeMsg.quanCode? codeMsg.quanCode:''}`"></div>
       </div>
 
       <!-- 二维码 -->

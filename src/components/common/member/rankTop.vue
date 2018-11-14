@@ -14,7 +14,7 @@
     <div class="progress">
       <van-progress
         color="#FBDE19"
-        :percentage="!(memberLevel.nowCondition/memberLevel.nextCondition)?  0:(memberLevel.nowCondition/memberLevel.nextCondition).toFixed(2)*100"
+        :percentage="!(memberLevel.nowCondition/memberLevel.nextCondition)?  0:(memberLevel.nextCondition===''? 100:(memberLevel.nowCondition/memberLevel.nextCondition).toFixed(2)*100)"
         :show-pivot="false"
       />
     </div>

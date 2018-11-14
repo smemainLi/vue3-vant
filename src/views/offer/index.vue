@@ -20,6 +20,7 @@ import card from '../../components/common/guide/card.vue';
 import { Action } from 'vuex-class';
 
 interface mechantInfo {
+  storeId: string,
   storeLogo: string,
   storeName: string,
   storeBrief: string,
@@ -63,10 +64,12 @@ export default class Member extends Vue {
   async getStoreDiscount() {
     await this.storeDiscount().then((res) => {
       const mechantList = res.data.list;
+      console.log(mechantList);
       this.length = mechantList.length;
       for (let i = 0; i < this.length; i++) {
         const mechant = mechantList[i];
         const mechantInfo: mechantInfo = {
+          storeId: mechant.mechantInfo.mechantId,
           storeLogo: mechant.mechantInfo.mechantLogo,
           storeName: mechant.mechantInfo.mechantName,
           storeBrief: mechant.mechantInfo.merchantDesc,

@@ -5,10 +5,9 @@
         <span class="path1"></span><span class="path2"></span>
       </i>
     </div>
-    <div class="site" v-cloak>{{site}}</div>
+    <div :class="['site',locationInfo.noSite?'':'noSite']" v-cloak>{{locationInfo.site}}</div>
     <div class="telephone">
-      <a href="tel:13726298724"><i class="icon-telephone"></i></a>
-
+      <a :href="locationInfo.phone"><i class="icon-telephone"></i></a>
     </div>
   </div>
 </template>
@@ -16,11 +15,13 @@
 import { Component, Provide, Vue } from "vue-property-decorator";
 
 @Component({
+  props: ["locationInfo"],
   components: {
   }
 })
 export default class Location extends Vue {
   site = "4楼12层";
+  phone = "tel:13726298724";
 }
 </script>
 <style lang="scss" scoped>
@@ -40,9 +41,12 @@ export default class Location extends Vue {
   }
   .site {
     margin-left: 10px;
-    line-height: 134px;
+    line-height: 126px;
     float: left;
     color: $color-88;
+  }
+  .noSite {
+    visibility: hidden;
   }
   .telephone {
     float: right;

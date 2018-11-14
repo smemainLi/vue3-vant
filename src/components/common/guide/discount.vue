@@ -15,8 +15,6 @@ import { Component, Provide, Vue } from "vue-property-decorator";
   }
 })
 export default class Ddiscount extends Vue {
-  discountTitle = "全场9折全场9折全场9折全场折";
-  discountTime = "20180504 ~ 20190603";
 }
 </script>
 <style lang="scss" scoped>

@@ -5,9 +5,8 @@
         <div class="top">当前积分</div>
         <div class="bottom" v-text="redeem"></div>
       </div>
-      <div class="explain">积分说明 >></div>
+      <router-link tag="div" :to="{name:'protocol',params:{type:2}}" class="explain">积分说明 >></router-link>
     </div>
-    
   </div>
 </template>
 
@@ -16,8 +15,8 @@ import { Component, Provide, Vue } from "vue-property-decorator";
   @Component({
     props:{
       redeem:{       //当前积分
-        type:String,
-        default:''
+        type:Number,
+        default:0
       }
     }
   })

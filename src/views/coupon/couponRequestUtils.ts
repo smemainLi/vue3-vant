@@ -10,6 +10,7 @@ class $Coupon {
  * @param {string} methodName     action的方法名
  * @param {object} data           页数和页码
  * @param {boolean} isUse         按钮的控制
+ * @param {boolean} isExchange    是否为兑换券（因为兑换券和代金券之类的数据处理方式不一样）
  * @returns {Array}               返回处理后的数组
  *  
  */
@@ -24,14 +25,16 @@ class $Coupon {
         return {...data} 
       }
       usedArray = res.data.list.map(item=>{
-        return {
+        return data.isExchange? 
+        {...item,
+            mechantLogo:item.goodsImage,
+            name:item.type===1? `${item.deductionIntegral}积分兑换${item.coinNum}个`
+                                :`${item.deductionIntegral}积分兑换`,
+            isUse:data.isUse,  
+            mechantName:item.name
+        }:{
           ...item,
-          // useText:item.statusName,   //按钮名称
-          // title:item.mechantName,    //店铺名
-          // coupon:item.name,          //优惠
-          // id:item.id,                //id
-          isUse: data.isUse,         //按钮的控制
-          // imgUrl:item.mechantLogo    //店铺Logo
+          isUse:data.isUse         //按钮的控制
         }
       })
       data.pageNo+=1
@@ -48,7 +51,7 @@ class $Coupon {
  * @param { Object } res   请求后的数据
  * @param { Array } arr    要传给子组件的数组
  */
-  dataHandling(res,arr):void{
+  dataHandling(res,arr,bool=false):void{
     if(res.data.startDateStr!==""&&res.data.endDateStr&&res.data.startDateStr!==null){
       arr.push(
         {
@@ -75,6 +78,16 @@ class $Coupon {
           title:"有效期说明",
           content:{
             content:res.data.useDateRemark
+          }
+        }
+      )
+    }
+    if(bool===true){
+      arr.push(
+        {
+          title:"兑换地点",
+          content:{
+            content:"服务台"
           }
         }
       )

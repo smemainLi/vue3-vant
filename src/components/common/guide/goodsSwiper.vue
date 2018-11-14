@@ -1,7 +1,7 @@
 <template>
   <div class="goodsSwiper">
     <swiper :options="swiperOption">
-      <swiper-slide v-for="(item,index) in goods" :key="index">
+      <swiper-slide v-for="(item,index) in goodsInfoList" :key="index">
         <div class="goods-photo">
           <img class="goods-image" :src="item.image" alt="">
         </div>
@@ -25,12 +25,15 @@ interface goods {
 }
 
 @Component({
+  props: ["goodsInfoList"],
   components: {
     swiper,
     swiperSlide
   }
 })
 export default class GoodsSwiper extends Vue {
+  goodsInfoList: any;
+
   swiperOption = {
     notNextTick: true,
     initialSlide: 0,
@@ -74,6 +77,9 @@ export default class GoodsSwiper extends Vue {
       price: "¥99",
     },
   ];
+
+  mounted() {
+  }
 
 }
 </script>

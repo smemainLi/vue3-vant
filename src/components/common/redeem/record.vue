@@ -38,8 +38,9 @@ export default class Record extends Vue {
     box-sizing: border-box;
     margin-bottom: 24px;
     .score {
-      width: 101px;
+      width: auto;
       height: 56px;
+      padding: 0 14px 0 8px;
       background: #fbde19;
       border-radius: 10px;
       color: $color-ff;

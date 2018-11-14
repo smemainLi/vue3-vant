@@ -2,7 +2,7 @@
   <div class="guide">
     <tab :category="category" @categoryId="getCategoryId"></tab>
     <!-- <router-link :to="{path:'/guide/detailPage'}"> -->
-    <store :introduce="item" v-for="(item,index) in introduceInfo" @click.native="storeDetail(item.merchantId)" :key="index"></store>
+    <store :introduce="item" v-for="(item,index) in introduceInfo" @click.native="loopStoreDetail(item.merchantId)" :key="index"></store>
     <!-- </router-link> -->
   </div>
 </template>
@@ -11,7 +11,7 @@
 import { Component, Provide, Vue } from "vue-property-decorator";
 import tab from '../../components/common/guide/tab.vue';
 import store from '../../components/common/guide/store.vue';
-import { Action } from 'vuex-class';
+import { Action, State, Mutation } from 'vuex-class';
 
 interface introduce {
   storeLogo: string,//商店logo
@@ -42,7 +42,9 @@ interface category {
   }
 })
 export default class Guide extends Vue {
-  @Action("classifiedGuide") classifiedGuide
+  @Action classifiedGuide
+  @Action storeDetail
+  /* @State(state => state.guide.merchantId) merchantId */
 
   category: Array<category> = [];//类目数据
   introduceInfo: Array<introduce> = [];//商家列表
@@ -69,8 +71,13 @@ export default class Guide extends Vue {
       pageNo: this.pageNo,
       pageSize: this.pageSize
     };
-    this.introduceInfo.length = 0;//切换其他类目的时候，清除商家列表
+    this.clearInfo();//切换其他类目的时候，清除商家列表
     this.getGuideInfo();
+  }
+
+  clearInfo() {
+    this.introduceInfo.length = 0;
+    console.log(this.introduceInfo.length);
   }
 
   /**
@@ -139,20 +146,27 @@ export default class Guide extends Vue {
     }
   }
 
-  storeDetail(merchantId) {
-    console.log(merchantId);
-    this.$router.push({
-      path: `/guide/detailPage/${merchantId}`//携带参数merchantId跳转到店铺详情页面
-    })
+
+  /**
+   * 点击跳转店铺详情页面
+   */
+  loopStoreDetail(merchantId) {
+    this.$router.push({ path: `/guide/detailPage/${merchantId}` })
+  }
+
+  test() {
+    this.introduceInfo = [];
   }
 
   mounted() {
+    this.test();
     this.getGuideInfo();
     window.addEventListener("scroll", this.scrollFn);
   }
 
   destroyed() {
     window.removeEventListener("scroll", this.scrollFn);
+    this.test();
   }
 
 }

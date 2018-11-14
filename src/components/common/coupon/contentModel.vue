@@ -1,5 +1,5 @@
 <template>
-	<router-link v-if="contentText.id" :to='component==="exchange"? "":{name:component,params:{id:contentText.id}}'  tag="div" class="content-model">
+	<router-link v-if="contentText.id||contentText.id===null" :to='component==="exchange"? "":{name:component,params:{id:contentText.id}}'  tag="div" class="content-model">
 		<div class="content-box">
 			<img :src="(contentText.mechantLogo===''||contentText.mechantLogo===null)? require('@/assets/image/coupon/mechantLogo.png'):contentText.mechantLogo" alt="">
 			<div class="content-title">
@@ -21,7 +21,6 @@ import { Component, Provide, Vue } from "vue-property-decorator";
  *  	 mechantName   ---> 餐馆名字
  * 		 name  ---> 优惠
  * 		 isUse   ---> 按钮样式 （不传就不显示按钮，只显示 > ）
- * 		 useText ---> 按钮文字
  * 		 mechantLogo  ---> 店铺logo
  * */  
 

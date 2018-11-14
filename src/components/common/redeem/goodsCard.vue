@@ -2,13 +2,13 @@
   <div class="goods-card">
    <div class="content">
      <div class="content-img">
-       <img src="../../../assets/image/coupon/store.png" alt="">
+       <img :src="goodsInfo.goodsImage? goodsInfo.goodsImage:require('../../../assets/image/coupon/store.png')" alt="">
      </div>
      <div class="content-bottom">
        <div class="title" v-text="goodsInfo.goodsName"></div>
        <div class="price">
-         <div v-text="goodsInfo.price"></div>
-         <div v-text="goodsInfo.surplus"></div>
+         <div v-text="`￥${goodsInfo.price.toFixed(2)}`"></div>
+         <div v-text="(goodsInfo.isLimit&&goodsInfo.isLimit)? '': `余${goodsInfo.remainingSum}`"></div>
        </div>
      </div>
      <slot></slot>
@@ -20,9 +20,9 @@
 import { Component, Provide, Vue } from "vue-property-decorator";
 /**
  *      goodsInfo     -----  Object
- *          goodsName   商品名字
- *          price       价格
- *          surplus     剩余多少件商品
+ *          goodsName        商品名字
+ *          price            价格
+ *          remainingSum     剩余多少件商品
  */
 
 @Component({

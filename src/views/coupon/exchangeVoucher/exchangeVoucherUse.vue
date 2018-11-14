@@ -2,13 +2,13 @@
 	<div class="use">
 
 		<!--  店铺信息 -->
-		<contentModel :contentText='contentText'></contentModel>
+		<contentModel :contentText='contentText' component="exchange"></contentModel>
 
 		<!-- 券码和消费时间 -->
 		<couponCodeAndTime :couponTime='couponTime'></couponCodeAndTime>
 
 		<!-- 有效期及时间 适用范围 -->
-		<scope :scopeMsg="scopeMsg"></scope>
+		<scope :scopeMsg="scopeMsg" v-if="scopeMsg.length!==0"></scope>
 
 	</div>
 </template>
@@ -18,55 +18,48 @@ import { Component, Provide, Vue } from "vue-property-decorator"
 import contentModel from "@/components/common/coupon/contentModel.vue"
 import couponCodeAndTime from "@/components/common/coupon/couponCodeAndTime.vue"
 import scope from "@/components/common/coupon/scope.vue"
+import { Action } from 'vuex-class'
+
 
 @Component({
-  components: {
-		contentModel,
-		couponCodeAndTime,
-		scope
-  }
+	props:["id"],
+  components: { contentModel, couponCodeAndTime, scope }
 })
 
 export default class ExchangeVoucherUse extends Vue {
-	// 店铺信息
-  contentText = {
-			useText:'待使用',
-			title:"小世界餐馆",
-		  coupon:'满两百减一百',
-		  imgUrl:require('@/assets/image/coupon/cashCoupon.png')
-		}
+id
 
+scopeMsg:Array<any> = []       //有效时间和适用范围
+contentText = {}   //店铺信息
+couponTime = { }                // 券码和消费时间
+@Action('integralExchangeDetail') integralExchangeDetail  // 兑换券待使用详情
 
-	// 券码和消费时间
-	couponTime = {
-		code:'0878 7878 77878',
-		isUse:true,
-		useText:'已兑换',
-		time:'2018-10-12 12:00'
+  couponDetailMethod(){
+    this.integralExchangeDetail({id:this.id}).then(res=>{
+     this.$nextTick(()=>{
+			this.contentText = {...res.data,
+													id:res.data.goodsId===null? (<any>Math).random(1)*100:res.data.goodsId,
+													mechantLogo:res.data.goodsImage,
+													mechantName:res.data.name,
+													name:res.data.type===1? `${res.data.deductionIntegral}积分兑换${res.data.coinNum}个`
+																									:`${res.data.deductionIntegral}积分兑换`
+													}
+		  this.$Coupon.dataHandling(res,this.scopeMsg,true)
+		  this.couponTime = {...res.data,time:res.data.usedDate,isUse:true}
+			})
+		})
 	}
-
-	// 有效时间和适用范围
-	scopeMsg = [
-		{
-      title:"兑换时间",
-      content:{scopeTime : '2017.8-2018-20',
-	            useTime: '周一至周日可用,11:00-次日1:00,其中2018年5月'}
-    },
-    {
-      title:"适用范围",
-      content:{useTime: '非工作日'}
-		}
-	]
-
-		
-
+  created () {
+    this.couponDetailMethod()
+  }
 }
 </script>
 
 
 
 <style lang='scss' scoped>
-.content-model{
+.use /deep/ .content-model{
 	margin-top: 0;
+
 }
 </style>
