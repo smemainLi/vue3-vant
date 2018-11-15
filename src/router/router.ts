@@ -7,7 +7,8 @@ import { getCookie } from '@/config/utils'
 import { Toast } from 'vant';
 import { wxMethod } from "../config/wxMethod"  //封装的js sdk的方法
 import store from "../store/index"
-import json from "../lang/wx"
+import json from "../lang/wx";
+import { wxShare } from "@/config/wxConfig";
 
 // 设置轻提示默认为1000ms
 Toast.setDefaultOptions({ duration: 1000 })
@@ -81,9 +82,9 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const inviteCode = to.query.inviteCode
-  // console.log(inviteCode,'===============')
+  console.log(to.query.shareParam, 'sfsdofhksdhfkshkfhsdkfhksdfdsfsdfkjsdfjsdlfjlsdjkfls');
+  if (to.query.shareParam) { location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI2MDI5MjQxMA==&scene=126&subscene=0#wechat_redirect"; }
   document.title = to.meta.title;
-
   Toast.clear()  //关闭提示框
   //判断是否登录过
   isLogin().then(res => {
@@ -91,7 +92,7 @@ router.beforeEach((to, from, next) => {
     if (inviteCode) {
       if (!res.data.isLogin) next({ path: `/member/openMember/?inviteCode=${inviteCode}` })
     } else {
-      if (!res.data.isLogin && to.path !== "/login" && to.path !== "/" && to.path !== "/member/openMember") next({ path: "/login" })
+      if (!res.data.isLogin && to.path !== "/" && to.path !== "/login" && to.path !== "/member/openMember" && to.path !== "/forgetPassword" && to.path !== "/guide/index" && to.path !== "/ar/index" && to.path !== "/wifi/index") next({ path: "/login" })
       else if (res.data.isLogin) {//如果已经登录过了
         if (to.path === '/member/openMember') next({ path: "/" })
         /**
@@ -99,41 +100,36 @@ router.beforeEach((to, from, next) => {
          * 判断微信是否授权，如果未授权，请求授权
          * 如果已经授权，可以请求sdk认证
          */
-        // if (!getCookie('qi_openid')) {
-        //   // 微信授权
-        //   getAuthorizeUrl(to.path).then(res => {
-        //     location.href = res.data.authorizeUrl;
-        //   })
-        // } else {
-        //   // sdk认证
-        //   // const _this = this
-        //   getJsSdkConfig(to.path).then(res => {
-        //     wx.config({
-        //       debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-        //       appId: res.data.appid, // 必填，公众号的唯一标识
-        //       timestamp: res.data.timestamp, // 必填，生成签名的时间戳
-        //       nonceStr: res.data.noncestr, // 必填，生成签名的随机串
-        //       signature: res.data.sign,// 必填，签名
-        //       jsApiList: ['getLocation', 'updateTimelineShareData', 'updateAppMessageShareData'] // 必填，需要使用的JS接口列表
-        //     });
-
-        //     const isEarn = to.name === "earn"
-        //     wx.ready(function () {
-        //       // （朋友圈）如果是积分的就使用不一样的分享页面
-        //       wxMethod.updateTimelineShareData(
-        //         isEarn ?
-        //           // 赚积分页面                   //公共
-        //           json.earnShareCircleOfFriends : json.publicShareCircleOfFriends
-        //       )
-
-        //       // 分享给好友
-        //       wxMethod.updateAppMessageShareData(
-        //         isEarn ?
-        //           json.earnShareOfFriends : json.publicShareOfFriends
-        //       )
-        //     })
-        //   })
-        // }
+        if (!getCookie('qi_openid')) {
+          // 微信授权
+          getAuthorizeUrl(to.path).then(res => {
+            location.href = res.data.authorizeUrl;
+          })
+        } else {
+          // sdk认证
+          // const _this = this
+          getJsSdkConfig(to.path).then(res => {
+            wx.config({
+              debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+              appId: res.data.appid, // 必填，公众号的唯一标识
+              timestamp: res.data.timestamp, // 必填，生成签名的时间戳
+              nonceStr: res.data.noncestr, // 必填，生成签名的随机串
+              signature: res.data.sign,// 必填，签名
+              jsApiList: ['getLocation', 'updateTimelineShareData', 'updateAppMessageShareData'] // 必填，需要使用的JS接口列表
+            });
+            wx.ready(function () {
+              let shareParam = "uuid";
+              let data = {
+                title: "测试测试",
+                desc: "只是一个测试而已",
+                link: `${decodeURIComponent(location.origin + to.path)}?shareParam=${shareParam}`,
+                imgUrl: `${location.origin}/img/car.677f4a96.png`,
+              }
+              wxShare.shareWithFriends(data);
+              wxShare.shareCircleFriends(data);
+            });
+          })
+        }
       }
     }
   })

@@ -19,7 +19,7 @@ Vue.prototype.$wx = wx
 Vue.config.productionTip = false;
 Vue.use(Vant);
 Vue.use(VueAwesomeSwiper);
-/* Vue.use(new Vconsole()) */
+Vue.use(new Vconsole())
 
 Component.registerHooks([
   'beforeRouteEnter',

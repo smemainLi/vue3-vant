@@ -4,7 +4,7 @@
       <div class="title" v-cloak>{{actualSceneryTitle}}</div>
       <div class="content" v-cloak>{{actualSceneryContent}}</div>
     </div>
-    <commonBtn></commonBtn>
+    <commonBtn :btnName="btnName"></commonBtn>
   </div>
 </template>
 
@@ -19,7 +19,6 @@ import commonBtn from '../../components/common/button.vue';
   }
 })
 export default class Guide extends Vue {
-  @Provide()
   btnName: string = "马上去找红包";
 
   actualSceneryTitle = "AR实景红包";
