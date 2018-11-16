@@ -19,7 +19,7 @@
               <img src="@/assets/image/redeem/add.png" alt="">
             </div>
           </div>
-          <div class="content-text" v-text="`所需积分${dialongData*values}`"></div>
+          <div class="content-text" v-text="`所需总积分${dialongData*values}`"></div>
         </div>
         <div class="botton">
           <div class="botton-left" @click="dialongs=false">取消</div>

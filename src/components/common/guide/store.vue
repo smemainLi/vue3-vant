@@ -9,7 +9,7 @@
         <div class="store-name" v-cloak>{{introduce.storeName}}</div>
         <div :class="['store-brief',introduce.storeBrief?'':'store-no-brief']" v-cloak>{{introduce.storeBrief}}</div>
         <div class="store-label">
-          <Tag :tagItem="item" v-for="(item,index) in introduce.tags" :key="index" v-cloak>{{introduce.storeLabel1}}</Tag>
+          <Tag :tagItem="item" v-for="(item,index) in introduce.tags" :key="index" v-cloak>{{introduce.storeLabel}}</Tag>
         </div>
       </div>
       <div class="floor" v-cloak>{{introduce.floor}}</div>

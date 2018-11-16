@@ -4,18 +4,21 @@
 
 			<!-- 待使用   -->
 			<div slot="待使用">
-					<ContentModel component="cashCouponWaitUse" :contentText="item" v-for="item in contentText1" :key="item.id"></ContentModel>
-			</div>
+				<ContentModel component="cashCouponWaitUse" :contentText="item" v-for="item in contentText1" :key="item.id"></ContentModel>
+        <prompt :bool="notUsedStatus"></prompt>
+      </div>
 
 			<!-- 已使用  -->
 			<div slot="已使用">
-					<ContentModel component="cashCouponUse" v-for="item in contentText2" :key="item.id" :contentText="item"></ContentModel>
-			</div>
+				<ContentModel component="cashCouponUse" v-for="item in contentText2" :key="item.id" :contentText="item"></ContentModel>
+        <prompt :bool="usedStatus"></prompt>
+      </div>
 
 			<!-- 已过期 -->
 			<div slot="已过期">
-					<ContentModel component="cashCouponExpire" :contentText="item" v-for="item in contentText3" :key="item.id"></ContentModel>
-			</div>
+				<ContentModel component="cashCouponExpire" :contentText="item" v-for="item in contentText3" :key="item.id"></ContentModel>
+        <prompt :bool="expiredStatus"></prompt>
+      </div>
 			
 		</Tab>
   </div>
@@ -25,6 +28,7 @@
 import { Component, Provide, Vue } from "vue-property-decorator";
 import Tab from "@/components/common/coupon/tab.vue"
 import ContentModel from '@/components/common/coupon/contentModel.vue'
+import prompt from "@/components/common/coupon/loadingPrompt.vue"
 
 // 定义内容模块的接口信息
 interface contentMsg{
@@ -36,10 +40,7 @@ interface contentMsg{
 }
 
 @Component({
-  components: {
-		Tab,
-		ContentModel
-  }
+  components: {Tab,ContentModel,prompt}
 })
 
 export default class allCashCoupon extends Vue {
@@ -155,85 +156,9 @@ export default class allCashCoupon extends Vue {
   destroyed () {
     this.listenScroll.removeScroll()
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// contentText1:Array<contentMsg> =[
-	// 	{
-	// 		isUse:false,
-	// 		useText:'待使用',
-	// 		title:"小世界餐馆",
-	// 	  coupon:'200元代金券',
-	// 	  imgUrl:require('@/assets/image/coupon/cashCoupon.png')
-	// 	},
-	// 	{
-	// 		isUse:false,
-	// 		useText:'待使用',
-	// 		title:"小世界餐馆",
-	// 	  coupon:'200元代金券',
-	// 	  imgUrl:require('@/assets/image/coupon/cashCoupon.png')
-	// 	}
-	// 	] 
-
-
-	// 	contentText2:Array<contentMsg> =[
-	// 	{
-	// 		isUse:true,
-	// 		title:"小世界餐馆",
-	// 		useText:'已使用',
-	// 	  coupon:'200元代金券',
-	// 	  imgUrl:require('@/assets/image/coupon/cashCoupon.png')
-	// 	},
-	// 	{
-	// 		isUse:true,
-	// 		title:"小世界餐馆",
-	// 		useText:'已使用',
-	// 	  coupon:'200元代金券',
-	// 	  imgUrl:require('@/assets/image/coupon/cashCoupon.png')
-	// 	}
-	// 	] 
-
-	// 	contentText3:Array<contentMsg> =[
-	// 	{
-	// 		isUse:true,
-	// 		useText:'已过期',
-	// 		title:"小世界餐馆",
-	// 	  coupon:'200元代金券',
-	// 	  imgUrl:require('@/assets/image/coupon/cashCoupon.png')
-	// 	},
-	// 	{
-	// 		isUse:true,
-	// 		useText:'已过期',
-	// 		title:"世界餐馆",
-	// 	  coupon:'200元代金券',
-	// 	  imgUrl:require('@/assets/image/coupon/cashCoupon.png')
-	// 	}
-	// 	] 
-	
 }
 </script>
+
+<style lang="scss">
+  
+</style>

@@ -15,10 +15,6 @@
       <dataCard title="联系我们" :imgUrl="require('../../assets/image/member/contact.png')"></dataCard>
     </div>
 
-    <!-- bar -->
-    <bar class="bar"></bar>
-
-
 
   <!-- 二维码弹出框 -->
     <memberIndexDialog :show="show" v-model="show"></memberIndexDialog>
@@ -33,7 +29,7 @@ import dataCard from "@/components/common/member/dataCard.vue"
 import bar from "@/components/common/member/bar.vue"
 import { Action } from 'vuex-class'
 
-@Component({components: {dataTop,dataCard,bar,memberIndexDialog}})
+@Component({components: {dataTop,dataCard,memberIndexDialog}})
 
 export default class Member extends Vue {
   @Action('memberIndexInfo')   memberIndexInfo         // 首页数据
@@ -73,25 +69,6 @@ export default class Member extends Vue {
   .center{
     margin: 24px 0;
   }
-  .bar{
-    position: fixed;
-    bottom:0;
-    left: 0;
-  }
-
-  // .button{
-  //   display: block;
-  //   height: 88px;
-  //   width: 686px;
-  //   padding: 0;
-  //   border:0;
-  //   color:$color-35;
-  //   font-size: $size36;
-  //   font-weight: 500;
-  //   background-color: $color-fb;
-  //   margin:0 auto;
-  //   margin-top:60px;
-  // }
 }
 
 </style>

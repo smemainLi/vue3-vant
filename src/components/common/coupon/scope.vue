@@ -8,8 +8,7 @@
 			</div>
 			<ul>
 				<li v-for="(item,index) in items.content" :key="index">
-					<span class="dots">●</span>
-					<span v-text="item"></span>
+					<span v-text="item" class="span"></span>
 				</li>
 			</ul>
 		</div>
@@ -62,19 +61,16 @@ export default class Scope extends Vue {
 
 	ul{
 		li{
-			display: flex;
-			align-items: center;
+			margin-left: 32px;
 			color: $color-88;
 			font-size: $size26;
 			margin-bottom: 10px;
 			letter-spacing:2px;
+
+			.span{
+				margin-left: -10px;
+			}
 		}
-	}
-	
-.dots{
-	font-size: 20px;
-	margin-right: 8px;
-	line-height: 35px;
 	}
 }
 </style>

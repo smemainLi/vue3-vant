@@ -81,8 +81,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  const inviteCode = to.query.inviteCode
-  console.log(to.query.shareParam, 'sfsdofhksdhfkshkfhsdkfhksdfdsfsdfkjsdfjsdlfjlsdjkfls');
+  const inviteCode = to.query.inviteCode;
   if (to.query.shareParam) { location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI2MDI5MjQxMA==&scene=126&subscene=0#wechat_redirect"; }
   document.title = to.meta.title;
   Toast.clear()  //关闭提示框
@@ -100,36 +99,38 @@ router.beforeEach((to, from, next) => {
          * 判断微信是否授权，如果未授权，请求授权
          * 如果已经授权，可以请求sdk认证
          */
-        if (!getCookie('qi_openid')) {
-          // 微信授权
-          getAuthorizeUrl(to.path).then(res => {
-            location.href = res.data.authorizeUrl;
-          })
-        } else {
-          // sdk认证
-          // const _this = this
-          getJsSdkConfig(to.path).then(res => {
-            wx.config({
-              debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-              appId: res.data.appid, // 必填，公众号的唯一标识
-              timestamp: res.data.timestamp, // 必填，生成签名的时间戳
-              nonceStr: res.data.noncestr, // 必填，生成签名的随机串
-              signature: res.data.sign,// 必填，签名
-              jsApiList: ['getLocation', 'updateTimelineShareData', 'updateAppMessageShareData'] // 必填，需要使用的JS接口列表
-            });
-            wx.ready(function () {
-              let shareParam = "uuid";
-              let data = {
-                title: "测试测试",
-                desc: "只是一个测试而已",
-                link: `${decodeURIComponent(location.origin + to.path)}?shareParam=${shareParam}`,
-                imgUrl: `${location.origin}/img/car.677f4a96.png`,
-              }
-              wxShare.shareWithFriends(data);
-              wxShare.shareCircleFriends(data);
-            });
-          })
-        }
+        // if (!getCookie('qi_openid')) {
+        //   // 微信授权
+        //   getAuthorizeUrl(to.path).then(res => {
+        //     location.href = res.data.authorizeUrl;
+        //   })
+        // } else {
+        //   // sdk认证
+        //   // const _this = this
+        //   getJsSdkConfig(to.path).then(res => {
+        //     wx.config({
+        //       debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        //       appId: res.data.appid, // 必填，公众号的唯一标识
+        //       timestamp: res.data.timestamp, // 必填，生成签名的时间戳
+        //       nonceStr: res.data.noncestr, // 必填，生成签名的随机串
+        //       signature: res.data.sign,// 必填，签名
+        //       jsApiList: ['getLocation', 'updateTimelineShareData', 'updateAppMessageShareData', 'onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表
+        //     });
+        //     wx.ready(function () {
+        //       let shareParam = "uuid";
+        //       let qiOpenId = getCookie('qi_openid');
+        //       let data = {
+        //         title: "作为标题测试测试",
+        //         desc: "测试描述只是一个测试而已",
+        //         link: `${window.location.href}?qi_openid=${qiOpenId}`,
+        //         imgUrl: `${location.origin}/img/car.677f4a96.png`,
+        //         toPath: to.path
+        //       }
+        //       wxShare.shareMenuShareTimeline(data);
+        //       wxShare.shareMenuShareAppMessage(data);
+        //     });
+        //   })
+        // }
       }
     }
   })

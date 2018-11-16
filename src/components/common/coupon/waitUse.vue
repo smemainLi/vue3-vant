@@ -6,7 +6,11 @@
 
       <!-- 券码 -->
       <div class="top">
-        <div class="coupon" v-text="`券码：${codeMsg.quanCode? codeMsg.quanCode:''}`"></div>
+        <!--  v-text="`券码：${codeMsg.quanCode? codeMsg.quanCode:''}`" -->
+        <div class="coupon">券码：<span v-text="`${codeMsg.quanCode? codeMsg.quanCode.substr(0,4):'' }`"></span>
+          <span v-text="`${codeMsg.quanCode? codeMsg.quanCode.substr(4,4):'' }`"></span>
+          <span v-text="`${codeMsg.quanCode? codeMsg.quanCode.substr(8,4):'' }`"></span>
+        </div>
       </div>
 
       <!-- 二维码 -->
@@ -52,7 +56,8 @@ bol:boolean = false
      this.qrcode.makeCode(data)  //创建另一个二维码
      return
     }
-    this.qrcode = new QRCode('qrcode', {text: data.quanCode })
+    this.qrcode = new QRCode('qrcode', { width: 128,
+    height: 128,text: data.quanCode })
     this.bol = true
   }
 
@@ -71,7 +76,8 @@ bol:boolean = false
     padding: 0 30px;
     margin-top: 24px;
     margin-bottom: 23px;
-    height: 518px;
+    // height: 518px;
+    height: 511px;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -94,6 +100,10 @@ bol:boolean = false
         font-size: $size32;
         border-left: 11px solid $color-fb;
         padding-left: 15px;
+
+        span{
+          margin-right: 25px;
+        }
       }
     }
     .img{

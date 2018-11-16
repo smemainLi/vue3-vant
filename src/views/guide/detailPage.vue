@@ -8,7 +8,7 @@
     <card :cardInfo="cardInfoList"></card>
     <coupon-title class="feel" :titleContent="feelTitle"></coupon-title>
     <feeling :voteInfoList="voteInfoList" :feelNumMax="feelNumMax" :merchantId="this.$route.params.merchantId"></feeling>
-    <van-popup class="pop-box" v-model="noExistence" :close-on-click-overlay="false">
+    <!-- <van-popup class="pop-box" v-model="noExistence" :close-on-click-overlay="false">
       <div class="pop-box-top">
         <div class="box-top-title" v-cloak>{{boxTitle}}</div>
         <router-link class="box-top-close" tag="div" :to="{path:'/guide/index'}">×</router-link>
@@ -17,7 +17,8 @@
       <router-link :to="{path:'/guide/index'}">
         <common-Btn :btnName="btnName" class="pop-box-bottom-btn"></common-Btn>
       </router-link>
-    </van-popup>
+    </van-popup> -->
+    <pop :modelVal="modelVal"></pop>
   </div>
 </template>
 <script lang="ts">
@@ -30,7 +31,7 @@ import goodsSwiper from '../../components/common/guide/goodsSwiper.vue';
 import couponTitle from '../../components/common/guide/couponTitle.vue';
 import card from '../../components/common/guide/card.vue';
 import feeling from '../../components/common/guide/feeling.vue';
-import commonBtn from '../../components/common/button.vue';
+import pop from "../../components/common/guide/pop.vue";
 
 interface storeInfo {
   storeId: string,
@@ -88,7 +89,7 @@ interface voteInfo {
     couponTitle,
     card,
     feeling,
-    commonBtn
+    pop
   }
 })
 export default class DetailPage extends Vue {
@@ -109,9 +110,6 @@ export default class DetailPage extends Vue {
   metaTitle = "ONLY服饰店";
   couTitle = "优惠券&代金券";
   feelTitle = "大家对该店的感觉";
-  boxTitle = "该店铺装修中";
-  boxMiddle = "肯定你姿势不对呀~";
-  btnName: string = "换个姿势";
 
   /* discountInfo: discountInfo = {
     discountTitle: "全场9折全场9折全场9折全场折",

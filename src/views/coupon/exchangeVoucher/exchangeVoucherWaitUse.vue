@@ -56,51 +56,12 @@ couponTime = {}   //券码和二维码
   mounted () {
     this.couponDetailMethod()
   }
-
-
-
-
-
-
-
-
-  // // 店铺信息
-  // contentText = {
-	// 		useText:'待使用',
-	// 		title:"清风150抽纸巾2盒 ",
-	// 	  coupon:'5000积分兑换',
-	// 	  imgUrl:require('@/assets/image/coupon/cashCoupon.png')
-  //   }
-    
-  // // 券码和二维码
-  // codeMsg = {
-  //   code:"123456789",
-  //   codeUrl:require("@/assets/image/coupon/code.png")
-  // }
-
-  //   	// 有效期和时间
-	// scopeMsg = [
-	// 	{
-  //     title:"有效期及时间",
-  //     content:{scopeTime : '2017.8-2018-20',
-	//             useTime: '周一至周日可用,11:00-次日1:00,其中2018年5月'}
-  //   },
-  //   {
-  //     title:"适用范围",
-  //     content:{
-  //       useTime: '非工作日',
-  //       useTime1: '非工作日',
-  //       useTime2: '非工作日',
-  //       useTime3: '非工作日'
-  //       }
-	// 	}
-	// ]
-
 }
 </script>
 
 <style lang='scss' scoped>
 .content-model{
-	margin-top: 0;
+	// margin-top: 0;
+	border-top: 0;
 }
 </style>

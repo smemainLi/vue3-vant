@@ -5,16 +5,19 @@
       <!-- 待使用   -->
       <div slot="待使用">
         <ContentModel component="waitUse" :contentText="item" v-for="item in contentText1" :key="item.id"></ContentModel>
+        <prompt :bool="notUsedStatus"></prompt>
       </div>
 
       <!-- 已使用  -->
       <div slot="已使用">
         <ContentModel component="alreadyUse"  v-for="item in contentText2" :key="item.id" :contentText="item"></ContentModel>
+        <prompt :bool="usedStatus"></prompt>
       </div>
 
       <!-- 已过期 -->
       <div slot="已过期">
         <ContentModel component="expire" :contentText="item" v-for="item in contentText3" :key="item.id"></ContentModel>
+        <prompt :bool="expiredStatus"></prompt>
       </div>
 
     </Tab>
@@ -25,6 +28,8 @@
 import { Component, Provide, Vue, Watch } from "vue-property-decorator";
 import Tab from "@/components/common/coupon/tab.vue"
 import ContentModel from '@/components/common/coupon/contentModel.vue'
+import prompt from "@/components/common/coupon/loadingPrompt.vue"
+
 
 // 定义内容模块的接口信息
 interface contentMsg {
@@ -35,7 +40,7 @@ interface contentMsg {
   useText?: string
 }
 
-@Component({ components: { Tab,ContentModel } })
+@Component({ components: { Tab,ContentModel,prompt } })
 
 export default class allCoupon extends Vue {
   activeNum:number       = 0   //切换到第几个 0 1 2

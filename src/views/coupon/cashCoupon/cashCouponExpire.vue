@@ -2,33 +2,42 @@
 	<div class="cash-coupon-expire">
 		<!-- top 店名和优惠 -->
 		<!-- <ContentModel :contentText="item" v-for="(item,index) in contentText" :key="index"></ContentModel> -->
-		<contentModel :contentText='contentText'></contentModel>
+		<contentModel :contentText='contentText' v-show="couponTime.id"></contentModel>
 
 		<!-- 卷码和消费时间 -->
-		<couponCodeAndTime :couponTime="couponTime"></couponCodeAndTime>
+		<msg :name="name" 
+				 :status="contentText.status" 
+				 :statusName="contentText.statusName"
+				 :upperLimit="contentText.upperLimit"
+				 :superposition="contentText.superposition"
+				 :isShow="true"
+				 v-show="couponTime.id"
+		></msg>
+		<couponCodeAndTime :couponTime="couponTime" v-show="couponTime.id"></couponCodeAndTime>
 
 		<!-- 有效时间和适用范围 -->
-		<scope :scopeMsg="scopeMsg"></scope>
+		<scope :scopeMsg="scopeMsg" v-show="couponTime.id"></scope>
 
 	</div>
-</template>
+</template>      
 
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator"
 import ContentModel from '@/components/common/coupon/contentModel.vue'
 import couponCodeAndTime from "@/components/common/coupon/couponCodeAndTime.vue"
 import scope from "@/components/common/coupon/scope.vue"
+import msg from "@/components/common/coupon/msg.vue"
 import { Action } from 'vuex-class'
 
-
+  
 @Component({
 	props:["id"],
-  components: {ContentModel,couponCodeAndTime,scope
-  }
+  components: {ContentModel,couponCodeAndTime,scope,msg}
 })
 
 export default class CashCouponExpire extends Vue {
 	id
+	name:string = ''
 	scopeMsg:Array<any> = []       //有效时间和适用范围
 	contentText = {}               //店铺信息
 	couponTime = {}                // 券码和消费时间
@@ -37,7 +46,8 @@ export default class CashCouponExpire extends Vue {
 	expireMethod(){
 		this.voucherDetail({id:this.id}).then(res=>{
 			this.$nextTick(()=>{
-				this.contentText = res.data
+				this.name = res.data.name
+				this.contentText = {...res.data,name:""}
 				console.log(this.contentText,'---')
 				this.$Coupon.dataHandling(res,this.scopeMsg)
 				this.couponTime = {...res.data,isUse:true}
@@ -48,59 +58,25 @@ export default class CashCouponExpire extends Vue {
 	created(){
 		this.expireMethod()
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-	// 券码或者时间
-// 	couponTime = {
-// 		code:'0878 7878 77878',
-// 		isUse:true,
-//     useText:'已过期',
-//     time:'2018-5-24'
-// 	}
-
-// 	// 有效期和时间
-// 	scopeMsg = [
-// 		{
-//       title:"有效期及时间",
-//       content:{scopeTime : '2017.8-2018-20',
-// 	            useTime: '周一至周日可用,11:00-次日1:00,其中2018年5月'}
-//     },
-//     {
-//       title:"适用范围",
-//       content:{useTime: '非工作日'}
-// 		}
-// 	]
-	
-
-// // top 的contentModel
-// 	contentText = [
-// 		{
-// 			useText:'待使用',
-// 			title:"小世界餐馆",
-// 		  coupon:'满两百减一百',
-// 		  imgUrl:require('@/assets/image/coupon/cashCoupon.png')
-// 		}
-// 		]
 }
 </script>
 <style lang='scss' scoped>
 
 // 小组件的样式
-.content-model{
-	margin-top: 0;
+.cash-coupon-expire /deep/ .content-model{
+	border-top: 0 !important;
 }
 
 .cash-coupon-expire /deep/ .couponCode .bottom{
   height: 178px;
 } 
+
+.cash-coupon-expire /deep/ .couponCode{
+	margin-top:0 !important;
+}
+
+.cash-coupon-expire /deep/ .coupon{
+	border-left: 0 !important;
+  padding-left: 0 !important;
+}
 </style>

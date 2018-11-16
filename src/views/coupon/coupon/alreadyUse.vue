@@ -1,13 +1,13 @@
 <template>
 	<div class="use">
 		<!--  店铺信息 -->
-		<contentModel :contentText='contentText'></contentModel>
+		<contentModel :contentText='contentText' v-show="contentText.id"></contentModel>
 
 		<!-- 券码和消费时间 -->
-		<couponCodeAndTime :couponTime='couponTime'></couponCodeAndTime>
+		<couponCodeAndTime :couponTime='couponTime' v-show="contentText.id"></couponCodeAndTime>
 
 		<!-- 有效期及时间 适用范围 -->
-		<scope :scopeMsg="scopeMsg"></scope>
+		<scope :scopeMsg="scopeMsg" v-show="contentText.id"></scope>
 
 	</div>
 </template>
@@ -35,9 +35,9 @@ couponTime = {}                // 券码和消费时间
   couponDetailMethod(){
     this.couponDetail({id:this.id}).then(res=>{
      this.$nextTick(()=>{
-      this.contentText = res.data
-		  this.$Coupon.dataHandling(res,this.scopeMsg)
+			 this.$Coupon.dataHandling(res,this.scopeMsg)
 		  this.couponTime = {...res.data,time:res.data.usedDate,isUse:true}
+      this.contentText = res.data
 			})
 		})
 	}
@@ -50,11 +50,9 @@ couponTime = {}                // 券码和消费时间
 
 
 <style lang='scss' scoped>
-.content-model{
-	margin-top: 0;
+.use /deep/ .content-model{
+	// margin-top: 0;
+	border-top:0;
 }
 
-.couponCode{
-	margin-top: 0;
-}
 </style>

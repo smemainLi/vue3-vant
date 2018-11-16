@@ -59,7 +59,7 @@ couponTime = { }                // 券码和消费时间
 
 <style lang='scss' scoped>
 .use /deep/ .content-model{
-	margin-top: 0;
-
+	// margin-top: 0;
+	border-top: 0 !important;
 }
 </style>

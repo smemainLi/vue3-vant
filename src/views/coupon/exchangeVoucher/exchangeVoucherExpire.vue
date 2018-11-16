@@ -54,40 +54,11 @@ export default class ExchangeVoucherExpire extends Vue {
 	}
 
 
-// 	// 券码或者时间
-// 	couponTime = {
-// 		code:'0878 7878 77878',
-// 		isUse:true,
-// 		useText:'已过期'
-// 	}
-
-// 	// 有效期和时间
-// 	scopeMsg = [
-// 		{
-//       title:"兑换时间",
-//       content:{scopeTime : '2017.8-2018-20',
-// 	            useTime: '周一至周日可用,11:00-次日1:00,其中2018年5月'}
-//     },
-//     {
-//       title:"兑换地点",
-//       content:{useTime: '非工作日'}
-// 		}
-// 	]
-	
-
-// // top 的contentModel
-// 	contentText = [
-// 		{
-// 			useText:'待使用',
-// 			title:"小世界餐馆",
-// 		  coupon:'满两百减一百',
-// 		  imgUrl:require('@/assets/image/coupon/cashCoupon.png')
-// 		}
-// 		]
 }
 </script>
 <style lang='scss' scoped>
 .content-model{
-	margin-top: 0;
+	// margin-top: 0;
+	border-top: 0;
 }
 </style>

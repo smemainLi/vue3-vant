@@ -4,7 +4,7 @@
 			<img :src="(contentText.mechantLogo===''||contentText.mechantLogo===null)? require('@/assets/image/coupon/mechantLogo.png'):contentText.mechantLogo" alt="">
 			<div class="content-title">
 				<span class='title' v-text="contentText.mechantName"></span>
-				<span class="coupon-text" v-text="contentText.name"></span>
+				<span class="coupon-text" v-if="contentText.name.length!==0" v-text="contentText.name"></span>
 			</div>
 		</div>
 
@@ -42,7 +42,9 @@ export default class ContentModel extends Vue {
 	align-items: center;
 	justify-content: space-between;
 	padding: 0 30px;
-	margin-top: 24px;
+	// margin-top: 24px;
+	// 新加的
+	border-top:24px $color-f5 solid;
 
 	.content-box{
 		display: flex;
@@ -79,10 +81,13 @@ export default class ContentModel extends Vue {
 	.button{
 		display: block;
 		background-color:#F56E72;
-		height: 36px;
-		line-height: 36px;
+		height: 40px;
+		line-height: 42px;
+		// height: 36px;
+		// line-height: 36px;
 		width: 138px;
-		padding: 0;
+		padding-left: 0;
+		padding-right: 0;
 		border: 0;
 		font-size: $size28;
 		color: #fff;

@@ -12,17 +12,17 @@ Vue.prototype.$momentTime = function momentTime(time: Date, formatText: string =
 }
 
 
-class $ListenScroll {
-  scrollMounted: any
-  constructor(callback) {
-    this.scrollMounted = () => {
+class $ListenScroll{
+  scrollMounted:any
+  constructor(callback){
+    this.scrollMounted = ()=>{
       // scrollTop是滚动条滚动时，距离顶部的距离
-      let scrollTop = (<any>document.documentElement).scrollTop || document.body.scrollTop;
-      // windowHeight是可视区的高度
-      let scrollHeight = (<any>document.documentElement).scrollHeight || document.body.scrollHeight;
+      let scrollTop = (<any>document.documentElement).scrollTop||document.body.scrollTop;
       // scrollHeight是滚动条的总高度
-      let windowHeight = (<any>document.documentElement).clientHeight || document.body.clientHeight;
-      if (scrollTop + windowHeight === scrollHeight) {
+      let scrollHeight = (<any>document.documentElement).scrollHeight||document.body.scrollHeight;
+      // windowHeight是可视区的高度
+      let windowHeight  = (<any>document.documentElement).clientHeight || document.body.clientHeight;
+      if(scrollTop+windowHeight===scrollHeight){
         callback()
       }
     }

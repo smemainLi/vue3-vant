@@ -15,7 +15,6 @@
       <router-link tag="div" :to="{name:'openMember'}" class="no-account" v-cloak>{{noAccount}}</router-link>
       <router-link tag="div" :to="{name:'forgetPassword'}" class="forget-pwd" v-cloak>{{forgetPwd}}</router-link>
     </div>
-
   </div>
 </template>
 
@@ -40,11 +39,11 @@ export default class Login extends Vue {
   /*  @State(state => state.member.test) test; */
   /* @State('member') member; *///引用的是模块
 
-  /* account = '15816093712';
-  pwd = '123456'; */
-
-  account = '13536540921';
+  account = '15816093712';
   pwd = '123456';
+
+  /* account = '13536540921';
+  pwd = '123456'; */
 
   accountPlaceholder = "请输入手机号码";
   pwdPlaceholder = "请输入密码";

@@ -5,17 +5,20 @@
 			<!-- 待使用   -->
 			<div slot="待使用">
 					<ContentModel component="exchangeVoucherWaitUse" :contentText="item" v-for="item in contentText1" :key="item.id"></ContentModel>
-			</div>
+          <prompt :bool="notUsedStatus"></prompt>
+      </div>
 
 			<!-- 已使用  -->
 			<div slot="已使用">
 					<ContentModel component="exchangeVoucherUse" :contentText="item" v-for="item in contentText2" :key="item.id" ></ContentModel>
-			</div>
+          <prompt :bool="usedStatus"></prompt>
+    	</div>
 
 			<!-- 已过期 -->
 			<div slot="已过期">
 					<ContentModel component="exchangeVoucherExpire" :contentText="item" v-for="item in contentText3" :key="item.id"></ContentModel>
-			</div>
+          <prompt :bool="expiredStatus"></prompt>
+      </div>
 			
 		</Tab>
   </div>
@@ -25,6 +28,7 @@
 import { Component, Provide, Vue } from "vue-property-decorator";
 import Tab from "@/components/common/coupon/tab.vue"
 import ContentModel from '@/components/common/coupon/contentModel.vue'
+import prompt from "@/components/common/coupon/loadingPrompt.vue"
 
 // 定义内容模块的接口信息
 interface contentMsg{
@@ -36,10 +40,7 @@ interface contentMsg{
 }
 
 @Component({
-  components: {
-		Tab,
-		ContentModel
-  }
+  components: {Tab,ContentModel,prompt}
 })
 
 export default class ExchangeVoucherIndex extends Vue {
@@ -166,3 +167,4 @@ handleScroll () {
 
 }
 </script>
+<style lang="scss"></style>

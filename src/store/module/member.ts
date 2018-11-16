@@ -14,8 +14,6 @@ const getters = {
 const mutations = {
   isLogins(state, data) {
     state.userInfo.isLogin = data.isLogin
-    /*     console.log(data,"state-----------------")
-        console.log(state,"state") */
   }
 }
 

@@ -24,6 +24,9 @@ class $Coupon {
         Toast.success('已全部加载')
         return {...data} 
       }
+      // 2018-11-13
+      if(res.data.list.length<10) data.status = true
+      
       usedArray = res.data.list.map(item=>{
         return data.isExchange? 
         {...item,

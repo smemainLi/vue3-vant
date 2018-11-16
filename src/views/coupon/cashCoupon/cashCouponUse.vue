@@ -4,8 +4,15 @@
 		<!--  店铺信息 -->
 		<cashContentModel :contentText='contentText'></cashContentModel>
     <div class="add">
-      <span class="dot-index">●</span>
-      <span class="text">可叠加两张</span>
+      <ul>
+        <li>
+          <span class="text" v-text="(contentText.superposition===0||contentText.upperLimit===null)
+                                    ? '不可叠加'
+                                    : contentText.upperLimit===undefined? '不可叠加': `可叠加${contentText.upperLimit}张`">
+          </span>
+        
+        </li>
+      </ul>
     </div>
 
 		<!-- 券码和消费时间 -->
@@ -50,55 +57,6 @@ couponTime = {}                         // 券码和消费时间
   created () {
     this.couponDetailMethod()
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// // 店铺信息
-  // contentText = {
-	// 		useText:'待使用',
-	// 		title:"小世界餐馆",
-	// 	  coupon:'满两百减一百',
-	// 	  imgUrl:require('@/assets/image/coupon/cashCoupon.png')
-	// 	}
-
-
-	// 券码和消费时间
-	// couponTime = {
-	// 	code:'0878 7878 77878',
-	// 	isUse:true,
-	// 	useText:'已消费',
-	// 	time:'2018-10-12 12:00'
-	// }
-
-	// // 有效时间和适用范围
-	// scopeMsg = [
-	// 	{
-  //     title:"有效期及时间",
-  //     content:{scopeTime : '2017.8-2018-20',
-	//             useTime: '周一至周日可用,11:00-次日1:00,其中2018年5月'}
-  //   },
-  //   {
-  //     title:"适用范围",
-  //     content:{useTime: '非工作日'}
-  //   },
-  //   {
-  //     title:"使用规则",
-  //     content:{useTime: '最多使用两张'}
-	// 	}
-	// ]
-
-		
-
 }
 </script>
 
@@ -118,15 +76,17 @@ couponTime = {}                         // 券码和消费时间
       height: 99px;
       line-height: 99px;
     }
-    .text{
-      color:#353535;
-      font-size: $size26;
-    }
-
-    .dot-index{
-      color: $color-fb;
-      font-size: 20px;
-      margin-right: 8px;
+    ul{
+      height: 100%;
+      margin-left: 30px;
+      li{
+        color: $color-fb;
+        .text{
+          margin-left: -10px;
+          color:#353535;
+          font-size: $size26;
+        }
+      }
     }
   }
 }
