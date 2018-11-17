@@ -1,8 +1,8 @@
 <template>
   <div class="pop">
-    <van-popup :class="[true?'pop-box':'',false?'pop-plus':'']" v-model="test" :close-on-click-overlay="false" :overlay="true">
+    <van-popup :class="[false?'pop-box':'',false?'pop-plus':'']" v-model="test" :close-on-click-overlay="false" :overlay="false">
 
-      <div class="store-no-open" v-show="tttyyy">
+      <div class="store-no-open" v-show="false">
         <div class="pop-box-top">
           <div class="box-top-title" v-cloak>sdkhfksdhfkjsdf</div>
           <router-link class="box-top-close" tag="div" :to="{path:'/guide/index'}">×</router-link>
@@ -13,7 +13,7 @@
         </router-link>
       </div>
 
-      <div class="plus-score" v-show="testWinPoints">
+      <div class="plus-score" v-show="false">
         <div class="plus-content">
           <div class="score-value" v-cloak>{{scoreValue}}</div>
           <div class="tip-value" v-cloak>{{tipValue}}</div>

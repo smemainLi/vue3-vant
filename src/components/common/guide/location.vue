@@ -7,7 +7,8 @@
     </div>
     <div :class="['site',locationInfo.noSite?'':'noSite']" v-cloak>{{locationInfo.site}}</div>
     <div class="telephone">
-      <a :href="locationInfo.phone"><i class="icon-telephone"></i></a>
+      <a :href="locationInfo.phone" v-show="!isShare"><i class="icon-telephone"></i></a>
+      <i class="icon-telephone" v-show="isShare" @click="downApp"></i>
     </div>
   </div>
 </template>
@@ -15,13 +16,19 @@
 import { Component, Provide, Vue } from "vue-property-decorator";
 
 @Component({
-  props: ["locationInfo"],
+  props: ["locationInfo", "isShare"],
   components: {
   }
 })
 export default class Location extends Vue {
   site = "4楼12层";
   phone = "tel:13726298724";
+
+  /**
+   * 跳转下载
+   */
+  downApp() { return new this.$JumpDownload() }
+
 }
 </script>
 <style lang="scss" scoped>

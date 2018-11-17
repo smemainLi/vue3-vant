@@ -20,5 +20,6 @@ declare module 'vue/types/vue' {
     $Coupon: any,           //优惠券等的请求
     $wx: any,
     $StyleColor: any,
+    $JumpDownload: any,//跳转下载页面
   }
 }

@@ -9,7 +9,7 @@
         <div class="store-name" v-cloak>{{introduce.storeName}}</div>
         <div :class="['store-brief',introduce.storeBrief?'':'store-no-brief']" v-cloak>{{introduce.storeBrief}}</div>
         <div class="store-label">
-          <Tag :tagItem="item" v-for="(item,index) in introduce.tags" :key="index" v-cloak>{{introduce.storeLabel}}</Tag>
+          <Tag :tagItem="item" v-for="(item,index) in introduce.tags" :key="index" v-cloak></Tag>
         </div>
       </div>
       <div class="floor" v-cloak>{{introduce.floor}}</div>
@@ -43,6 +43,21 @@ import Tag from './tag.vue'
 })
 export default class Tab extends Vue {
   defaultImg = require('../../../assets/image/coupon/store.png');
+  /* 
+  storeLogo: string,//商店logo
+  merchantId: string,//商家id
+  perCapita: string,//人均
+  storeName: string,//商店名称
+  storeBrief: string,//商店简介
+  tags: Array<string>,//商店标签
+  floor: string,//商店所在楼层
+  benefitTitle: string,//'惠'字
+  benefitContent: string,//线下活动
+  ticketTitle: string,//'券'字
+  ticketContent: string,//优惠券
+  voucherTitle: string,//'代'字
+  voucherContent: string,//代金券
+   */
 }
 </script>
 <style lang="scss" scoped>

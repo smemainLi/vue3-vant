@@ -2,8 +2,8 @@ import Vue from "vue";
 import Router from "vue-router";
 import wx from 'weixin-js-sdk';
 import * as routerPath from '@/router/router-path';
-import { isLogin, getAuthorizeUrl, getJsSdkConfig } from '@/service/getData'
-import { getCookie } from '@/config/utils'
+import { isLogin, getAuthorizeUrlSuper, getJsSdkConfig } from '@/service/getData'
+import { getCookie, setStore } from '@/config/utils'
 import { Toast } from 'vant';
 import { wxMethod } from "../config/wxMethod"  //封装的js sdk的方法
 import store from "../store/index"
@@ -33,6 +33,8 @@ const router = new Router({
     // 找商家
     { path: "/guide/index", name: "guide", meta: { title: '找商家' }, component: routerPath.guide },
     { path: "/guide/detailPage/:merchantId", name: "detailPage", meta: { title: '店铺详情' }, component: routerPath.detailPage },
+    { path: "/guide/shareDetailPage", name: "shareDetailPage", meta: { title: '店铺详情' }, component: routerPath.shareDetailPage },
+    { path: "/guide/netRedShop", name: "netRedShop", meta: { title: '十大网红店' }, component: routerPath.netRedShop },
 
     // 抢优惠
     { path: "/offer/index", name: "offer", meta: { title: '抢优惠' }, component: routerPath.offer },
@@ -81,6 +83,17 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+  /**
+   * 登录之前进行微信鉴权
+   * 判断微信是否授权，如果未授权，请求授权
+   * 如果已经授权，可以请求sdk认证
+   */
+  /* if (!getCookie('qi_openid')) {
+    // 微信授权
+    getAuthorizeUrlSuper(to.path).then(res => {
+      location.href = res.data.authorizeUrl;
+    })
+  } else { */
   const inviteCode = to.query.inviteCode;
   if (to.query.shareParam) { location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI2MDI5MjQxMA==&scene=126&subscene=0#wechat_redirect"; }
   document.title = to.meta.title;
@@ -94,46 +107,34 @@ router.beforeEach((to, from, next) => {
       if (!res.data.isLogin && to.path !== "/" && to.path !== "/login" && to.path !== "/member/openMember" && to.path !== "/forgetPassword" && to.path !== "/guide/index" && to.path !== "/ar/index" && to.path !== "/wifi/index") next({ path: "/login" })
       else if (res.data.isLogin) {//如果已经登录过了
         if (to.path === '/member/openMember') next({ path: "/" })
-        /**
-         * 登录之后进行微信鉴权
-         * 判断微信是否授权，如果未授权，请求授权
-         * 如果已经授权，可以请求sdk认证
-         */
-        // if (!getCookie('qi_openid')) {
-        //   // 微信授权
-        //   getAuthorizeUrl(to.path).then(res => {
-        //     location.href = res.data.authorizeUrl;
-        //   })
-        // } else {
-        //   // sdk认证
-        //   // const _this = this
-        //   getJsSdkConfig(to.path).then(res => {
-        //     wx.config({
-        //       debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-        //       appId: res.data.appid, // 必填，公众号的唯一标识
-        //       timestamp: res.data.timestamp, // 必填，生成签名的时间戳
-        //       nonceStr: res.data.noncestr, // 必填，生成签名的随机串
-        //       signature: res.data.sign,// 必填，签名
-        //       jsApiList: ['getLocation', 'updateTimelineShareData', 'updateAppMessageShareData', 'onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表
-        //     });
-        //     wx.ready(function () {
-        //       let shareParam = "uuid";
-        //       let qiOpenId = getCookie('qi_openid');
-        //       let data = {
-        //         title: "作为标题测试测试",
-        //         desc: "测试描述只是一个测试而已",
-        //         link: `${window.location.href}?qi_openid=${qiOpenId}`,
-        //         imgUrl: `${location.origin}/img/car.677f4a96.png`,
-        //         toPath: to.path
-        //       }
-        //       wxShare.shareMenuShareTimeline(data);
-        //       wxShare.shareMenuShareAppMessage(data);
-        //     });
-        //   })
-        // }
       }
     }
   })
+  // sdk认证
+  getJsSdkConfig(to.path).then(res => {
+    wx.config({
+      debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+      appId: res.data.appid, // 必填，公众号的唯一标识
+      timestamp: res.data.timestamp, // 必填，生成签名的时间戳
+      nonceStr: res.data.noncestr, // 必填，生成签名的随机串
+      signature: res.data.sign,// 必填，签名
+      jsApiList: ['getLocation', 'updateTimelineShareData', 'updateAppMessageShareData', 'onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表
+    });
+    wx.ready(function () {
+      let shareParam = "uuid";
+      let qiOpenId = getCookie('qi_openid');
+      let data = {
+        title: "作为标题测试测试",
+        desc: "测试描述只是一个测试而已",
+        link: `${window.location.href}?qi_openid=${qiOpenId}`,
+        imgUrl: `${location.origin}/img/car.677f4a96.png`,
+        toPath: to.path
+      }
+      wxShare.shareMenuShareTimeline(data);
+      wxShare.shareMenuShareAppMessage(data);
+    });
+  })
+  /* } */
   next();
 })
 

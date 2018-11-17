@@ -3,7 +3,7 @@
     <div :class="['no-card',cardInfo.length===0?'':'have-card']">
       <img class="no-card-image" src="../../../assets/image/guide/noCard.png" alt="">
     </div>
-    <div :class="['store-card',cardInfo.length!==0?'':'no-store-card']" v-for="(item,index) in cardInfo" @click="[!item.isMask&&item.isOffer?getCard(item):'']" :key="index">
+    <div :class="['store-card',cardInfo.length!==0?'':'no-store-card']" v-for="(item,index) in cardInfo" @click="[!item.isMask&&item.isOffer?getCard(item):isShare?downApp():'']" :key="index">
       <div class="">
         <div :class="['no-mask',item.isMask?'mask':'']" v-cloak>{{item.finish}}</div>
         <div class="bg-photo">
@@ -34,13 +34,12 @@ import { Component, Provide, Vue } from "vue-property-decorator";
 import { Action } from 'vuex-class';
 
 @Component({
-  props: ["cardInfo"],
+  props: ["cardInfo", "isShare"],
   components: {
   }
 })
 export default class Card extends Vue {
   @Action rushQuan
-
 
   mask = true;
 
@@ -56,6 +55,11 @@ export default class Card extends Vue {
       this.$toast.fail(err);
     });
   }
+
+  /**
+   * 跳转下载
+   */
+  downApp() { return new this.$JumpDownload() }
 }
 </script>
 <style lang="scss" scoped>

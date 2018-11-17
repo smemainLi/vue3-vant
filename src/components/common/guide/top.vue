@@ -10,7 +10,8 @@
         <div class="per-capita" v-cloak>{{storeInfo.perCapita}}</div>
       </div>
       <div class="follow">
-        <i class="icon-attention" @click="follow(!storeInfo.isFocus)"></i>
+        <i class="icon-attention" @click="follow(!storeInfo.isFocus)" v-show="!isShare"></i>
+        <i class="icon-attention" @click="downApp" v-show="isShare"></i>
         <div class="follow-word" v-cloak>{{focus}}</div>
       </div>
     </div>
@@ -21,7 +22,7 @@ import { Component, Provide, Vue, Watch } from "vue-property-decorator";
 import { Action } from 'vuex-class';
 
 @Component({
-  props: ["storeInfo"],
+  props: ["storeInfo", "isShare"],
   components: {
   }
 })
@@ -74,6 +75,11 @@ export default class Top extends Vue {
     }, 500);
   }
 
+  /**
+   * 跳转下载
+   */
+  downApp() { return new this.$JumpDownload() }
+
   mounted() {
     this.initUpdateFocus();
   }
@@ -101,6 +107,12 @@ export default class Top extends Vue {
       margin-left: 17px;
       color: $color-00;
       font-size: 28px;
+      .store-brief {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 417px;
+      }
     }
     .follow {
       float: right;

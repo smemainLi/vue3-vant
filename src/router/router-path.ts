@@ -13,6 +13,8 @@ export const wifi = (r: any) => require.ensure([], () => r(require('../views/wif
 // 找商家
 export const guide = (r: any) => require.ensure([], () => r(require('../views/guide/index.vue')), e => console.log(e), 'index')
 export const detailPage = (r: any) => require.ensure([], () => r(require('../views/guide/detailPage.vue')), e => console.log(e), 'detailPage')
+export const shareDetailPage = (r: any) => require.ensure([], () => r(require('../views/guide/shareDetailPage.vue')), e => console.log(e), 'shareDetailPage')
+export const netRedShop = (r: any) => require.ensure([], () => r(require('../views/guide/netRedShop.vue')), e => console.log(e), 'netRedShop')
 
 // 抢优惠
 export const offer = (r: any) => require.ensure([], () => r(require('../views/offer/index.vue')), e => console.log(e), 'offer')

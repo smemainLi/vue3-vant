@@ -12,17 +12,17 @@ Vue.prototype.$momentTime = function momentTime(time: Date, formatText: string =
 }
 
 
-class $ListenScroll{
-  scrollMounted:any
-  constructor(callback){
-    this.scrollMounted = ()=>{
+class $ListenScroll {
+  scrollMounted: any
+  constructor(callback) {
+    this.scrollMounted = () => {
       // scrollTop是滚动条滚动时，距离顶部的距离
-      let scrollTop = (<any>document.documentElement).scrollTop||document.body.scrollTop;
+      let scrollTop = (<any>document.documentElement).scrollTop || document.body.scrollTop;
       // scrollHeight是滚动条的总高度
-      let scrollHeight = (<any>document.documentElement).scrollHeight||document.body.scrollHeight;
+      let scrollHeight = (<any>document.documentElement).scrollHeight || document.body.scrollHeight;
       // windowHeight是可视区的高度
-      let windowHeight  = (<any>document.documentElement).clientHeight || document.body.clientHeight;
-      if(scrollTop+windowHeight===scrollHeight){
+      let windowHeight = (<any>document.documentElement).clientHeight || document.body.clientHeight;
+      if (scrollTop + windowHeight === scrollHeight) {
         callback()
       }
     }
@@ -55,5 +55,24 @@ Vue.prototype.$ListenScroll = $ListenScroll
  */
 Vue.prototype.$StyleColor = (className, classColor) => { return (<any>document).getElementsByClassName(`'${className}'`)[0].style.color = `'${classColor}'`; };
 
+
+class $JumpDownload {
+
+  constructor() {
+    const u = navigator.userAgent,
+      isAndroid = u.indexOf('Android') > 1 || u.indexOf('Adr') > 1,
+      isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
+      urls = {
+        /* 'android': 'http://ftp-apk.pcauto.com.cn/pub/autoclub-5000-autowapDL1.apk', */
+        'android': 'http://www1.pcauto.com.cn/app/20141120/pcautoapp/index.html',
+        'ios': 'https://itunes.apple.com/cn/app/zhong-guo-che-you-hui/id640447959',
+        'other': 'http://www1.pcauto.com.cn/app/20141120/pcautoapp/index.html'
+      };
+    window.location.href = isAndroid ? urls.android : isIOS ? urls.ios : urls.other;
+  }
+
+}
+
+Vue.prototype.$JumpDownload = $JumpDownload;
 
 export default Vue

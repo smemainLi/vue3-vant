@@ -11,7 +11,6 @@
 </template>
 <script lang="ts">
 import { Component, Provide, Vue, Watch } from "vue-property-decorator";
-import { setStore } from "../../../config/utils"
 
 interface voteInfo {
   percentage: string,
