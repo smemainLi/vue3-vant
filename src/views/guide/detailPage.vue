@@ -8,7 +8,7 @@
     <card :cardInfo="cardInfoList"></card>
     <coupon-title class="feel" :titleContent="feelTitle"></coupon-title>
     <feeling :voteInfoList="voteInfoList" :feelNumMax="feelNumMax" :merchantId="this.$route.params.merchantId"></feeling>
-    <van-popup class="pop-box" v-model="noExistence" :close-on-click-overlay="false">
+    <!-- <van-popup class="pop-box" v-model="noExistence" :close-on-click-overlay="false">
       <div class="pop-box-top">
         <div class="box-top-title" v-cloak>{{boxTitle}}</div>
         <router-link class="box-top-close" tag="div" :to="{path:'/guide/index'}">×</router-link>
@@ -17,66 +17,68 @@
       <router-link :to="{path:'/guide/index'}">
         <common-Btn :btnName="btnName" class="pop-box-bottom-btn"></common-Btn>
       </router-link>
-    </van-popup>
+    </van-popup> -->
+    <pop></pop>
   </div>
 </template>
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
-import { Action } from 'vuex-class';
-import top from '../../components/common/guide/top.vue';
-import location from '../../components/common/guide/location.vue';
-import discount from '../../components/common/guide/discount.vue';
-import goodsSwiper from '../../components/common/guide/goodsSwiper.vue';
-import couponTitle from '../../components/common/guide/couponTitle.vue';
-import card from '../../components/common/guide/card.vue';
-import feeling from '../../components/common/guide/feeling.vue';
-import commonBtn from '../../components/common/button.vue';
+import { Action } from "vuex-class";
+import top from "../../components/common/guide/top.vue";
+import location from "../../components/common/guide/location.vue";
+import discount from "../../components/common/guide/discount.vue";
+import goodsSwiper from "../../components/common/guide/goodsSwiper.vue";
+import couponTitle from "../../components/common/guide/couponTitle.vue";
+import card from "../../components/common/guide/card.vue";
+import feeling from "../../components/common/guide/feeling.vue";
+import commonBtn from "../../components/common/button.vue";
+import pop from "../../components/common/guide/pop.vue";
 
 interface storeInfo {
-  storeId: string,
-  storeLogo: string,
-  metaTitle: string,
-  storeBrief: string,
-  perCapita: string,
-  isFocus: boolean,
+  storeId: string;
+  storeLogo: string;
+  metaTitle: string;
+  storeBrief: string;
+  perCapita: string;
+  isFocus: boolean;
 }
 
 interface locationInfo {
-  site: string,
-  noSite: boolean,//判断地理位置是否为空
-  phone: string,
+  site: string;
+  noSite: boolean; //判断地理位置是否为空
+  phone: string;
 }
 
 interface discountInfo {
-  discountTitle: string,
-  discountTime: string
+  discountTitle: string;
+  discountTime: string;
 }
 
 interface goodsInfo {
-  goodsId: string,
-  image: string,
-  name: string,
-  price: string,
+  goodsId: string;
+  image: string;
+  name: string;
+  price: string;
 }
 
 interface cardInfo {
-  cardId: string,
-  bgImage: string,
-  parValue: string,//面值
-  fullReduction: string,//满减
-  range: string,//适用范围
-  time: string,
-  cardType: number,/* 0表示满减(黄色卡片背景)，1表示代金券(红色卡片背景) */
-  isMask?: boolean,/* false表示还有券，true表示已抢光 */
-  isOffer?: boolean,/* true表示是抢优惠券页面触发的点击事件(卡片点击事件) */
-  finish?: string,
+  cardId: string;
+  bgImage: string;
+  parValue: string; //面值
+  fullReduction: string; //满减
+  range: string; //适用范围
+  time: string;
+  cardType: number /* 0表示满减(黄色卡片背景)，1表示代金券(红色卡片背景) */;
+  isMask?: boolean /* false表示还有券，true表示已抢光 */;
+  isOffer?: boolean /* true表示是抢优惠券页面触发的点击事件(卡片点击事件) */;
+  finish?: string;
 }
 
 interface voteInfo {
-  percentage: string,
-  emoticon: string,
-  num: string,
-  status: boolean,
+  percentage: string;
+  emoticon: string;
+  num: string;
+  status: boolean;
 }
 
 @Component({
@@ -88,11 +90,13 @@ interface voteInfo {
     couponTitle,
     card,
     feeling,
-    commonBtn
+    commonBtn,
+    pop
   }
 })
 export default class DetailPage extends Vue {
-  @Action storeDetail
+  @Action
+  storeDetail;
 
   /* merchantId = this.$route.params.merchantId; */
   storeInfo = {};
@@ -103,7 +107,7 @@ export default class DetailPage extends Vue {
   cardInfo = {};
   cardInfoList: any = [];
   voteInfoList: any = [];
-  noExistence: boolean = false;
+  noExistence: boolean = true;
   feelNumMax: number = 0;
 
   metaTitle = "ONLY服饰店";
@@ -120,86 +124,101 @@ export default class DetailPage extends Vue {
 
   getStoreDetail() {
     console.log(this.$route.params.merchantId);
-    this.storeDetail({ merchantId: this.$route.params.merchantId }).then((res) => {
-      this.noExistence = res.data.openStatus === 0 ? false : true;
-      this.storeInfo = {
-        storeId: this.$route.params.merchantId,
-        storeLogo: res.data.logo,
-        metaTitle: res.data.storeName,
-        storeBrief: res.data.storeDesc,
-        perCapita: res.data.percapita,
-        isFocus: res.data.isFocus,
-      }
-      this.locationInfo = {
-        site: `${res.data.floor}${res.data.floorAddr}`,
-        noSite: !res.data.floor || !res.data.floor ? false : true,
-        phone: `tel:${res.data.contactPhone}`,
-      }
-      this.discountInfo = {
-        discountTitle: res.data.activity.activityName,
-        discountTime: res.data.activity.activityContent,
-      }
-      for (let i = 0; i < res.data.goodsList.length; i++) {
-        const goods = res.data.goodsList[i];
-        this.goodsInfo = {
-          goodsId: goods.goodsId,
-          image: goods.goodsImage,
-          name: goods.goodsName,
-          price: `￥${goods.netPrice}`,
+    this.storeDetail({ merchantId: this.$route.params.merchantId })
+      .then(res => {
+        /* this.noExistence = res.data.openStatus === 0 ? false : true; */
+        this.storeInfo = {
+          storeId: this.$route.params.merchantId,
+          storeLogo: res.data.logo,
+          metaTitle: res.data.storeName,
+          storeBrief: res.data.storeDesc,
+          perCapita: res.data.percapita,
+          isFocus: res.data.isFocus
+        };
+        this.locationInfo = {
+          site: `${res.data.floor}${res.data.floorAddr}`,
+          noSite: !res.data.floor || !res.data.floor ? false : true,
+          phone: `tel:${res.data.contactPhone}`
+        };
+        this.discountInfo = {
+          discountTitle: res.data.activity.activityName,
+          discountTime: res.data.activity.activityContent
+        };
+        for (let i = 0; i < res.data.goodsList.length; i++) {
+          const goods = res.data.goodsList[i];
+          this.goodsInfo = {
+            goodsId: goods.goodsId,
+            image: goods.goodsImage,
+            name: goods.goodsName,
+            price: `￥${goods.netPrice}`
+          };
+          this.goodsInfoList.push(this.goodsInfo);
         }
-        this.goodsInfoList.push(this.goodsInfo);
-      }
-      for (let i = 0; i < res.data.quanList.length; i++) {
-        const card = res.data.quanList[i];
-        this.cardInfo = {
-          cardId: card.quanId,
-          bgImage: card.typeName === "优惠券" ? require("../../assets/image/guide/cash.png") : require("../../assets/image/guide/discount.png"),
-          parValue: `￥${card.discount}`,
-          fullReduction: card.typeName === "优惠券" ? `满${card.amount}可用` : card.typeName,
-          range: card.usable,
-          time: `${card.startDateStr}-${card.endDateStr}`,
-          cardType: card.typeName === "优惠券" ? 0 : 1,/* 0表示满减(黄色卡片背景)，1表示代金券(红色卡片背景) */
-          isMask: false,
-          isOffer: false,/* true表示是抢优惠券页面触发的点击事件(卡片点击事件) */
-          finish: "抢光了，下次早点来哦",
+        for (let i = 0; i < res.data.quanList.length; i++) {
+          const card = res.data.quanList[i];
+          this.cardInfo = {
+            cardId: card.quanId,
+            bgImage:
+              card.typeName === "优惠券"
+                ? require("../../assets/image/guide/cash.png")
+                : require("../../assets/image/guide/discount.png"),
+            parValue: `￥${card.discount}`,
+            fullReduction:
+              card.typeName === "优惠券"
+                ? `满${card.amount}可用`
+                : card.typeName,
+            range: card.usable,
+            time: `${card.startDateStr}-${card.endDateStr}`,
+            cardType:
+              card.typeName === "优惠券"
+                ? 0
+                : 1 /* 0表示满减(黄色卡片背景)，1表示代金券(红色卡片背景) */,
+            isMask: false,
+            isOffer: false /* true表示是抢优惠券页面触发的点击事件(卡片点击事件) */,
+            finish: "抢光了，下次早点来哦"
+          };
+          this.cardInfoList.push(this.cardInfo);
         }
-        this.cardInfoList.push(this.cardInfo);
-      }
 
-      this.voteInfoList.push({
-        percentage: "0",
-        emoticon: require("../../assets/image/guide/like.png"),
-        num: res.data.feels.feelGoodNum,
-        status: res.data.feels.feelGood,
-      });
-      this.voteInfoList.push({
-        percentage: "0",
-        emoticon: require("../../assets/image/guide/ordinary.png"),
-        num: res.data.feels.feelSosoNum,
-        status: res.data.feels.feelSoso,
-      });
-      this.voteInfoList.push({
-        percentage: "0",
-        emoticon: require("../../assets/image/guide/dislike.png"),
-        num: res.data.feels.feelBadNum,
-        status: res.data.feels.feelBad,
-      });
-      this.feelNumMax = this.checkMax(this.voteInfoList[0].num, this.voteInfoList[1].num, this.voteInfoList[2].num)
+        this.voteInfoList.push({
+          percentage: "0",
+          emoticon: require("../../assets/image/guide/like.png"),
+          num: res.data.feels.feelGoodNum,
+          status: res.data.feels.feelGood
+        });
+        this.voteInfoList.push({
+          percentage: "0",
+          emoticon: require("../../assets/image/guide/ordinary.png"),
+          num: res.data.feels.feelSosoNum,
+          status: res.data.feels.feelSoso
+        });
+        this.voteInfoList.push({
+          percentage: "0",
+          emoticon: require("../../assets/image/guide/dislike.png"),
+          num: res.data.feels.feelBadNum,
+          status: res.data.feels.feelBad
+        });
+        this.feelNumMax = this.checkMax(
+          this.voteInfoList[0].num,
+          this.voteInfoList[1].num,
+          this.voteInfoList[2].num
+        );
 
-      console.log(this.voteInfoList);
-    }).catch((err) => {
-      this.$toast.fail(err);
-    });
+        console.log(this.voteInfoList);
+      })
+      .catch(err => {
+        this.$toast.fail(err);
+      });
   }
 
   checkMax(numF, numS, numT) {
     let tempMax: number = 0;
     if (numF >= numS && numF >= numT) {
-      return tempMax = numF;
+      return (tempMax = numF);
     } else if (numS >= numT) {
-      return tempMax = numS;
+      return (tempMax = numS);
     } else {
-      return tempMax = numT;
+      return (tempMax = numT);
     }
   }
 

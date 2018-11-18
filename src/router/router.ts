@@ -99,7 +99,7 @@ router.beforeEach((to, from, next) => {
   document.title = to.meta.title;
   Toast.clear()  //关闭提示框
   //判断是否登录过
-  isLogin().then(res => {
+  /* isLogin().then(res => {
     store.commit('isLogins', { isLogin: res.data.isLogin })
     if (inviteCode) {
       if (!res.data.isLogin) next({ path: `/member/openMember/?inviteCode=${inviteCode}` })
@@ -109,7 +109,7 @@ router.beforeEach((to, from, next) => {
         if (to.path === '/member/openMember') next({ path: "/" })
       }
     }
-  })
+  }) */
   // sdk认证
   getJsSdkConfig(to.path).then(res => {
     wx.config({
