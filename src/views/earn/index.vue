@@ -40,7 +40,7 @@ import taskCard from "@/components/common/earn/taskCard.vue"
 import moreIntegral from "@/components/common/earn/moreIntegral.vue"
 import { Action } from 'vuex-class'
 import json from "../../lang/wx"
-// import { wxMethod } from "../../config/wxMethod"
+// import { wxShare } from "../../config/wxConfig"
 
 
 @Component({
@@ -65,7 +65,6 @@ export default class Guide extends Vue {
 
   @Action("punchClock")            punchClock             //签到
   @Action("exchangeVoucherIndex")  exchangeVoucherIndex   //首页展示
-  @Action("gotoInvite")            gotoInvite             //邀请码
 
   // 签到 子组件触发父组件的方法
   receiveMethod(){
@@ -116,70 +115,57 @@ export default class Guide extends Vue {
     }
   }
 
-  // 邀请码
-  InviteCode(){
-    this.gotoInvite().then(res=>{
-      // 朋友圈
-      let circleCode = json.earnShareCircleOfFriends.link
-      // 好友
-      let friends = json.earnShareOfFriends.link
-      circleCode = `${circleCode}?inviteCode=${res.data.inviteCode}`
-      friends = `${friends}?inviteCode=${res.data.inviteCode}`
-      json.earnShareOfFriends.title = friends
-      console.log(json.earnShareOfFriends.title,"===============    =======================")
-    }).catch(err=>{
-      this.$toast.fail(err);
-    })
-  }
-
   wxMethod(){
     let _this = this
     this.$wx.ready(function () {
     _this.$wx.getLocation({
       type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
       success: function (res) {
-      let latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-      let longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-      let speed = res.speed; // 速度，以米/每秒计
-      let accuracy = res.accuracy; // 位置精度
-      //   0.01大概等于1.11KM
-      if((_this.dimension-latitude<0.01&&_this.dimension-latitude>-0.01)
+        let latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+        let longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+        let speed = res.speed; // 速度，以米/每秒计
+        let accuracy = res.accuracy; // 位置精度
+        //   0.01大概等于1.11KM
+        if((_this.dimension-latitude<0.01&&_this.dimension-latitude>-0.01)
           &&(_this.longitude-longitude<0.01&&_this.longitude-longitude>-0.01)){
         _this.isRange = true
-        console.log("在范围内")
-      }else{
-        _this.isRange = false
-      }
-      console.log(latitude,'======= 维度============')
-      console.log(longitude,'========= 经度 ==========')
+        }else{
+          _this.isRange = false
         }
-      })
+      }
+    })
     _this.$wx.error( (err)=>{
-      console.log(err,"============= 这是位置错误信息 ==============")
       _this.isRangeText = "位置授权失败，请重新授权" 
       })
     })
   }
 
   created(){
-    this.InviteCode()
     this.wxMethod()
     this.indexShow()
 
-    // this.$wx.ready(function(){
-    //   wxMethod.updateAppMessageShareData(
-    //     {
-    //       title:"我在万悦湾等你啦啦啦啦啦",
-    //       link:"http://wyw-wx.test.qi-cloud.com",
-    //       imgUrl: "https://ss1.baidu.com/-4o3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=a0417f4137292df588c3aa158c305ce2/9345d688d43f8794906df240df1b0ef41ad53ac9.jpg"
-    //     }
-    //   )
-    // })
+
   }
 
   mounted () {
- 
-    console.log(document.cookie,'============= 123456 ============')
+
+    let share = document.cookie.split(";").filter(item=>{
+      return item.includes("qi_openid")
+    })
+    let _this = this
+    this.$wx.ready(function(){
+      _this.$wx.onMenuShareAppMessage({
+        title: '邀请您注册', // 分享标题
+        desc: '快点注册', // 分享描述
+        link: `${window.location.href.split("?")[0]}/${share.length===0? "":"?"+share[0]}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1542364545336&di=63240e8f0bb2d92c4f09ff3b226a3782&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F83025aafa40f4bfb0786420f0e4f78f0f7361813.jpg', // 分享图标
+        type: '', // 分享类型,music、video或link，不填默认为link
+        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+        success: function () {
+        // 用户点击了分享后执行的回调函数
+        }
+      })
+    })
   }
 
 }

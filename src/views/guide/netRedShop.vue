@@ -1,12 +1,13 @@
 <template>
   <div class="guide">
-    <tab :category="category" @categoryId="getCategoryId"></tab>
-    <store :introduce="item" v-for="(item,index) in introduceInfo" @click.native="loopStoreDetail(item.merchantId)" :key="index"></store>
+    <layer></layer>
+    <store :introduce="item" v-for="(item,index) in introduceInfo" @click.native="downApp" :key="index"></store>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
+import layer from '../../components/common/layer.vue';
 import tab from '../../components/common/guide/tab.vue';
 import store from '../../components/common/guide/store.vue';
 import { Action, State, Mutation } from 'vuex-class';
@@ -35,6 +36,7 @@ interface category {
 
 @Component({
   components: {
+    layer,
     tab,
     store
   }
@@ -154,6 +156,13 @@ export default class NetRedShop extends Vue {
 
   test() {
     this.introduceInfo = [];
+  }
+
+  /**
+    * 跳转下载
+    */
+  downApp() {
+    return new this.$JumpDownload();
   }
 
   mounted() {

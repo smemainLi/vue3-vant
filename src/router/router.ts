@@ -94,12 +94,21 @@ router.beforeEach((to, from, next) => {
       location.href = res.data.authorizeUrl;
     })
   } else { */
+  // 邀请人openid
+  let inviterOpenId = to.query.qi_openid
+  // 如果有分享人的id那么就保存在loacalStorage   accept
+  if (getCookie('qi_openid') && inviterOpenId) {
+    // 这是受邀人的oppenid
+    localStorage.setItem("inviteeOpenId", JSON.stringify(getCookie('qi_openid')))
+    // 邀请人
+    localStorage.setItem("inviterOpenId", JSON.stringify(inviterOpenId))
+  }
   const inviteCode = to.query.inviteCode;
   if (to.query.shareParam) { location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI2MDI5MjQxMA==&scene=126&subscene=0#wechat_redirect"; }
   document.title = to.meta.title;
   Toast.clear()  //关闭提示框
   //判断是否登录过
-  /* isLogin().then(res => {
+  isLogin().then(res => {
     store.commit('isLogins', { isLogin: res.data.isLogin })
     if (inviteCode) {
       if (!res.data.isLogin) next({ path: `/member/openMember/?inviteCode=${inviteCode}` })
@@ -109,7 +118,7 @@ router.beforeEach((to, from, next) => {
         if (to.path === '/member/openMember') next({ path: "/" })
       }
     }
-  }) */
+  })
   // sdk认证
   getJsSdkConfig(to.path).then(res => {
     wx.config({
@@ -118,10 +127,9 @@ router.beforeEach((to, from, next) => {
       timestamp: res.data.timestamp, // 必填，生成签名的时间戳
       nonceStr: res.data.noncestr, // 必填，生成签名的随机串
       signature: res.data.sign,// 必填，签名
-      jsApiList: ['getLocation', 'updateTimelineShareData', 'updateAppMessageShareData', 'onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表
+      jsApiList: ['getLocation', 'updateTimelineShareData', 'updateAppMessageShareData', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'hideOptionMenu'] // 必填，需要使用的JS接口列表
     });
     wx.ready(function () {
-      let shareParam = "uuid";
       let qiOpenId = getCookie('qi_openid');
       let data = {
         title: "作为标题测试测试",

@@ -47,6 +47,7 @@ export default class ForgetPassword extends Vue {
   baseUrl: string = ""
   countDown: number = 60     // 验证码倒计时
   time: any                  //计时器
+  notClick:boolean = true //禁止点击
 
   // vuex action
   @Action('forgetPassword') resetPassword  // 修改密码
@@ -95,7 +96,9 @@ export default class ForgetPassword extends Vue {
 
   // 获取手机验证码
   getCode() {
-    if (this.countDown !== 60) return
+    if (this.countDown !== 60||!this.notClick) return
+    this.notClick = false
+
     this.getSmsCode({  phoneNum: this.data.phoneNum,
                        vcode: this.data.vcode    })
       .then(res => {
@@ -106,6 +109,7 @@ export default class ForgetPassword extends Vue {
         this.$toast.fail(err);
         // 输入图形验证码错误后，就更新一个图形验证码
         this.getVcodeUrl()
+        this.notClick = true
       })
   }
 

@@ -1,8 +1,16 @@
 import { request } from '@/config/request';
+import { setStore, getStore } from "../../config/utils";
 
-const state = {};
+const state = {
+  winPoints: false,
+};
 const getters = {};
-const mutations = {};
+const mutations = {
+  recordWinPoints(state, winPoints) {
+    state.winPoints = winPoints;
+    setStore("winPoints", winPoints);
+  }
+};
 const actions = {
   /**
    * 获取分类导购信息

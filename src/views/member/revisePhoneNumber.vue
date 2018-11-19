@@ -43,6 +43,7 @@ export default class RevisePhoneNumber extends Vue {
   imgUrl:string=""
   countDown:number=60
   time:any
+  notClick:boolean = true //禁止点击
 
 // 图形验证码
   graphCode(){
@@ -55,13 +56,14 @@ export default class RevisePhoneNumber extends Vue {
 
 // 获取手机验证码
   smsCode(data){
-    if (this.countDown !== 60) return
+    if (this.countDown !== 60||!this.notClick) return
     this.getSmsCode({phoneNum:data.newPhoneNum,vcode:data.vcode}).then(res=>{
       this.$toast.success('验证码已发送');
       this.countDownTime()
     }).catch(err=>{
       this.$toast.fail(err)
       this.graphCode()
+      this.notClick = true
     })
   }
 

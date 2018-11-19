@@ -1,5 +1,6 @@
 <template>
   <div class="detailPage">
+    <layer></layer>
     <top :storeInfo="storeInfo" :isShare="isShare"></top>
     <location :locationInfo="locationInfo" :isShare="isShare"></location>
     <discount :discountInfo="discountInfo"></discount>
@@ -10,6 +11,7 @@
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
 import { Action } from 'vuex-class';
+import layer from '../../components/common/layer.vue';
 import top from '../../components/common/guide/top.vue';
 import location from '../../components/common/guide/location.vue';
 import discount from '../../components/common/guide/discount.vue';
@@ -70,6 +72,7 @@ interface voteInfo {
     discount,
     goodsSwiper,
     card,
+    layer
   }
 })
 export default class ShareDetailPage extends Vue {

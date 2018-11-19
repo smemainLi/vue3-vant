@@ -64,7 +64,7 @@ export default class Top extends Vue {
 
   initUpdateFocus() {
     setTimeout(() => {
-      console.log(this.storeInfo.isFocus);
+      /* console.log(this.storeInfo.isFocus); */
       if (this.storeInfo.isFocus) {
         (<any>document).getElementsByClassName('icon-attention')[0].style.color = '#f56e73';
         this.focus = "取消";

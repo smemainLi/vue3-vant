@@ -27,9 +27,9 @@ export default class Index extends Vue {
     { name: '会员信息', url: '/member/index' },
     { name: '登录', url: '/login' },
     { name: '开通会员卡', url: '/member/openMember' },
-    { name: '十大网红店', url: '/guide/netRedShop' },
     // { name: '店铺详情分享1', url: 'http://wyw-wx.test.qi-cloud.com/guide/shareDetailPage?merchantId=ff808081665d09da016661bff7f701f3' },
     // { name: '店铺详情分享2', url: 'http://wyw-wx.test.qi-cloud.com/guide/shareDetailPage?merchantId=8a8ae43865d7db200165d800262a000c' },
+    { name: '十大网红店', url: 'http://wyw-wx.test.qi-cloud.com/guide/netRedShop?merchantId=ff8080816685f45c01668a54fb200006' },
   ]
 }
 </script>

@@ -1,13 +1,13 @@
 <template>
   <div class="pop">
-    <van-popup :class="[storeNoOpen?'pop-box':'',plusScore?'pop-plus':'']" v-model="popModel" :close-on-click-overlay="false" :overlay="storeNoOpen?true:plusScore?false:''">
+    <van-popup :class="[storeNoOpen?'pop-box':'',plusScore?'pop-plus':'']" v-model="popModel" :close-on-click-overlay="false" :overlay="storeNoOpen?true:plusScore?false:noOverlay?false:''">
 
       <div class="store-no-open" v-show="storeNoOpen">
         <div class="pop-box-top">
-          <div class="box-top-title" v-cloak>sdkhfksdhfkjsdf</div>
+          <div class="box-top-title" v-cloak>{{boxTitle}}</div>
           <router-link class="box-top-close" tag="div" :to="{path:'/guide/index'}">×</router-link>
         </div>
-        <div class="pop-box-middle" v-cloak>sdfasdfasdfsdaf</div>
+        <div class="pop-box-middle" v-cloak>{{boxMiddle}}</div>
         <router-link :to="{path:'/guide/index'}">
           <common-Btn :btnName="btnName" class="pop-box-bottom-btn"></common-Btn>
         </router-link>
@@ -21,27 +21,22 @@
       </div>
 
     </van-popup>
+
   </div>
 </template>
 <script lang="ts">
 import { Component, Provide, Vue, Watch } from "vue-property-decorator";
-import { getStore } from "../../../config/utils";
+import { getStore, getCookie } from "../../../config/utils";
+import { gotoShare } from "../../../service/getData";
+import { State, Mutation } from "vuex-class";
 import commonBtn from "../../../components/common/button.vue";
+import wx from "weixin-js-sdk";
 
 @Component({
-  // props: ["modelVal", "tt1", "tt2"],
   props: {
-    popModel: {
-      type: Boolean,
-      default: true
-    },
     storeNoOpen: {
       type: Boolean,
       default: false
-    },
-    plusScore: {
-      type: Boolean,
-      default: true
     }
   },
   components: {
@@ -49,7 +44,14 @@ import commonBtn from "../../../components/common/button.vue";
   }
 })
 export default class Pop extends Vue {
-  testWinPoints = getStore("winPoints");
+  @State(State => State.guide.winPoints) winPoints
+
+  popModel: boolean = false;
+  storeNoOpen: any;
+  plusScore: any = false;
+
+  noOverlay: any = false;
+
   scoreValue = "+5分";
   tipValue = "成功积分";
 
@@ -57,15 +59,52 @@ export default class Pop extends Vue {
   boxMiddle = "肯定你姿势不对呀~";
   btnName: string = "换个姿势";
 
-  @Watch("tt1")
-  ttt() {}
+  @Watch("storeNoOpen")
+  storeChange(newVal, oldVal) {
+    if (newVal) {
+      this.forbidShare();
+      this.popModel = newVal;
+    }
+  }
+  @Watch("winPoints")
+  plusChange(newVal, oldVal) {
+    if (newVal) {
+      this.popModel = newVal;
+      this.plusScore = newVal;
+      setTimeout(() => {
+        this.plusScore = false;
+        this.noOverlay = newVal;
+      }, 1000);
+    }
+  }
 
-  /*******************************店铺装修的时候不允许分享朋友圈***********************************/
+  /**
+   * 获取分享店铺的加分参数winPoints
+   */
+  getWinPoints() {
+    console.log(getStore("winPoints"));
+    this.plusScore = getStore("winPoints");
+  }
+
+
+  /**
+   * 禁止分享朋友圈
+   */
+  forbidShare() {
+    wx.ready(function () {
+      wx.hideOptionMenu();
+    });
+  }
+
 }
 </script>
 
 <style lang="scss" scoped>
 .pop {
+  .buttonbtn {
+    width: 200px;
+    height: 200px;
+  }
   .pop-box {
     width: 686px;
     height: 542px;
@@ -102,12 +141,24 @@ export default class Pop extends Vue {
     }
   }
   .pop-plus {
-    width: 230px;
-    height: 230px;
-    background-color: rgba(0, 0, 0, 0.45);
     .plus-score {
+      background: #0c0c0c;
+      opacity: 0.72;
+      border-radius: 10px;
       .plus-content {
-        color: white;
+        width: 230px;
+        height: 230px;
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+        color: $color-ff;
+        .score-value {
+          font-size: 48px;
+          font-weight: bold;
+        }
+        .tip-value {
+          font-size: 28px;
+        }
       }
     }
   }

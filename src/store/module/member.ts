@@ -85,6 +85,10 @@ const actions = {
   // 用户协议（开通会员卡）
   feesDesc({ commit }, data) {
     return request("/wx/member/parking/feesDesc", data)
+  },
+  // 绑定会员id（邀请）
+  bindInvite({ commit }, data){
+    return request("/wx/member/account/auth/bindInvite",data)
   }
 
 }

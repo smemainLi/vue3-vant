@@ -35,7 +35,8 @@ export default class Guide extends Vue {
   .btn-img {
     width: 574px;
     height: 136px;
-    margin-top: 850px;
+    position: relative;
+    top: 80%;
   }
 }
 </style>

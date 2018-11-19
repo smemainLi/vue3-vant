@@ -16,10 +16,6 @@ const actions = {
 //首页展示
   exchangeVoucherIndex({ commit }){
     return request("/wx/member/earnIntegral/index") 
-  },
-// 去邀请
-  gotoInvite({ commit }){
-    return request("/wx/member/earnIntegral/gotoInvite")
   }
 }
 

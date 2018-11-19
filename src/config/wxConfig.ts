@@ -1,6 +1,7 @@
 import wx from "weixin-js-sdk";
 import { gotoShare } from "@/service/getData";
 import { setStore } from "@/config/utils";
+import store from "../store/index";
 
 class share {
   constructor() {
@@ -37,12 +38,12 @@ class share {
         console.log(data.toPath);
         console.log(data.toPath.indexOf("/guide/detailPage"));
         if (data.toPath.indexOf("/guide/detailPage") !== -1) {
-          gotoShare().then((res) => {
-            console.log(res.data.message);
+          gotoShare().then(() => {
             setStore("winPoints", true);
-          }).catch((err) => {
+            store.commit('recordWinPoints', true);
+          }).catch(() => {
             setStore("winPoints", false);
-            console.log(err);
+            store.commit('recordWinPoints', true);
           });
         }
       }
