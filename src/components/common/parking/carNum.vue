@@ -28,7 +28,7 @@ import { Action } from "vuex-class"
   }
 })
 export default class CarNum extends Vue {
-  @Action("queryPlateNumber") queryPlateNumber
+  @Action queryPlateNumber//获取车牌号码
 
   carNumArr: Array<string> = [];
   carNumArrLength: number = 0;
@@ -40,8 +40,10 @@ export default class CarNum extends Vue {
     await this.queryPlateNumber().then((res) => {
       //向父组件传递参数，第一个参数是父组件中绑定的自定义回调方法，第二个参数为传递的参数
       this.$emit('hasCarNum', res.data.isCarNum);
-      this.carNumArr = res.data.carNum.split('');
-      this.carNumArrLength = this.carNumArr.length;
+      if (res.data.carNum) {
+        this.carNumArr = res.data.carNum.split('');
+        this.carNumArrLength = this.carNumArr.length;
+      }
     }).catch((err) => {
       this.$toast.fail(err);
     });

@@ -17,9 +17,10 @@ declare module 'vue/types/vue' {
   interface Vue {
     $momentTime: any,      //格式化时间
     $ListenScroll: any,    //监听scroll
-    $Coupon: any,           //优惠券等的请求
+    $Coupon: any,          //优惠券等的请求
     $wx: any,
     $StyleColor: any,
     $JumpDownload: any,//跳转下载页面
+    $pottingTosts: any,    //二次封装tost的提示
   }
 }

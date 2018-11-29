@@ -50,10 +50,16 @@ couponTime = {}   //券码和二维码
       this.codeMsg = res.data
 		  this.couponTime = {...res.data,time:res.data.usedDate,isUse:true}
       this.$Coupon.dataHandling(res,this.scopeMsg,true)
+      this.$toast.clear()
      })
     })
+    .catch(err=>{
+			this.$toast.clear()
+			this.$toast.fail(err)
+		})
   }
   mounted () {
+    this.$pottingTosts("加载中")
     this.couponDetailMethod()
   }
 }

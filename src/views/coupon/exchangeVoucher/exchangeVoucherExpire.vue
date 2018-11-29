@@ -44,12 +44,18 @@ export default class ExchangeVoucherExpire extends Vue {
                                 									:`${res.data.deductionIntegral}积分兑换`,
 													}
 		  this.$Coupon.dataHandling(res,this.scopeMsg,true)
-		  this.couponTime = {...res.data,time:res.data.usedDate,isUse:true}
+			this.couponTime = {...res.data,time:res.data.usedDate,isUse:true}
+			this.$toast.clear()
 			})
+		})
+		.catch(err=>{
+			this.$toast.clear()
+			this.$toast.fail(err)
 		})
 	}
 
 	created(){
+		this.$pottingTosts("加载中")
 		this.expireMethod()
 	}
 

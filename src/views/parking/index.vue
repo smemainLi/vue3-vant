@@ -37,15 +37,14 @@ import commonBtn from '../../components/common/button.vue';
   }
 })
 export default class Parking extends Vue {
-  btnName: string = "";
-  isCarNum: boolean = false;
+  btnName: string = "";//按钮名称
+  isCarNum: boolean = false;//是否已经绑定了车牌号码
   type: number = 3;//文明文档的类型，3----停车收费
 
   /**
    * 回调方法，接收子组件传的参数
    */
   hasCarNum(isCarNum) {
-    console.log(isCarNum);
     this.isCarNum = isCarNum;
     //如果已经有绑定的车辆了，按钮文字显示为“查询”，否则显示为“绑定车辆”
     if (isCarNum) this.btnName = "查询";

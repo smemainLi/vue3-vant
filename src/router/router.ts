@@ -2,7 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import wx from 'weixin-js-sdk';
 import * as routerPath from '@/router/router-path';
-import { isLogin, getAuthorizeUrlSuper, getJsSdkConfig } from '@/service/getData'
+import { isLogin, getAuthorizeUrlSuperSJ, getJsSdkConfig } from '@/service/getData'
 import { getCookie, setStore } from '@/config/utils'
 import { Toast } from 'vant';
 import { wxMethod } from "../config/wxMethod"  //封装的js sdk的方法
@@ -38,6 +38,7 @@ const router = new Router({
 
     // 抢优惠
     { path: "/offer/index", name: "offer", meta: { title: '抢优惠' }, component: routerPath.offer },
+    { path: "/offer/turntableGame", name: "turntableGame", meta: { title: '游戏转盘' }, component: routerPath.turntableGame },
 
     // AR
     { path: "/ar/index", name: "ar", meta: { title: 'AR红包' }, component: routerPath.ar },
@@ -73,6 +74,8 @@ const router = new Router({
     { path: "/member/selectData", name: "selectData", meta: { title: '我的资料' }, component: routerPath.selectData },
     { path: "/member/carNumber", name: "carNumber", meta: { title: '车牌号' }, component: routerPath.carNumber },
     { path: "/protocol/:type", name: "protocol", meta: { title: '用户协议' }, component: routerPath.protocol, props: true },
+    { path: "/member/createBazaar", name: "createBazaar", meta: { title: '创意集市' }, component: routerPath.createBazaar },
+    { path: "/member/welcome", name: "welcome", meta: { title: '万悦湾' }, component: routerPath.welcome },
 
     // 账号登录
     { path: "/login", name: "login", meta: { title: '账号登录' }, component: routerPath.login },
@@ -83,66 +86,74 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  /**
-   * 登录之前进行微信鉴权
-   * 判断微信是否授权，如果未授权，请求授权
-   * 如果已经授权，可以请求sdk认证
-   */
-  /* if (!getCookie('qi_openid')) {
-    // 微信授权
-    getAuthorizeUrlSuper(to.path).then(res => {
-      location.href = res.data.authorizeUrl;
-    })
-  } else { */
-  // 邀请人openid
-  let inviterOpenId = to.query.qi_openid
-  // 如果有分享人的id那么就保存在loacalStorage   accept
-  if (getCookie('qi_openid') && inviterOpenId) {
-    // 这是受邀人的oppenid
-    localStorage.setItem("inviteeOpenId", JSON.stringify(getCookie('qi_openid')))
-    // 邀请人
+  let inviterOpenId = to.query.qi_openid  //邀请人
+  if (inviterOpenId) {
     localStorage.setItem("inviterOpenId", JSON.stringify(inviterOpenId))
   }
-  const inviteCode = to.query.inviteCode;
-  if (to.query.shareParam) { location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI2MDI5MjQxMA==&scene=126&subscene=0#wechat_redirect"; }
-  document.title = to.meta.title;
-  Toast.clear()  //关闭提示框
-  //判断是否登录过
-  isLogin().then(res => {
-    store.commit('isLogins', { isLogin: res.data.isLogin })
-    if (inviteCode) {
-      if (!res.data.isLogin) next({ path: `/member/openMember/?inviteCode=${inviteCode}` })
-    } else {
-      if (!res.data.isLogin && to.path !== "/" && to.path !== "/login" && to.path !== "/member/openMember" && to.path !== "/forgetPassword" && to.path !== "/guide/index" && to.path !== "/ar/index" && to.path !== "/wifi/index") next({ path: "/login" })
+  /**
+   * 跳转页面为app分享至微信端的页面，无需登录以及鉴权
+   */
+  if (to.path === "/guide/shareDetailPage" || to.path === "/guide/netRedShop" || to.path === "/member/createBazaar" || to.path === "/offer/turntableGame") {
+    next();
+  } else if (!getCookie('qi_openid')) {
+    /**
+     * 登录之前进行微信鉴权
+     * 判断微信是否授权，如果未授权，请求授权
+     * 如果已经授权，可以请求sdk认证
+     */
+    // 微信授权
+    getAuthorizeUrlSuperSJ(to.path).then(res => {
+      location.href = res.data.authorizeUrl;
+    })
+  } else {
+    // 绑定邀请人与被邀请人的方法
+    if (getCookie('qi_openid') && JSON.parse((<any>localStorage).getItem("inviterOpenId"))) {
+      let data = {
+        inviteeOpenId: getCookie('qi_openid'),                                    //受邀人
+        inviterOpenId: JSON.parse((<any>localStorage).getItem("inviterOpenId"))   //邀请人
+      }
+      store.dispatch('bindInvite', data)  //调用绑定关系的接口
+    }
+
+    document.title = to.meta.title;
+    Toast.clear()  //关闭提示框
+    //判断是否登录过
+    isLogin().then(res => {
+      store.commit('isLogins', { isLogin: res.data.isLogin })
+      if (!res.data.isLogin && to.path !== "/" && to.path !== "/login" && to.path !== "/member/openMember" && to.path !== "/forgetPassword" && to.path !== "/guide/index" && to.path !== "/ar/index" && to.path !== "/wifi/index" && to.path !== "/member/welcome") {
+        if (to.query.qi_openid) {
+          location.href = decodeURIComponent(`${location.origin}/member/welcome`);
+        }
+        next({ path: "/login" })
+      }
       else if (res.data.isLogin) {//如果已经登录过了
         if (to.path === '/member/openMember') next({ path: "/" })
       }
-    }
-  })
-  // sdk认证
-  getJsSdkConfig(to.path).then(res => {
-    wx.config({
-      debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-      appId: res.data.appid, // 必填，公众号的唯一标识
-      timestamp: res.data.timestamp, // 必填，生成签名的时间戳
-      nonceStr: res.data.noncestr, // 必填，生成签名的随机串
-      signature: res.data.sign,// 必填，签名
-      jsApiList: ['getLocation', 'updateTimelineShareData', 'updateAppMessageShareData', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'hideOptionMenu'] // 必填，需要使用的JS接口列表
-    });
-    wx.ready(function () {
-      let qiOpenId = getCookie('qi_openid');
-      let data = {
-        title: "作为标题测试测试",
-        desc: "测试描述只是一个测试而已",
-        link: `${window.location.href}?qi_openid=${qiOpenId}`,
-        imgUrl: `${location.origin}/img/car.677f4a96.png`,
-        toPath: to.path
-      }
-      wxShare.shareMenuShareTimeline(data);
-      wxShare.shareMenuShareAppMessage(data);
-    });
-  })
-  /* } */
+    })
+    // sdk认证
+    getJsSdkConfig(to.path).then(res => {
+      wx.config({
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: res.data.appid, // 必填，公众号的唯一标识
+        timestamp: res.data.timestamp, // 必填，生成签名的时间戳
+        nonceStr: res.data.noncestr, // 必填，生成签名的随机串
+        signature: res.data.sign,// 必填，签名
+        jsApiList: ['getLocation', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'hideOptionMenu', 'showOptionMenu'] // 必填，需要使用的JS接口列表
+      });
+      wx.ready(function () {
+        let qiOpenId = getCookie('qi_openid');
+        let data = {
+          title: "作为标题测试测试",
+          desc: "测试描述只是一个测试而已",
+          link: `${window.location.href}?qi_openid=${qiOpenId}`,
+          imgUrl: `${location.origin}/img/car.677f4a96.png`,
+          toPath: to.path
+        }
+        wxShare.shareMenuShareTimeline(data);
+        wxShare.shareMenuShareAppMessage(data);
+      });
+    })
+  }
   next();
 })
 

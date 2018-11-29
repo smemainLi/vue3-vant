@@ -1,8 +1,8 @@
 <template>
   <div class="successDeduct">
-    <div class="successDeduct-content">
+    <div class="success-deduct-content">
       <div class="tick-photo">
-        <img class="tick-image" src="../../assets/image/parking/tick.png" alt="">
+        <img class="tick-image" :src="tickImg" alt="">
       </div>
       <div class="success-mark" v-cloak>{{successMark}}</div>
       <div class="cut-line"></div>
@@ -17,8 +17,8 @@
         </div>
       </div>
     </div>
-    <div class="successDeduct-button">
-      <commonBtn></commonBtn>
+    <div class="success-deduct-button">
+      <commonBtn :btnName="btnName"></commonBtn>
     </div>
   </div>
 </template>
@@ -31,10 +31,9 @@ import commonBtn from '../../components/common/button.vue'
     commonBtn
   }
 })
-export default class ParkingFee extends Vue {
-  @Provide()
+export default class SuccessDeduct extends Vue {
   btnName: string = "返回首页"
-
+  tickImg = require("../../assets/image/parking/tick.png");
   successMark = "积分抵扣成功";
   carNumberTitle = "车牌号";
   carNumberContent = "粤CT6767";
@@ -46,7 +45,7 @@ export default class ParkingFee extends Vue {
 .successDeduct {
   padding-top: 10px;
   text-align: center;
-  .successDeduct-content {
+  .success-deduct-content {
     background-color: $color-ff;
     .tick-photo {
       padding-top: 92px;
@@ -62,7 +61,6 @@ export default class ParkingFee extends Vue {
     }
     .cut-line {
       width: 684px;
-      /* height: 8px; */
       margin: 0 auto;
       padding-top: 76px;
       border-bottom: 1px solid #e5e5e5;

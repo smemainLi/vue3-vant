@@ -1,7 +1,7 @@
 <template>
   <div class="pop">
-    <van-popup :class="[storeNoOpen?'pop-box':'',plusScore?'pop-plus':'']" v-model="popModel" :close-on-click-overlay="false" :overlay="storeNoOpen?true:plusScore?false:noOverlay?false:''">
-
+    <van-popup :class="[storeNoOpen?'pop-box':'',plusScore?'pop-plus':'']" v-model="popModel" :close-on-click-overlay="false" :overlay="storeNoOpen">
+      <!-- :overlay="storeNoOpen" 当店铺处于关闭状态的时候需要蒙层，其他时候都将蒙层去掉 -->
       <div class="store-no-open" v-show="storeNoOpen">
         <div class="pop-box-top">
           <div class="box-top-title" v-cloak>{{boxTitle}}</div>
@@ -12,16 +12,13 @@
           <common-Btn :btnName="btnName" class="pop-box-bottom-btn"></common-Btn>
         </router-link>
       </div>
-
       <div class="plus-score" v-show="plusScore">
         <div class="plus-content">
           <div class="score-value" v-cloak>{{scoreValue}}</div>
           <div class="tip-value" v-cloak>{{tipValue}}</div>
         </div>
       </div>
-
     </van-popup>
-
   </div>
 </template>
 <script lang="ts">
@@ -46,11 +43,9 @@ import wx from "weixin-js-sdk";
 export default class Pop extends Vue {
   @State(State => State.guide.winPoints) winPoints
 
-  popModel: boolean = false;
-  storeNoOpen: any;
-  plusScore: any = false;
-
-  noOverlay: any = false;
+  popModel: boolean = false;//van-popup绑定的v-model，表示当前组件是否显示 true:显示 false:不显示
+  storeNoOpen: any;//店铺是否处于关闭状态的判断标识
+  plusScore: any = false;//是否显示+5分的判断标识
 
   scoreValue = "+5分";
   tipValue = "成功积分";
@@ -61,31 +56,23 @@ export default class Pop extends Vue {
 
   @Watch("storeNoOpen")
   storeChange(newVal, oldVal) {
-    if (newVal) {
+    if (newVal) {//storeNoOpen的值为true，表示该店铺处于关闭状态，不允许分享
       this.forbidShare();
       this.popModel = newVal;
     }
   }
+
   @Watch("winPoints")
   plusChange(newVal, oldVal) {
-    if (newVal) {
+    if (newVal) {//winPoints的值为true，表示是首次分享店铺，+5分
       this.popModel = newVal;
       this.plusScore = newVal;
-      setTimeout(() => {
+      setTimeout(() => {//+5分的提示框只显示1秒
+        this.popModel = false;
         this.plusScore = false;
-        this.noOverlay = newVal;
       }, 1000);
     }
   }
-
-  /**
-   * 获取分享店铺的加分参数winPoints
-   */
-  getWinPoints() {
-    console.log(getStore("winPoints"));
-    this.plusScore = getStore("winPoints");
-  }
-
 
   /**
    * 禁止分享朋友圈
@@ -96,6 +83,18 @@ export default class Pop extends Vue {
     });
   }
 
+  /**
+   * 允许分享朋友圈
+   */
+  allowShare() {
+    wx.ready(function () {
+      wx.showOptionMenu();
+    })
+  }
+
+  mounted() {
+    this.allowShare();//默认允许用户分享朋友圈
+  }
 }
 </script>
 

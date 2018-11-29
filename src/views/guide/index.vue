@@ -1,17 +1,15 @@
 <template>
   <div class="guide">
     <tab :category="category" @categoryId="getCategoryId"></tab>
-    <!-- <router-link :to="{path:'/guide/detailPage'}"> -->
     <store :introduce="item" v-for="(item,index) in introduceInfo" @click.native="loopStoreDetail(item.merchantId)" :key="index"></store>
-    <!-- </router-link> -->
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
+import { Action, State } from 'vuex-class';
 import tab from '../../components/common/guide/tab.vue';
 import store from '../../components/common/guide/store.vue';
-import { Action, State, Mutation } from 'vuex-class';
 
 interface introduce {
   storeLogo: string,//商店logo
@@ -30,8 +28,8 @@ interface introduce {
 }
 
 interface category {
-  id: string,
-  name: string,
+  id: string,//类目id
+  name: string,//类目名
 }
 
 
@@ -59,7 +57,7 @@ export default class Guide extends Vue {
   flag = 0;//标志 0：第一次请求 1：非第一次请求
 
   /**
-   * 回调方法，接收子组件传的参数
+   * 回调方法，接收子组件传的参数categoryId（类目id）
    */
   getCategoryId(categoryId) {
     this.merchantTypeId = categoryId;//绑定类目id
@@ -71,13 +69,8 @@ export default class Guide extends Vue {
       pageNo: this.pageNo,
       pageSize: this.pageSize
     };
-    this.clearInfo();//切换其他类目的时候，清除商家列表
+    this.introduceInfo = [];//切换其他类目的时候，清除商家列表
     this.getGuideInfo();
-  }
-
-  clearInfo() {
-    this.introduceInfo.length = 0;
-    console.log(this.introduceInfo.length);
   }
 
   /**
@@ -85,7 +78,7 @@ export default class Guide extends Vue {
    */
   getGuideInfo() {
     if (this.flag === 0) {
-      this.data = {//首次加载，默认加载类目的第一个类型的数据
+      this.data = {//首次加载，默认加载类目的第一个类型的数据，不需要传merchantTypeId（类目id）
         pageNo: this.pageNo,//页码
         pageSize: this.pageSize,//每页有多少条记录
       }
@@ -96,16 +89,23 @@ export default class Guide extends Vue {
         pageSize: this.pageSize,
       }
     }
-    this.$toast.loading({ mask: true, duration: 0, forbidClick: true, message: '加载中...' })
+    this.$toast.loading({ mask: true, duration: 0, loadingType: 'spinner', forbidClick: true, message: '加载中...' })
     this.classifiedGuide(this.data).then(res => {
-      this.$toast.clear();
+      this.$toast.clear();//清除toast
       this.category = res.data.merchantType;
       const introduceList = res.data.list;
       this.pageNo += 1;//满足条件页码加一
       if (res.data.list.length === 0) {
         this.noRecord = true;
         this.$toast.success("全部加载完了");
+        return;
       }
+      /**
+       * 不在mounted()中向window添加"onscroll"事件
+       * 在mounted()做一次数据请求，获取到数据之后向window添加"onscroll"事件
+       * 防止可能进入页面之后触发两次请求事件
+       */
+      window.addEventListener("scroll", this.scrollFn);
       for (const key in introduceList) {
         if (introduceList.hasOwnProperty(key)) {
           const introduceItem: introduce = {
@@ -139,38 +139,27 @@ export default class Guide extends Vue {
     //隐藏的高度
     var scrollHeight = window.pageYOffset || (<any>document).documentElement.scrollTop || (<any>document).body.scrollTop || 0;
     if (pageHeight - viewportHeight - scrollHeight === 0) {//如果滚轮滚到了底部
-      if (this.noRecord) this.$toast.success("全部加载完了");
+      if (this.noRecord) { this.$toast.success("全部加载完了"); }
       else {
         this.getGuideInfo();//如果满足触发条件，执行
       }
     }
   }
 
-
   /**
-   * 点击跳转店铺详情页面
+   * 点击跳转店铺详情页面并携带参数merchantId（店铺id）
    */
   loopStoreDetail(merchantId) {
     this.$router.push({ path: `/guide/detailPage/${merchantId}` })
   }
 
-  test() {
-    this.introduceInfo = [];
-  }
-
   mounted() {
-    this.test();
     this.getGuideInfo();
-    window.addEventListener("scroll", this.scrollFn);
   }
 
   destroyed() {
-    window.removeEventListener("scroll", this.scrollFn);
-    this.test();
+    window.removeEventListener("scroll", this.scrollFn);//移除window添加的"onscroll"事件
   }
 
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

@@ -2,26 +2,26 @@
   <div class="deduction">
     <div class="confirm">请再次确认</div>
     <div class="car-number">
-      <div class="normal" v-cloak>{{deduction[0].carNumNormal}}</div>
-      <div class="new-energy" v-cloak>{{deduction[0].carNumEnergy}}</div>
+      <div class="normal" v-cloak>{{deductionInfo[0].carNumNormal}}</div>
+      <div class="new-energy" v-cloak>{{deductionInfo[0].carNumEnergy}}</div>
     </div>
     <div class="cut-line"></div>
     <div class="parking-data">
       <div class="entry-time row-data">
-        <div class="title" v-cloak>{{deduction[0].entryTimeTitle}}</div>
-        <div class="content" v-cloak>{{deduction[0].entryTimeContent}}</div>
+        <div class="title" v-cloak>{{deductionInfo[0].entryTimeTitle}}</div>
+        <div class="content" v-cloak>{{deductionInfo[0].entryTimeContent}}</div>
       </div>
       <div class="time-length row-data">
-        <div class="title" v-cloak>{{deduction[0].timeLengthTitle}}</div>
-        <div class="content" v-cloak>{{deduction[0].timeLengthContent}}</div>
+        <div class="title" v-cloak>{{deductionInfo[0].timeLengthTitle}}</div>
+        <div class="content" v-cloak>{{deductionInfo[0].timeLengthContent}}</div>
       </div>
       <div class="parking-rate row-data">
-        <div class="title" v-cloak>{{deduction[0].parkingRateTitle}}</div>
-        <div class="content content-rate" v-cloak>{{deduction[0].parkingRateContent}}</div>
+        <div class="title" v-cloak>{{deductionInfo[0].parkingRateTitle}}</div>
+        <div class="content content-rate" v-cloak>{{deductionInfo[0].parkingRateContent}}</div>
       </div>
       <div class="integral-deduct row-data">
-        <div class="title" v-cloak>{{deduction[0].integralDeductTitle}}</div>
-        <div class="content content-integral" v-cloak>{{deduction[0].integralDeductContent}}</div>
+        <div class="title" v-cloak>{{deductionInfo[0].integralDeductTitle}}</div>
+        <div class="content content-integral" v-cloak>{{deductionInfo[0].integralDeductContent}}</div>
       </div>
     </div>
   </div>
@@ -30,12 +30,13 @@
 import { Component, Inject, Vue } from "vue-property-decorator";
 
 @Component({
+  props: ["deductionInfo"],
   components: {
   }
 })
 export default class Deduction extends Vue {
-  @Inject()
-  deduction: any;
+  /*  @Inject()
+   deduction: any; */
 }
 </script>
 <style lang="scss" scoped>
@@ -71,7 +72,6 @@ export default class Deduction extends Vue {
   }
   .cut-line {
     width: 684px;
-    /* height: 8px; */
     margin: 0 auto;
     margin-top: 76px;
     border-bottom: 1px solid #e5e5e5;

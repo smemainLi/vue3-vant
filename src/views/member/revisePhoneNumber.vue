@@ -57,13 +57,19 @@ export default class RevisePhoneNumber extends Vue {
 // 获取手机验证码
   smsCode(data){
     if (this.countDown !== 60||!this.notClick) return
-    this.getSmsCode({phoneNum:data.newPhoneNum,vcode:data.vcode}).then(res=>{
-      this.$toast.success('验证码已发送');
-      this.countDownTime()
+    this.$pottingTosts("发送中")
+    this.notClick = false
+
+    this.getSmsCode({phoneNum:data.newPhoneNum,vcode:data.vcode})
+    .then(res=>{
+      this.$toast.success('验证码已发送')
+      this.countDownTime()  // 60s倒计时
+      this.$toast.clear()   //清除加载动画
     }).catch(err=>{
       this.$toast.fail(err)
       this.graphCode()
       this.notClick = true
+      this.$toast.clear()  //清除加载动画
     })
   }
 
@@ -71,6 +77,8 @@ export default class RevisePhoneNumber extends Vue {
   changePhoneMouted(){
     this.changePhone().then(res=>{
       this.$toast.success('修改完成')
+      // 修改完成之后跳转到登陆
+      setTimeout(()=>{ this.$router.push({ name: 'login' }) },1000 )
     }).catch(err=>{
       this.$toast.fail(err)
     })
@@ -86,6 +94,7 @@ export default class RevisePhoneNumber extends Vue {
         clearInterval(_this.time)
         _this.countDown = 60
         _this.graphCode()
+        _this.notClick = true
       }
     }, 1000)
   }

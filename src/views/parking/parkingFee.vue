@@ -1,9 +1,11 @@
 <template>
   <div class="parkingFee">
+    <!-- 点击‘收费说明’跳转/protocol页面并且传入参数type -->
     <router-link class="charge-description" tag="div" :to="{path:`/protocol/${type}`}">收费说明>></router-link>
-    <deduction></deduction>
+    <!-- <router-link class="charge-description" tag="div" :to="{name:'protocol',params:{type:type}}">收费说明>></router-link> -->
+    <deduction :deductionInfo="deductionInfo"></deduction>
     <router-link :to="{path:'/parking/successDeduct'}">
-      <commonBtn :class="[{commonBtn:!needToPay}]"></commonBtn>
+      <commonBtn :btnName="btnName" :class="[{commonBtn:!needToPay}]"></commonBtn>
     </router-link>
 
   </div>
@@ -35,11 +37,8 @@ interface deductionInfo {
 export default class ParkingFee extends Vue {
   points = "3333";
   needToPay = true;
-  buttonName = this.needToPay ? `使用${this.points}积分抵扣` : '暂无需支付';
+  btnName: string = this.needToPay ? `使用${this.points}积分抵扣` : '暂无需支付';
   type: number = 3;//文明文档的类型，3----停车收费
-
-  @Provide()
-  btnName: string = this.buttonName;
 
   deductionInfo: Array<deductionInfo> = [
     {
@@ -68,8 +67,8 @@ export default class ParkingFee extends Vue {
     }
   ];
 
-  @Provide()
-  deduction: Array<deductionInfo> = this.deductionInfo;
+  /* @Provide()
+  deduction: Array<deductionInfo> = this.deductionInfo; */
 
 }
 </script>

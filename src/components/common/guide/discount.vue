@@ -1,8 +1,13 @@
 <template>
   <div class="discount">
-    <div class="discount-info" v-show="discountInfo.discountTitle">
-      <div class="discount-title" v-cloak>{{discountInfo.discountTitle}}</div>
-      <div class="discount-time" v-cloak>{{discountInfo.discountTime}}</div>
+    <div class="discount-info" v-show="true">
+      <div class="left-icon">
+        <img class="left-icon-img" :src="leftImg" alt="">
+      </div>
+      <div class="discount-content" v-cloak>{{discountInfo}}</div>
+      <div class="right-icon">
+        <img class="right-icon-img" :src="rightImg" alt="">
+      </div>
     </div>
   </div>
 </template>
@@ -14,25 +19,48 @@ import { Component, Provide, Vue } from "vue-property-decorator";
   components: {
   }
 })
-export default class Ddiscount extends Vue {
+export default class Discount extends Vue {
+  leftImg = require('../../../assets/image/offer/left.png');
+  rightImg = require('../../../assets/image/offer/right.png');
 }
 </script>
 <style lang="scss" scoped>
 .discount {
-  margin-top: 2px;
   .discount-info {
-    height: 130px;
-    background: url("../../../assets/image/guide/discountBg.png") no-repeat;
-    background-size: 100% 170px;
-    padding: 25px 0 0 50px;
-    box-sizing: border-box;
+    height: 63px;
+    background-color: $color-ff;
     color: $color-35;
-    .discount-title {
-      font-size: 40px;
-      font-weight: bold;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .left-icon,
+    .right-icon {
+      width: 52px;
+      height: 36px;
+      display: inline-block;
     }
-    .discount-time {
-      font-size: 22px;
+    .left-icon {
+      width: 52px;
+      height: 36px;
+      .left-icon-img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .discount-content {
+      display: inline-block;
+      font-size: 28px;
+      font-weight: bold;
+      margin: 0 20px;
+    }
+    .right-icon {
+      width: 63px;
+      height: 37px;
+      .right-icon-img {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 }

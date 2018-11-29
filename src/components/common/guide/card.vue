@@ -15,18 +15,15 @@
         </div>
         <div :class="[item.cardType?'discount-cut-line':'cut-line']"></div>
         <div class="lower-part">
-          <div class="lower-part-range">
-            <div :class="['circle',item.cardType?'discount-circle':'']">●</div>
-            <div class="range" v-cloak>{{item.range}}</div>
-          </div>
-          <div class="lower-part-time">
-            <div :class="['circle',item.cardType?'discount-circle':'']">●</div>
-            <div class="time" v-cloak>{{item.time}}</div>
-          </div>
+          <ul class="lower-part-range">
+            <li :class="['part-circle',item.cardType?'discount-card':'']" v-cloak><span class="part-content">{{item.range}}</span></li>
+          </ul>
+          <ul class="lower-part-time">
+            <li :class="['part-circle',item.cardType?'discount-card':'']" v-cloak><span class="part-content">{{item.time}}</span></li>
+          </ul>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 <script lang="ts">
@@ -34,7 +31,7 @@ import { Component, Provide, Vue } from "vue-property-decorator";
 import { Action } from 'vuex-class';
 
 @Component({
-  props: ["cardInfo", "isShare"],
+  props: ["cardInfo", "isShare"],//isShare是通过shareDetailPage页面传过来的判断标识，判断是否是通过app分享至微信端的页面
   components: {
   }
 })
@@ -43,6 +40,9 @@ export default class Card extends Vue {
 
   mask = true;
 
+  /**
+   * 抢券
+   */
   getCard(card) {
     let data = {
       id: card.cardId,
@@ -64,7 +64,7 @@ export default class Card extends Vue {
 </script>
 <style lang="scss" scoped>
 .card {
-  margin: 27px 0;
+  margin: 2px 0;
   padding: 14px 32px;
   box-sizing: border-box;
   position: relative;
@@ -77,7 +77,8 @@ export default class Card extends Vue {
       height: 100%;
     }
   }
-  .have-card {
+  .have-card,
+  .no-store-card {
     display: none;
   }
   .store-card {
@@ -138,36 +139,21 @@ export default class Card extends Vue {
       border-bottom: 2px solid #f56e72;
     }
     .lower-part {
-      margin-left: 18px;
-      .lower-part-range,
+      margin: 12px 0 0 52px;
       .lower-part-time {
+        margin-top: 12px;
+      }
+      .part-circle {
+        color: #fbde19;
+      }
+      .discount-card {
+        color: #f56e72;
+      }
+      .part-content {
         font-size: 28px;
         color: #582929;
-        .circle {
-          display: inline-block;
-          color: #fbde19;
-          margin-right: 15px;
-        }
-        .discount-circle {
-          color: #f56e72;
-        }
-      }
-      .lower-part-range {
-        .range {
-          display: inline-block;
-          margin-top: 4px;
-        }
-      }
-      .lower-part-time {
-        .time {
-          display: inline-block;
-          margin-top: 4px;
-        }
       }
     }
-  }
-  .no-store-card {
-    display: none;
   }
 }
 </style>

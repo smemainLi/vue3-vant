@@ -22,6 +22,9 @@
       <div v-cloak>{{ memberLevel.nextLevelName===""? "您已经是最高级会员":`再获取${memberLevel.needCondition}即可升级成${memberLevel.nextLevelName}` }}</div>
       <div v-text="memberLevel.nextCondition"></div>
     </div>
+    <div class="interests">
+      <router-link tag="span" :to="{name:'protocol',params:{type:7}}">会员权益>>></router-link>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -38,7 +41,8 @@ export default class RankTop extends Vue {
 
 <style lang="scss" scoped>
 .member-info{
-  height: 280px;
+  // height: 280px;
+  height: 363px;
   background-color: $color-ff;
   overflow: hidden;
   padding: 0 27px;
@@ -84,6 +88,13 @@ export default class RankTop extends Vue {
     justify-content: space-between;
     color:$color-88;
     font-size: $size28;
+  }
+
+  .interests{
+    text-align: right;
+    font-size: $size28;
+    color: $color-88;
+    margin-top: 48px;
   }
 }
 

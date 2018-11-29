@@ -1,16 +1,29 @@
 <template>
-  <div class="guide">
+  <div class="netRedShop">
+    <!-- 蒙层 -->
     <layer></layer>
-    <store :introduce="item" v-for="(item,index) in introduceInfo" @click.native="downApp" :key="index"></store>
+    <div class="banner">
+      <img
+        class="banner-image"
+        :src="bannerImg"
+        alt=""
+      >
+    </div>
+    <store
+      :introduce="item"
+      v-for="(item,index) in introduceInfo"
+      @click.native="downApp"
+      :key="index"
+    ></store>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Provide, Vue } from "vue-property-decorator";
+import { Action, State } from 'vuex-class';
 import layer from '../../components/common/layer.vue';
 import tab from '../../components/common/guide/tab.vue';
 import store from '../../components/common/guide/store.vue';
-import { Action, State, Mutation } from 'vuex-class';
 
 interface introduce {
   storeLogo: string,//商店logo
@@ -28,12 +41,6 @@ interface introduce {
   voucherContent: string,//代金券
 }
 
-interface category {
-  id: string,
-  name: string,
-}
-
-
 @Component({
   components: {
     layer,
@@ -42,67 +49,29 @@ interface category {
   }
 })
 export default class NetRedShop extends Vue {
-  @Action classifiedGuide
-  @Action storeDetail
-  /* @State(state => state.guide.merchantId) merchantId */
+  @Action dissertationShare
 
-  category: Array<category> = [];//类目数据
-  introduceInfo: Array<introduce> = [];//商家列表
-  merchantTypeId: string = "";//类目id
+  bannerImg = require('../../assets/image/guide/netRedShopBg.png');
+  introduceInfo: Array<introduce> = [];//专题列表
   pageNo: number = 1;//页码
   pageSize: number = 6;//每页有多少条记录
   noRecord: boolean = false;//没有更多数据
-  data: any = {//存储传给后台的参数
-    pageNo: 1,//页码
-    pageSize: 6,//每页有多少条记录
-  };
-  flag = 0;//标志 0：第一次请求 1：非第一次请求
 
   /**
-   * 回调方法，接收子组件传的参数
+   * 获取专题列表数据
    */
-  getCategoryId(categoryId) {
-    this.merchantTypeId = categoryId;//绑定类目id
-    this.pageNo = 1;//切换类目之后，要将页面置1
-    this.noRecord = false;//切换类目之后，noRecord置为false
-    this.flag = 1;//标志置为1
-    this.data = {
-      merchantTypeId: categoryId,
+  getDissertationShare() {
+    let data = {
+      dissertationId: this.$route.query.dissertationId,//获取url上携带的参数dissertationId（专题id）
       pageNo: this.pageNo,
-      pageSize: this.pageSize
-    };
-    this.clearInfo();//切换其他类目的时候，清除商家列表
-    this.getGuideInfo();
-  }
-
-  clearInfo() {
-    this.introduceInfo.length = 0;
-    console.log(this.introduceInfo.length);
-  }
-
-  /**
-   * 获取分类导购数据
-   */
-  getGuideInfo() {
-    if (this.flag === 0) {
-      this.data = {//首次加载，默认加载类目的第一个类型的数据
-        pageNo: this.pageNo,//页码
-        pageSize: this.pageSize,//每页有多少条记录
-      }
-    } else if (this.flag === 1) {
-      this.data = {//切换了类目之后，需要将类目id一起传过去
-        merchantTypeId: this.merchantTypeId,
-        pageNo: this.pageNo,
-        pageSize: this.pageSize,
-      }
+      pageSize: this.pageSize,
     }
     this.$toast.loading({ mask: true, duration: 0, forbidClick: true, message: '加载中...' })
-    this.classifiedGuide(this.data).then(res => {
-      this.$toast.clear();
-      this.category = res.data.merchantType;
-      const introduceList = res.data.list;
+    this.dissertationShare(data).then(res => {
+      this.$toast.clear();//清除toast
+      const introduceList = res.data.listMerchant;
       this.pageNo += 1;//满足条件页码加一
-      if (res.data.list.length === 0) {
+      if (res.data.listMerchant.length === 0) {
         this.noRecord = true;
         this.$toast.success("全部加载完了");
       }
@@ -141,21 +110,9 @@ export default class NetRedShop extends Vue {
     if (pageHeight - viewportHeight - scrollHeight === 0) {//如果滚轮滚到了底部
       if (this.noRecord) this.$toast.success("全部加载完了");
       else {
-        this.getGuideInfo();//如果满足触发条件，执行
+        this.getDissertationShare();//如果满足触发条件，执行
       }
     }
-  }
-
-
-  /**
-   * 点击跳转店铺详情页面
-   */
-  loopStoreDetail(merchantId) {
-    this.$router.push({ path: `/guide/detailPage/${merchantId}` })
-  }
-
-  test() {
-    this.introduceInfo = [];
   }
 
   /**
@@ -166,19 +123,29 @@ export default class NetRedShop extends Vue {
   }
 
   mounted() {
-    this.test();
-    this.getGuideInfo();
-    window.addEventListener("scroll", this.scrollFn);
+    this.getDissertationShare();
+    this.introduceInfo = [];//清空列表
+    window.addEventListener("scroll", this.scrollFn);//向window添加"onscroll"事件
   }
 
   destroyed() {
-    window.removeEventListener("scroll", this.scrollFn);
-    this.test();
+    window.removeEventListener("scroll", this.scrollFn);//移除window添加的"onscroll"事件
   }
 
 }
 </script>
 
 <style lang="scss" scoped>
+.netRedShop {
+  .banner {
+    width: 750px;
+    height: 250px;
+    margin-bottom: 15px;
+    .banner-image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
 </style>
 

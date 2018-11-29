@@ -1,6 +1,6 @@
 import wx from "weixin-js-sdk";
 import { gotoShare } from "@/service/getData";
-import { setStore } from "@/config/utils";
+import { setStore, getStore } from "@/config/utils";
 import store from "../store/index";
 
 class share {
@@ -34,16 +34,20 @@ class share {
       link: data.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
       imgUrl: data.imgUrl, // 分享图标
       success: function () {
+        console.log('ggggggggggggggggggggggggggggggggggggggggg');
+
         // 用户点击了分享后执行的回调函数
         console.log(data.toPath);
         console.log(data.toPath.indexOf("/guide/detailPage"));
         if (data.toPath.indexOf("/guide/detailPage") !== -1) {
           gotoShare().then(() => {
             setStore("winPoints", true);
+            console.log(`Success winPoints:${getStore("winPoints")}`);
             store.commit('recordWinPoints', true);
           }).catch(() => {
             setStore("winPoints", false);
-            store.commit('recordWinPoints', true);
+            console.log(`Catch winPoints:${getStore("winPoints")}`);
+            store.commit('recordWinPoints', false);
           });
         }
       }
@@ -60,6 +64,7 @@ class share {
       dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
       success: function () {
         // 用户点击了分享后执行的回调函数
+        console.log('ggggggggggggggggggggggggggggggggggggggggg');
       }
     });
   }

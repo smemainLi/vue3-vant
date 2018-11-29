@@ -1,6 +1,6 @@
 <template>
   <div class="feeling">
-    <vote :voteInfoList="voteInfoList" :feelNumMax="feelNumMax" :merchantId="merchantId"></vote>
+    <vote :voteInfoList="voteInfoList" :merchantId="merchantId"></vote>
   </div>
 </template>
 <script lang="ts">
@@ -8,7 +8,7 @@ import { Component, Provide, Vue } from "vue-property-decorator";
 import vote from "../guide/vote.vue"
 
 @Component({
-  props: ["voteInfoList", "feelNumMax", "merchantId"],
+  props: ["voteInfoList", "merchantId"],
   components: {
     vote
   }

@@ -1,6 +1,10 @@
 <template>
-  <div>
+  <div class="paymentRecord">
     <record :recordItem="item" v-for="(item,index) in recordInfo" :key="index"></record>
+    <div class="no-record" v-show="recordInfo.length===0">
+      <img class="placeholder-img" :src="placeholderImg" alt="">
+      <div class="no-payment-record" v-cloak>{{noPaymentRecord}}</div>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -25,10 +29,10 @@ export default class PaymentRecord extends Vue {
   pageSize: number = 6; //每页有多少条记录
   noRecord: boolean = false; //没有更多数据
   recordInfo: Array<recordInfo> = [];//存储缴费记录
+  placeholderImg = require('../../assets/image/coupon/empty.png');
+  noPaymentRecord = "暂无缴费记录";
 
-  @Action("parkingPayRecord") parkingPayRecord
-
-
+  @Action parkingPayRecord
 
   /**
    * 获取缴费记录
@@ -47,15 +51,14 @@ export default class PaymentRecord extends Vue {
         this.$toast.success("全部加载完了");//防止第一次不触发提示
       }
       for (const key in recordList) {
-        if (recordList.hasOwnProperty(key)) {
-          // 只遍历自身属性
+        if (recordList.hasOwnProperty(key)) {// 只遍历自身属性
           const recordItem: recordInfo = {
             money: `￥${recordList[key].fee}`,
             number: recordList[key].carNum,
             integral: `${recordList[key].deductionIntegral}积分`,
             time: recordList[key].payTime
           };
-          this.recordInfo.push(recordItem);
+          this.recordInfo.push(recordItem);//将元素recordItem添加到数组recordInfo中
         }
       }
     }).catch(err => {
@@ -78,13 +81,32 @@ export default class PaymentRecord extends Vue {
 
   mounted() {
     this.getParkingPayRecord();
-    window.addEventListener("scroll", this.scrollFn);
+    window.addEventListener("scroll", this.scrollFn);//向window添加"onscroll"事件
   }
 
   destroyed() {
-    window.removeEventListener("scroll", this.scrollFn);
+    window.removeEventListener("scroll", this.scrollFn);//移除window添加的"onscroll"事件
   }
 }
 </script>
 <style lang="scss" scoped>
+.paymentRecord {
+  .no-record {
+    width: 100%;
+    margin-top: 82px;
+    display: flex;
+    justify-content: center;
+    .placeholder-img {
+      width: 258px;
+      height: 263px;
+      display: block;
+    }
+    .no-payment-record {
+      font-size: 28px;
+      color: $color-88;
+      position: absolute;
+      top: 319px;
+    }
+  }
+}
 </style>

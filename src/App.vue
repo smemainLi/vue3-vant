@@ -9,8 +9,7 @@
 <script lang="ts">
 import { Component, Inject, Vue } from "vue-property-decorator";
 
-@Component({
-})
+@Component({ })
 export default class App extends Vue {
 
 }

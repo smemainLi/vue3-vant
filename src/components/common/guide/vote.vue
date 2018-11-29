@@ -1,101 +1,80 @@
 <template>
   <div class="vote">
     <div class="feel-progress" :class="[index===1?'pro-one':'',index===2?'pro-two':'']" v-for="(item,index) in voteInfoList" :key="index">
-      <van-progress color="#FBDE19" :show-pivot="false" :percentage="parseInt(item.num)/fullPoint*100" />
-      <div class="emoticon" @click="test(index)">
-        <img class="emoticon-image" :src="item.emoticon" alt="">
+      <van-progress color="#FBDE19" :show-pivot="false" :percentage="voteInfoList[index].sum===0?0:parseInt(item.num)/voteInfoList[index].sum*100" />
+      <div class="emoticon" @click="choice(index)">
+        <img class="emoticon-image" :src="[item.feel?item.selected:item.unSelected]" alt="">
       </div>
-      <div class="num" v-cloak>{{item.num}}</div>
     </div>
   </div>
 </template>
 <script lang="ts">
 import { Component, Provide, Vue, Watch } from "vue-property-decorator";
-
-interface voteInfo {
-  percentage: string,
-  emoticon: string,
-  num: string;
-}
+import { Action } from "vuex-class";
 
 @Component({
-  props: ["voteInfoList", "feelNumMax", "merchantId"],
+  props: ["voteInfoList", "merchantId"],
   components: {
   }
 })
 export default class Vote extends Vue {
+  @Action updateFeelGood
+  @Action updateFeelSoso
+  @Action updateFeelBad
+
   voteInfoList: any;
-  feelNumMax: any;
-  feelTempMax: any;
-  feelCurrentMax: any;
   merchantId: any;
-  selected: boolean = false;
-  fullPoint: number = 999999;//满值
-  flag0 = 0; flag1 = 0; flag2 = 0;
+  selected: boolean = false;//表情小图标的是否被选中的状态
 
   /**
-   * 重置满值fullPoint，将满值设置为用户对本店'感觉值'最大值除以0.9
+   * 点击表情小图标
    */
-  resetFullPoint() {
-    setTimeout(() => {
-      this.feelCurrentMax = this.feelNumMax;
-      this.fullPoint = this.feelCurrentMax / 0.9;
-    }, 500);
-  }
-
-  test(index) {
-    if (index === 0) {
-      if (this.flag0 === 0) {
-        this.flag0 = 1;
-        this.voteInfoList[index].num += 1;
-        this.feelCurrentMax = this.checkMax(this.voteInfoList[index].num, this.voteInfoList[1].num, this.voteInfoList[2].num);
-        this.fullPoint = this.feelCurrentMax / 0.9;
-      } else {
-        this.flag0 = 0;
-        this.voteInfoList[index].num -= 1;
-        this.feelCurrentMax = this.checkMax(this.voteInfoList[index].num, this.voteInfoList[1].num, this.voteInfoList[2].num);
-        this.fullPoint = this.feelCurrentMax / 0.9;
-      }
-    } else if (index === 1) {
-      if (this.flag1 === 0) {
-        this.flag1 = 1;
-        this.voteInfoList[index].num += 1;
-        this.feelCurrentMax = this.checkMax(this.voteInfoList[index].num, this.voteInfoList[0].num, this.voteInfoList[2].num);
-        this.fullPoint = this.feelCurrentMax / 0.9;
-      } else {
-        this.flag1 = 0;
-        this.voteInfoList[index].num -= 1;
-        this.feelCurrentMax = this.checkMax(this.voteInfoList[index].num, this.voteInfoList[0].num, this.voteInfoList[2].num);
-        this.fullPoint = this.feelCurrentMax / 0.9;
-      }
-    } else if (index === 2) {
-      if (this.flag2 === 0) {
-        this.flag2 = 1;
-        this.voteInfoList[index].num += 1;
-        this.feelCurrentMax = this.checkMax(this.voteInfoList[index].num, this.voteInfoList[1].num, this.voteInfoList[0].num);
-        this.fullPoint = this.feelCurrentMax / 0.9;
-      } else {
-        this.flag2 = 0;
-        this.voteInfoList[index].num -= 1;
-        this.feelCurrentMax = this.checkMax(this.voteInfoList[index].num, this.voteInfoList[1].num, this.voteInfoList[0].num);
-        this.fullPoint = this.feelCurrentMax / 0.9;
-      }
-    }
-  }
-
-  checkMax(numF, numS, numT) {
-    let tempMax: number = 0;
-    if (numF >= numS && numF >= numT) {
-      return tempMax = numF;
-    } else if (numS >= numT) {
-      return tempMax = numS;
+  choice(index) {
+    if (this.voteInfoList[index].feel) {//如果已是选中状态
+      this.voteInfoList[index].feel = false;//将原来的feel值置为false
+      this.voteInfoList[index].num -= 1;//对应小表情的对应数量减1
+      this.selected = false;//选中状态置为false
     } else {
-      return tempMax = numT;
+      this.voteInfoList[index].feel = true;//将原来的feel值置为true
+      this.voteInfoList[index].num += 1;//对应小表情的对应数量加1
+      this.selected = true;//选中状态置为true
     }
+    if (index === 0) {
+      this.updateFeelGood({ merchantId: this.merchantId, selected: this.selected }).then((res) => {
+        console.log(res);
+      }).catch((err) => {
+        this.$toast.fail(err);
+      });
+    } else if (index === 1) {
+      this.updateFeelSoso({ merchantId: this.merchantId, selected: this.selected }).then((res) => {
+        console.log(res);
+      }).catch((err) => {
+        this.$toast.fail(err);
+      });
+    } else if (index === 2) {
+      this.updateFeelBad({ merchantId: this.merchantId, selected: this.selected }).then((res) => {
+        console.log(res);
+      }).catch((err) => {
+        this.$toast.fail(err);
+      });
+    }
+    let sum = 0;
+    /**
+     * 用户改变了某个表情小图标的选中数量之后，重新计算三个小图标被选中的总数
+     */
+    this.voteInfoList.forEach(item => {
+      sum += item.num;
+    });
+    /**
+     * 将总数赋值给列表voteInfoList中每一项的sum值
+     * 目的是为了重新计算每一个小表情被选中数量占总数的百分比：parseInt(item.num)/voteInfoList[index].sum*100
+     */
+    this.voteInfoList.forEach(element => {
+      element.sum = sum;
+    });
   }
 
   mounted() {
-    this.resetFullPoint();
   }
 
 }

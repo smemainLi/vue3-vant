@@ -39,11 +39,17 @@ export default class Login extends Vue {
   /*  @State(state => state.member.test) test; */
   /* @State('member') member; *///引用的是模块
 
-  account = '15816093712';
-  pwd = '123456';
+  /* account = '15816093712';
+  pwd = '123456'; */
 
   /* account = '13536540921';
   pwd = '123456'; */
+
+  /* account = '13434771450';
+  pwd = '123456'; */
+
+  account = '13726298724';
+  pwd = '123456';
 
   accountPlaceholder = "请输入手机号码";
   pwdPlaceholder = "请输入密码";

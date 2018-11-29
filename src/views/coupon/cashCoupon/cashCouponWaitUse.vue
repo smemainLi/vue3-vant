@@ -45,17 +45,23 @@ couponTime = {}   //券码和二维码
 
   couponDetailMethod(){
     this.voucherDetail({id:this.id}).then(res=>{
-     this.$nextTick(()=>{
-      this.name = res.data.name
-      this.upperLimit = res.data.upperLimit
-      this.contentText = {...res.data,name:""}
-      this.codeMsg = res.data
-		  this.couponTime = {...res.data,time:res.data.usedDate,isUse:true}
-      this.$Coupon.dataHandling(res,this.scopeMsg)
-     })
+      this.$nextTick(()=>{
+        this.name = res.data.name
+        this.upperLimit = res.data.upperLimit
+        this.contentText = {...res.data,name:""}
+        this.codeMsg = res.data
+        this.couponTime = {...res.data,time:res.data.usedDate,isUse:true}
+        this.$Coupon.dataHandling(res,this.scopeMsg)
+        this.$toast.clear()
+      })
     })
+    .catch(err=>{
+			this.$toast.clear()
+			this.$toast.fail(err)
+		})
   }
   created () {
+    this.$pottingTosts("加载中")
     this.couponDetailMethod()
   }
 }

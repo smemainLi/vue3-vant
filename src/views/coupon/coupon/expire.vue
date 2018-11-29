@@ -46,15 +46,20 @@ export default class Expire extends Vue {
 			this.$nextTick(()=>{
 				this.name = res.data.name
 				this.contentText = {...res.data,name:""}
-				console.log(this.contentText,'---')
 				this.$Coupon.dataHandling(res,this.scopeMsg)
 				this.couponTime = {...res.data,isUse:true}
+				this.$toast.clear()
 			})
+		})
+		.catch(err=>{
+			this.$toast.clear()
+			this.$toast.fail(err)
 		})
 	}
 
 
 	created(){
+		this.$pottingTosts("加载中")
 		this.expireMethod()
 	}
 }

@@ -1,23 +1,12 @@
 <template>
   <div class="detailPage">
     <top :storeInfo="storeInfo"></top>
-    <location :locationInfo="locationInfo"></location>
-    <discount :discountInfo="discountInfo"></discount>
+    <discount class="discount" :discountInfo="discountInfo"></discount>
     <goods-swiper :goodsInfoList="goodsInfoList"></goods-swiper>
     <coupon-title :titleContent="couTitle"></coupon-title>
     <card :cardInfo="cardInfoList"></card>
     <coupon-title class="feel" :titleContent="feelTitle"></coupon-title>
-    <feeling :voteInfoList="voteInfoList" :feelNumMax="feelNumMax" :merchantId="this.$route.params.merchantId"></feeling>
-    <!-- <van-popup class="pop-box" v-model="noExistence" :close-on-click-overlay="false">
-      <div class="pop-box-top">
-        <div class="box-top-title" v-cloak>{{boxTitle}}</div>
-        <router-link class="box-top-close" tag="div" :to="{path:'/guide/index'}">×</router-link>
-      </div>
-      <div class="pop-box-middle" v-cloak>{{boxMiddle}}</div>
-      <router-link :to="{path:'/guide/index'}">
-        <common-Btn :btnName="btnName" class="pop-box-bottom-btn"></common-Btn>
-      </router-link>
-    </van-popup> -->
+    <feeling :voteInfoList="voteInfoList" :merchantId="this.$route.params.merchantId"></feeling>
     <pop :storeNoOpen="noExistence"></pop>
   </div>
 </template>
@@ -25,7 +14,6 @@
 import { Component, Provide, Vue } from "vue-property-decorator";
 import { Action } from 'vuex-class';
 import top from '../../components/common/guide/top.vue';
-import location from '../../components/common/guide/location.vue';
 import discount from '../../components/common/guide/discount.vue';
 import goodsSwiper from '../../components/common/guide/goodsSwiper.vue';
 import couponTitle from '../../components/common/guide/couponTitle.vue';
@@ -34,56 +22,41 @@ import feeling from '../../components/common/guide/feeling.vue';
 import pop from '../../components/common/guide/pop.vue';
 
 interface storeInfo {
-  storeId: string,
-  storeLogo: string,
-  metaTitle: string,
-  storeBrief: string,
-  perCapita: string,
-  isFocus: boolean,
+  storeId: string,/* 店铺id */
+  storeLogo: string,/* 店铺logo */
+  metaTitle: string,/* 店铺名称 */
+  storeBrief: string,/* 店铺简介 */
+  perCapita: string,/* 人均 */
+  isFocus: boolean,/* 是否已经关注 */
+  site: string,/* 店铺位置 */
+  noSite: boolean,/* 判断地理位置是否为空 */
+  phone: string,/* 店铺电话 */
 }
 
-interface locationInfo {
-  site: string,
-  noSite: boolean,//判断地理位置是否为空
-  phone: string,
-}
-
-interface discountInfo {
-  discountTitle: string,
-  discountTime: string
-}
 
 interface goodsInfo {
-  goodsId: string,
-  image: string,
-  name: string,
-  price: string,
+  goodsId: string,/* 商品id */
+  image: string,/* 商品图片 */
+  name: string,/* 商品名称 */
+  price: string,/* 商品价格 */
 }
 
 interface cardInfo {
-  cardId: string,
-  bgImage: string,
-  parValue: string,//面值
-  fullReduction: string,//满减
-  range: string,//适用范围
-  time: string,
+  cardId: string,/* 卡片 */
+  bgImage: string,/* 卡片背景图 */
+  parValue: string,/* 面值 */
+  fullReduction: string,/* 满减 */
+  range: string,/* 适用范围 */
+  time: string,/* 适用期限 */
   cardType: number,/* 0表示满减(黄色卡片背景)，1表示代金券(红色卡片背景) */
   isMask?: boolean,/* false表示还有券，true表示已抢光 */
-  isOffer?: boolean,/* true表示是抢优惠券页面触发的点击事件(卡片点击事件) */
-  finish?: string,
-}
-
-interface voteInfo {
-  percentage: string,
-  emoticon: string,
-  num: string,
-  status: boolean,
+  isOffer?: boolean,/* true表示是[抢优惠]页面触发的点击事件(卡片点击事件) */
+  finish?: string,/* 判断标识，是否已经被抢光 */
 }
 
 @Component({
   components: {
     top,
-    location,
     discount,
     goodsSwiper,
     couponTitle,
@@ -95,53 +68,41 @@ interface voteInfo {
 export default class DetailPage extends Vue {
   @Action storeDetail
 
-  /* merchantId = this.$route.params.merchantId; */
   storeInfo = {};
-  locationInfo = {};
-  discountInfo = {};
+  discountInfo: string = "";/* 线下活动标题 */
   goodsInfo = {};
   goodsInfoList: any = [];
   cardInfo = {};
   cardInfoList: any = [];
-  voteInfoList: any = [];
+  voteInfoList: any = [];/* 数据列表：用户对店铺的感觉 */
   noExistence: boolean = false;
-  feelNumMax: number = 0;
+  feelSum: number = 0;
 
-  metaTitle = "ONLY服饰店";
   couTitle = "优惠券&代金券";
   feelTitle = "大家对该店的感觉";
   boxTitle = "该店铺装修中";
   boxMiddle = "肯定你姿势不对呀~";
   btnName: string = "换个姿势";
 
-  /* discountInfo: discountInfo = {
-    discountTitle: "全场9折全场9折全场9折全场折",
-    discountTime: "20180504 ~ 20190603"
-  } */
-
   getStoreDetail() {
-    console.log(this.$route.params.merchantId);
     this.storeDetail({ merchantId: this.$route.params.merchantId }).then((res) => {
-      this.noExistence = res.data.openStatus === 0 ? false : true;
+      const storeDetailList = res.data;
+      this.noExistence = storeDetailList.openStatus === 0 ? false : true;
       this.storeInfo = {
         storeId: this.$route.params.merchantId,
-        storeLogo: res.data.logo,
-        metaTitle: res.data.storeName,
-        storeBrief: res.data.storeDesc,
-        perCapita: res.data.percapita,
-        isFocus: res.data.isFocus,
+        storeLogo: storeDetailList.logo,
+        metaTitle: storeDetailList.storeName,
+        storeBrief: storeDetailList.storeDesc,
+        perCapita: `人均：${storeDetailList.percapita}`,
+        isFocus: storeDetailList.isFocus,
+        site: `${storeDetailList.floor}${storeDetailList.floorAddr}`,
+        noSite: !storeDetailList.floor || !storeDetailList.floorAddr ? false : true,
+        phone: `tel:${storeDetailList.contactPhone}`,
       }
-      this.locationInfo = {
-        site: `${res.data.floor}${res.data.floorAddr}`,
-        noSite: !res.data.floor || !res.data.floor ? false : true,
-        phone: `tel:${res.data.contactPhone}`,
-      }
-      this.discountInfo = {
-        discountTitle: res.data.activity.activityName,
-        discountTime: res.data.activity.activityContent,
-      }
-      for (let i = 0; i < res.data.goodsList.length; i++) {
-        const goods = res.data.goodsList[i];
+      document.title = storeDetailList.storeName;/* 设置页面的title */
+      this.discountInfo = storeDetailList.activityName;
+      for (let i = 0; i < storeDetailList.goodsList.length; i++) {
+        const goods = storeDetailList.goodsList[i];
         this.goodsInfo = {
           goodsId: goods.goodsId,
           image: goods.goodsImage,
@@ -150,13 +111,13 @@ export default class DetailPage extends Vue {
         }
         this.goodsInfoList.push(this.goodsInfo);
       }
-      for (let i = 0; i < res.data.quanList.length; i++) {
-        const card = res.data.quanList[i];
+      for (let i = 0; i < storeDetailList.quanList.length; i++) {
+        const card = storeDetailList.quanList[i];
         this.cardInfo = {
           cardId: card.quanId,
           bgImage: card.typeName === "优惠券" ? require("../../assets/image/guide/cash.png") : require("../../assets/image/guide/discount.png"),
           parValue: `￥${card.discount}`,
-          fullReduction: card.typeName === "优惠券" ? `满amount可用` : card.typeName,
+          fullReduction: card.typeName === "优惠券" ? `满${card.amount}可用` : card.typeName,
           range: card.usable,
           time: `${card.startDateStr}-${card.endDateStr}`,
           cardType: card.typeName === "优惠券" ? 0 : 1,/* 0表示满减(黄色卡片背景)，1表示代金券(红色卡片背景) */
@@ -166,84 +127,46 @@ export default class DetailPage extends Vue {
         }
         this.cardInfoList.push(this.cardInfo);
       }
-
+      //计算各种小表情被选中数量的总数
+      this.feelSum = storeDetailList.feels.feelGoodNum + storeDetailList.feels.feelSosoNum + storeDetailList.feels.feelBadNum;
       this.voteInfoList.push({
-        percentage: "0",
-        emoticon: require("../../assets/image/guide/like.png"),
-        num: res.data.feels.feelGoodNum,
-        status: res.data.feels.feelGood,
+        percentage: "0",/* 进度条百分比 */
+        unSelected: require('../../assets/image/guide/olike.png'),/* 未选中的图标 */
+        selected: require('../../assets/image/guide/like.png'),/* 选中后的图标 */
+        num: storeDetailList.feels.feelGoodNum,/* 数量 */
+        sum: this.feelSum,/* 所有数量的总和 */
+        feel: storeDetailList.feels.feelGood,/* 是否已经被选过 true:已选过 false:未选过 */
       });
       this.voteInfoList.push({
-        percentage: "0",
-        emoticon: require("../../assets/image/guide/ordinary.png"),
-        num: res.data.feels.feelSosoNum,
-        status: res.data.feels.feelSoso,
+        percentage: "0",/* 进度条百分比 */
+        unSelected: require('../../assets/image/guide/oordinary.png'),/* 未选中的图标 */
+        selected: require('../../assets/image/guide/ordinary.png'),/* 选中后的图标 */
+        num: storeDetailList.feels.feelSosoNum,/* 数量 */
+        sum: this.feelSum,/* 所有数量的总和 */
+        feel: storeDetailList.feels.feelSoso,/* 是否已经被选过 true:已选过 false:未选过 */
       });
       this.voteInfoList.push({
-        percentage: "0",
-        emoticon: require("../../assets/image/guide/dislike.png"),
-        num: res.data.feels.feelBadNum,
-        status: res.data.feels.feelBad,
+        percentage: "0",/* 进度条百分比 */
+        unSelected: require('../../assets/image/guide/odislike.png'),/* 未选中的图标 */
+        selected: require('../../assets/image/guide/dislike.png'),/* 选中后的图标 */
+        num: storeDetailList.feels.feelBadNum,/* 数量 */
+        sum: this.feelSum,/* 所有数量的总和 */
+        feel: storeDetailList.feels.feelBad,/* 是否已经被选过 true:已选过 false:未选过 */
       });
-      this.feelNumMax = this.checkMax(this.voteInfoList[0].num, this.voteInfoList[1].num, this.voteInfoList[2].num)
-
-      console.log(this.voteInfoList);
     }).catch((err) => {
       this.$toast.fail(err);
     });
   }
 
-  checkMax(numF, numS, numT) {
-    let tempMax: number = 0;
-    if (numF >= numS && numF >= numT) {
-      return tempMax = numF;
-    } else if (numS >= numT) {
-      return tempMax = numS;
-    } else {
-      return tempMax = numT;
-    }
-  }
-
   created() {
-    document.title = this.metaTitle;
     this.getStoreDetail();
   }
 }
 </script>
 <style lang="scss" scoped>
 .detailPage {
-  .pop-box {
-    width: 686px;
-    height: 542px;
-    border-radius: 10px;
-    text-align: center;
-    .pop-box-top {
-      height: 124px;
-      background-color: #fbde19;
-      .box-top-title {
-        line-height: 124px;
-        font-size: 34px;
-        color: $color-00;
-      }
-      .box-top-close {
-        position: absolute;
-        top: 0;
-        right: 32px;
-        line-height: 124px;
-        font-size: 70px;
-        color: $color-ff;
-      }
-    }
-    .pop-box-middle {
-      margin-top: 122px;
-      font-size: 36px;
-      color: $color-35;
-    }
-    .pop-box-bottom-btn {
-      width: 326px;
-      font-size: 36px;
-      color: $color-35;
-    }
+  .discount {
+    margin: 24px 0;
   }
 }
 </style>

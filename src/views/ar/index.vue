@@ -1,5 +1,6 @@
 <template>
   <div class="ar">
+    <!-- 蒙层 -->
     <layer></layer>
     <img :src="btnImg" class="btn-img" @click="downApp" alt="">
   </div>

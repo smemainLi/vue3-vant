@@ -18,6 +18,7 @@ export const netRedShop = (r: any) => require.ensure([], () => r(require('../vie
 
 // 抢优惠
 export const offer = (r: any) => require.ensure([], () => r(require('../views/offer/index.vue')), e => console.log(e), 'offer')
+export const turntableGame = (r: any) => require.ensure([], () => r(require('../views/offer/turntableGame.vue')), e => console.log(e), 'turntableGame')
 
 // AR
 export const ar = (r: any) => require.ensure([], () => r(require('../views/ar/index.vue')), e => console.log(e), 'ar')
@@ -51,6 +52,8 @@ export const memberRank = (r: any) => require.ensure([], () => r(require('@/view
 export const selectData = (r: any) => require.ensure([], () => r(require('@/views/member/selectData.vue')), e => console.log(e), 'selectData')
 export const carNumber = (r: any) => require.ensure([], () => r(require('@/views/member/carNumber.vue')), e => console.log(e), 'carNumber')
 export const protocol = (r: any) => require.ensure([], () => r(require('@/views/member/protocol.vue')), e => console.log(e), 'protocol')
+export const createBazaar = (r: any) => require.ensure([], () => r(require('../views/member/creativeBazaar.vue')), e => console.log(e), 'createBazaar')
+export const welcome = (r: any) => require.ensure([], () => r(require('../views/member/welcome.vue')), e => console.log(e), 'welcome')
 
 // 账号登录
 export const login = (r: any) => require.ensure([], () => r(require('../views/member/login.vue')), e => console.log(e), 'login')

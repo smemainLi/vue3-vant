@@ -1,5 +1,6 @@
 import moment from 'moment'
 import Vue from "vue"
+import { Toast } from 'vant';
 
 /**
  * 格式化时间 time为时间，formatText为格式
@@ -11,7 +12,7 @@ Vue.prototype.$momentTime = function momentTime(time: Date, formatText: string =
   return moment(time).format(formatText)
 }
 
-
+// 滑动到底部加载
 class $ListenScroll {
   scrollMounted: any
   constructor(callback) {
@@ -40,39 +41,21 @@ class $ListenScroll {
 // 在使用的组件中，new this.$Utils()一个实例并传入一个触发的方法
 Vue.prototype.$ListenScroll = $ListenScroll
 
-
-/* class $StyleColor {
-  private className: string;
-  private classColor: string;
-  constructor(className, classColor) {
-    this.className = className;
-    this.classColor = classColor;
-  }
-  public change(): any {
-    return (<any>document).getElementsByClassName(`'${this.className}'`)[0].style.color = `'${this.classColor}'`;
-  }
-}
+/**
+ * 二次封装toast
+ * @param { string } text       toast的提示内容
+ * @param { number } duration   持续展示 toast
+ * 
  */
-Vue.prototype.$StyleColor = (className, classColor) => { return (<any>document).getElementsByClassName(`'${className}'`)[0].style.color = `'${classColor}'`; };
-
-
-class $JumpDownload {
-
-  constructor() {
-    const u = navigator.userAgent,
-      isAndroid = u.indexOf('Android') > 1 || u.indexOf('Adr') > 1,
-      isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
-      urls = {
-        /* 'android': 'http://ftp-apk.pcauto.com.cn/pub/autoclub-5000-autowapDL1.apk', */
-        'android': 'http://www1.pcauto.com.cn/app/20141120/pcautoapp/index.html',
-        'ios': 'https://itunes.apple.com/cn/app/zhong-guo-che-you-hui/id640447959',
-        'other': 'http://www1.pcauto.com.cn/app/20141120/pcautoapp/index.html'
-      };
-    window.location.href = isAndroid ? urls.android : isIOS ? urls.ios : urls.other;
-  }
-
+function pottingTosts(message: string = "发送中", duration: number = 0): void {
+  Toast.loading({
+    duration: duration,       // 持续展示 toast
+    forbidClick: true,        // 禁用背景点击
+    loadingType: 'spinner',
+    message: message
+  })
 }
 
-Vue.prototype.$JumpDownload = $JumpDownload;
+Vue.prototype.$pottingTosts = pottingTosts
 
 export default Vue

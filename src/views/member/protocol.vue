@@ -21,6 +21,7 @@ export default class Protocol extends Vue {
   feesDescMethod(){
     this.feesDesc({ type:this.type })
     .then(res=>{
+      document.title = res.data.name    //改变title
       this.content = res.data.content
       this.name = res.data.name
       this.show = true

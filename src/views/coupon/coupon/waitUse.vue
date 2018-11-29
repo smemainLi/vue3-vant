@@ -43,18 +43,17 @@ codeMsg = {}      // 券码和二维码
       this.contentText = {...res.data,name:""}
       this.codeMsg = res.data
       this.$Coupon.dataHandling(res,this.scopeMsg)
-      // setTimeout(()=>{this.$toast.clear()},300)
-      
+      this.$toast.clear()      
      })
+    })
+    .catch(err=>{
+      this.$toast.clear()  
+      this.$toast.fail(err)
     })
   }
   created () {
+    this.$pottingTosts("加载中")
     this.couponDetailMethod()
-    // this.$toast.loading({
-    //   duration: 0,       // 持续展示 toast
-    //   forbidClick: true, // 禁用背景点击
-    //   loadingType: 'spinner'
-    // });
   }
 
 
@@ -64,7 +63,7 @@ codeMsg = {}      // 券码和二维码
 </script>
 
 <style lang='scss' scoped>
-.content-model{
+.waiteUse /deep/ .content-model{
 	// margin-top: 0;
 	border-top: 0;
 }

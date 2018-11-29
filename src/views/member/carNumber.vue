@@ -107,6 +107,7 @@ export default class CarNumber extends Vue {
   addedCarNum = "";
   btnName = "确定";
 
+  /* 键盘字 */
   carTxt = [{ name: ["粤", "京", "冀", "沪", "津", "晋", "蒙", "辽", "吉", "黑"] }, { name: ["苏", "浙", "皖", "闽", "赣", "鲁", "豫", "鄂", "湘", "桂"] }, { name: ["琼", "渝", "川", "贵", "云", "藏", "陕", "甘", "青", "宁"] }];
   carNumBottom = ["W", "X", "Y", "Z"];
   noneBottom = ["", "", "", ""];
@@ -294,26 +295,28 @@ export default class CarNumber extends Vue {
    */
   async getPlateNumber() {
     await this.queryPlateNumber().then((res) => {
-      this.carNumList = res.data.carNum.split('');
-      const carNumLength: number = this.carNumList.length;
-      if (this.carNumList.length !== 0) {
-        // 新能源车牌号
-        if (carNumLength === 8) {
-          this.isNewEnergy = true;
-          this.numSix = this.carNumList[7];
-        } else {
-          this.isNewEnergy = false;
+      if (res.data.carNum) {
+        this.carNumList = res.data.carNum.split('');
+        const carNumLength: number = this.carNumList.length;
+        if (this.carNumList.length !== 0) {
+          // 新能源车牌号
+          if (carNumLength === 8) {
+            this.isNewEnergy = true;
+            this.numSix = this.carNumList[7];
+          } else {
+            this.isNewEnergy = false;
+          }
+          this.areaName = this.carNumList[0];
+          this.areaLetter = this.carNumList[1];
+          this.numOne = this.carNumList[2];
+          this.numTwo = this.carNumList[3];
+          this.numThree = this.carNumList[4];
+          this.numFour = this.carNumList[5];
+          this.numFive = this.carNumList[6];
         }
-        this.areaName = this.carNumList[0];
-        this.areaLetter = this.carNumList[1];
-        this.numOne = this.carNumList[2];
-        this.numTwo = this.carNumList[3];
-        this.numThree = this.carNumList[4];
-        this.numFour = this.carNumList[5];
-        this.numFive = this.carNumList[6];
       }
-
     }).catch((err) => {
+      console.log(`err------${err}`)
       this.$toast.fail(err);
     });
   }

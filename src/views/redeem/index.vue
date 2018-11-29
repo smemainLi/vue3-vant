@@ -77,6 +77,8 @@ export default class Store extends Vue {
       this.parkingFeeRatio = result.parkingFeeRatio
       this.parkingFeeRatioStatus = result.parkingFeeRatioStatus
       this.goodsInfo = result.listIntegralGoods
+      
+      this.$toast.clear()  //清除加载动画
     }).catch(err=>{
       this.$toast.fail(err);
     })
@@ -119,6 +121,7 @@ export default class Store extends Vue {
   }
 
   mounted () {
+    this.$pottingTosts("加载中")
     this.redeemIndexMethod()
   }
 }

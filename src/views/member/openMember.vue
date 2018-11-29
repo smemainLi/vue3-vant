@@ -56,7 +56,7 @@ export default class OpenMember extends Vue {
   @Action('bindInvite') bindInvite         // 邀请积分
 
   data = {
-    invitationCode: "",     //邀请码
+    inviterOpenId: JSON.parse((<any>localStorage).getItem("inviterOpenId"))? JSON.parse((<any>localStorage).getItem("inviterOpenId")):"",     //邀请码
     phoneNum: "",	         //手机号码
     pwd: "",	               //密码
     smsCode: "",           //短信验证码
@@ -71,19 +71,21 @@ export default class OpenMember extends Vue {
   // 获取手机验证码
   getCode(): void {
     if (this.countDown !== 60 || !this.notClick) return
+    this.$pottingTosts("发送中")
     this.notClick = false
 
-    this.getSmsCode({      phoneNum: this.data.phoneNum,
-      vcode: this.data.vcode    })
+    this.getSmsCode({   phoneNum: this.data.phoneNum,
+                        vcode: this.data.vcode    })
       .then(res => {
-        // 60s倒计时
-        this.countDownTime()
+        this.$toast.success('验证码已发送');
+        this.countDownTime()    // 60s倒计时
+        this.$toast.clear()     //清除加载动画
       })
       .catch(err => {
         this.$toast.fail(err);
-        // 输入图形验证码错误后，就更新一个图形验证码
-        this.getVcodeUrl()
+        this.getVcodeUrl()      // 输入图形验证码错误后，就更新一个图形验证码
         this.notClick = true
+        this.$toast.clear()     //清除加载动画
       })
   }
 
@@ -98,6 +100,8 @@ export default class OpenMember extends Vue {
         _this.countDown = 60
         // 60s 之后重新请求一个图形验证码
         _this.getVcodeUrl()
+        _this.notClick = true
+        _this.$toast.clear() 
       }
     }, 1000)
   }
@@ -105,30 +109,30 @@ export default class OpenMember extends Vue {
   // 开通会员卡
   openMember(): void {
     if (!this.testInfo()) return
-    this.$toast.loading({
-      duration: 0,       // 持续展示 toast
-      forbidClick: true, // 禁用背景点击
-    });
+    this.$pottingTosts("")
     this.openMemberMethod({ ...this.data, pwd: md5(this.data.pwd) }).then(res => {
 
       // +++++++ 如果是别人分享出去的，新用户啊注册的就加相应积分 +++++++
-      let inviteeOpenId = JSON.parse((<any>localStorage).getItem("inviteeOpenId"))
-      let inviterOpenId = JSON.parse((<any>localStorage).getItem("inviterOpenId"))
-      if (inviteeOpenId && inviterOpenId) {
-        this.bindInvite({ inviteeOpenId, inviterOpenId }).then(res => {
-          this.$toast.success("注册成功")
-          this.$router.push({ name: 'coupon' })
-        }).catch(err => {
-          this.$toast.success("注册成功")
-          this.$router.push({ name: 'coupon' })
-        })
-        return
-      }
+      // let inviteeOpenId = JSON.parse((<any>localStorage).getItem("inviteeOpenId"))
+      // let inviterOpenId = JSON.parse((<any>localStorage).getItem("inviterOpenId"))
+      // if (inviteeOpenId && inviterOpenId) {
+      //   this.bindInvite({ inviteeOpenId, inviterOpenId }).then(res => {
+      //     this.$toast.success("注册成功")
+      //     this.$router.push({ name: 'coupon' })
+      //   }).catch(err => {
+      //     this.$toast.success("注册成功")
+      //     this.$router.push({ name: 'coupon' })
+      //   })
+      //   return
+      // }
+
+      
       //   ============== 结束 ==================
-
-
+      this.$toast.clear()
       // 跳到我的卡券包
-      this.$router.push({ name: 'coupon' })
+      this.$toast.success("注册成功")
+      setTimeout(()=>{ this.$router.push({ name: 'coupon' }) },1000 )
+      
     }).catch(err => {
       this.$toast.fail(err)
     })
@@ -168,12 +172,6 @@ export default class OpenMember extends Vue {
 
   created() {
     this.getVcodeUrl()
-    let inviteCode = this.$route.query.inviteCode
-    this.$nextTick(() => {
-      if (inviteCode) {
-        this.$set(this.data, 'invitationCode', inviteCode)
-      }
-    })
   }
 
 }

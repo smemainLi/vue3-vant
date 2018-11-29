@@ -20,29 +20,24 @@ import card from '../../components/common/guide/card.vue';
 import { Action } from 'vuex-class';
 
 interface mechantInfo {
-  storeId: string,
-  storeLogo: string,
-  storeName: string,
-  storeBrief: string,
-  isMore: boolean
-}
-
-interface discountInfo {
-  discountTitle: string,
-  discountTime: string
+  storeId: string,/* 商店id */
+  storeLogo: string,/* 商店logo */
+  storeName: string,/* 商店名称 */
+  storeBrief: string,/* 商店简介 */
+  isMore: boolean/* 判断标识，是否有更多优惠 */
 }
 
 interface cardInfo {
-  cardId: string,
-  bgImage: string,
-  parValue: string,
-  fullReduction: string,
-  range: string,
-  time: string,
+  cardId: string,/* 卡片id */
+  bgImage: string,/* 卡片背景图 */
+  parValue: string,/* 卡片面值 */
+  fullReduction: string,/* 满减值 */
+  range: string,/* 适用范围 */
+  time: string,/* 适用期限 */
   cardType: number,/* 0表示满减(黄色卡片背景)，1表示代金券(红色卡片背景) */
   isMask?: boolean,/* false表示还有券，true表示已抢光 */
   isOffer?: boolean,/* true表示是抢优惠券页面触发的点击事件(卡片点击事件) */
-  finish?: string,
+  finish?: string,/* 判断标识，是否已经被抢光 */
 }
 
 @Component({
@@ -54,17 +49,16 @@ interface cardInfo {
   }
 })
 export default class Member extends Vue {
-  @Action('storeDiscount') storeDiscount
+  @Action storeDiscount
 
   length: number = 0;
   mechantInfoList: Array<mechantInfo> = [];
-  discountInfoList: Array<discountInfo> = [];
+  discountInfoList: Array<Object> = [];
   cardInfoList: any = [];
 
   async getStoreDiscount() {
     await this.storeDiscount().then((res) => {
       const mechantList = res.data.list;
-      console.log(mechantList);
       this.length = mechantList.length;
       for (let i = 0; i < this.length; i++) {
         const mechant = mechantList[i];
@@ -76,11 +70,10 @@ export default class Member extends Vue {
           isMore: mechant.mechantInfo.isMore,
         }
         this.mechantInfoList.push(mechantInfo);
-        const discountInfo: discountInfo = {
-          discountTitle: mechant.mechantInfo.activityName,
-          discountTime: mechant.mechantInfo.activityContent
-        }
+
+        const discountInfo = mechant.mechantInfo.activityName;//线下活动标题
         this.discountInfoList.push(discountInfo);
+
         const cardInfo: cardInfo = {
           cardId: mechant.mechantQuan.quanId,
           bgImage: mechant.mechantQuan.type === 0 ? require("../../assets/image/guide/cash.png") : require("../../assets/image/guide/discount.png"),
@@ -95,7 +88,6 @@ export default class Member extends Vue {
         //将cardInfo放到一个数组中，然后再推入另一个数组中
         this.cardInfoList.push([cardInfo]);
       }
-      /* console.log(this.cardInfoList); */
     }).catch((err) => {
       this.$toast.fail(err);
     });
@@ -118,7 +110,8 @@ export default class Member extends Vue {
     }
     .coupon-voucher {
       .card {
-        margin: 2px 0 0;
+        margin: 0;
+        padding: 0 32px;
       }
     }
   }

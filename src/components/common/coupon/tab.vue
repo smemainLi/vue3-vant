@@ -54,7 +54,7 @@ export default class Tab extends Vue {
 	// margin-top: 8px;
 	.card-box{
 		width: 100%;
-		height: 1000px;
+		// height: 1000px;
 		background-color:#f5f5f5;
 	}
 }

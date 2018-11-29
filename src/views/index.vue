@@ -27,9 +27,12 @@ export default class Index extends Vue {
     { name: '会员信息', url: '/member/index' },
     { name: '登录', url: '/login' },
     { name: '开通会员卡', url: '/member/openMember' },
-    // { name: '店铺详情分享1', url: 'http://wyw-wx.test.qi-cloud.com/guide/shareDetailPage?merchantId=ff808081665d09da016661bff7f701f3' },
-    // { name: '店铺详情分享2', url: 'http://wyw-wx.test.qi-cloud.com/guide/shareDetailPage?merchantId=8a8ae43865d7db200165d800262a000c' },
-    { name: '十大网红店', url: 'http://wyw-wx.test.qi-cloud.com/guide/netRedShop?merchantId=ff8080816685f45c01668a54fb200006' },
+    { name: '店铺详情分享1', url: '/guide/shareDetailPage?merchantId=ff808081665d09da016661bff7f701f3' },
+    { name: '店铺详情分享2', url: '/guide/shareDetailPage?merchantId=8a8ae43865d7db200165d800262a000c' },
+    { name: '十大网红店', url: '/guide/netRedShop?dissertationId=ff80808166f7b0d5016705cc2f0824d4' },
+    { name: '创意集市', url: '/member/createBazaar?articleId=8a8ae43865c89ce20165c8a1b8d10001' },
+    { name: '游戏转盘', url: '/offer/turntableGame' },
+    { name: '万悦湾', url: '/member/welcome' },
   ]
 }
 </script>

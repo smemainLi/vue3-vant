@@ -34,14 +34,20 @@ couponTime = {}                // 券码和消费时间
 
   couponDetailMethod(){
     this.couponDetail({id:this.id}).then(res=>{
-     this.$nextTick(()=>{
-			 this.$Coupon.dataHandling(res,this.scopeMsg)
-		  this.couponTime = {...res.data,time:res.data.usedDate,isUse:true}
-      this.contentText = res.data
+			this.$nextTick(()=>{
+				this.$Coupon.dataHandling(res,this.scopeMsg)
+				this.couponTime = {...res.data,time:res.data.usedDate,isUse:true}
+				this.contentText = res.data
+				this.$toast.clear()
 			})
+		})
+		.catch(err=>{
+			this.$toast.clear()
+			this.$toast.fail(err)
 		})
 	}
   created () {
+		this.$pottingTosts("加载中")
     this.couponDetailMethod()
   }
 }

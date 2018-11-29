@@ -4,20 +4,23 @@
 
 			<!-- 待使用   -->
 			<div slot="待使用">
-					<ContentModel component="exchangeVoucherWaitUse" :contentText="item" v-for="item in contentText1" :key="item.id"></ContentModel>
-          <prompt :bool="notUsedStatus"></prompt>
+        <emptyImg v-if="contentText1.length===0"></emptyImg>   <!-- 占位图 -->
+				<ContentModel v-else component="exchangeVoucherWaitUse" :contentText="item" v-for="item in contentText1" :key="item.id"></ContentModel>
+        <prompt :bool="notUsedStatus" v-if="contentText1.length!==0"></prompt>
       </div>
 
 			<!-- 已使用  -->
 			<div slot="已使用">
-					<ContentModel component="exchangeVoucherUse" :contentText="item" v-for="item in contentText2" :key="item.id" ></ContentModel>
-          <prompt :bool="usedStatus"></prompt>
+        <emptyImg v-if="contentText2.length===0"></emptyImg>   <!-- 占位图 -->
+				<ContentModel v-else component="exchangeVoucherUse" :contentText="item" v-for="item in contentText2" :key="item.id" ></ContentModel>
+        <prompt :bool="usedStatus" v-if="contentText2.length!==0"></prompt>
     	</div>
 
 			<!-- 已过期 -->
 			<div slot="已过期">
-					<ContentModel component="exchangeVoucherExpire" :contentText="item" v-for="item in contentText3" :key="item.id"></ContentModel>
-          <prompt :bool="expiredStatus"></prompt>
+        <emptyImg v-if="contentText3.length===0"></emptyImg>   <!-- 占位图 -->
+				<ContentModel v-else component="exchangeVoucherExpire" :contentText="item" v-for="item in contentText3" :key="item.id"></ContentModel>
+        <prompt :bool="expiredStatus" v-if="contentText3.length!==0"></prompt>
       </div>
 			
 		</Tab>
@@ -29,6 +32,7 @@ import { Component, Provide, Vue } from "vue-property-decorator";
 import Tab from "@/components/common/coupon/tab.vue"
 import ContentModel from '@/components/common/coupon/contentModel.vue'
 import prompt from "@/components/common/coupon/loadingPrompt.vue"
+import emptyImg from '@/components/common/coupon/emptyImg.vue'
 
 // 定义内容模块的接口信息
 interface contentMsg{
@@ -40,7 +44,7 @@ interface contentMsg{
 }
 
 @Component({
-  components: {Tab,ContentModel,prompt}
+  components: {Tab, ContentModel, prompt, emptyImg}
 })
 
 export default class ExchangeVoucherIndex extends Vue {
@@ -84,6 +88,7 @@ export default class ExchangeVoucherIndex extends Vue {
   // 待使用
   couponNotUsedMethod(){
     if(this.notUsedStatus) return
+    if(this.contentText1.length===0)  this.$pottingTosts("加载中")   //加载提示
     let coupon = {
       pageNo        :this.notUsedPageNo,
       methodName    :this.couponNotUsed,
@@ -96,12 +101,14 @@ export default class ExchangeVoucherIndex extends Vue {
       
       this.contentText1  = res.arr
       this.notUsedStatus = res.status
-      this.notUsedPageNo    = res.pageNo
+      this.notUsedPageNo = res.pageNo
+      this.$toast.clear()  //清除加载动画
     })
   }
   //已使用
   couponUsedMethod(){
-    if(this.usedStatus)return
+    if(this.usedStatus) return
+    if(this.contentText2.length===0)  this.$pottingTosts("加载中")   //加载提示
     let coupon = {
       pageNo       :this.usedPageNo,
       methodName   :this.couponUsed,
@@ -114,11 +121,14 @@ export default class ExchangeVoucherIndex extends Vue {
     .then(res=>{
       this.contentText2  = res.arr
       this.usedStatus    = res.status
-      this.usedPageNo = res.pageNo
+      this.usedPageNo    = res.pageNo
+      this.$toast.clear()  //清除加载动画
     })
   }
   // 已过期
   couponExpiredMethod(){
+    if(this.expiredStatus) return
+    if(this.contentText3.length===0)  this.$pottingTosts("加载中")   //加载提示
     let coupon = {
       pageNo       :this.expiredPageNo,
       methodName   :this.couponExpired,
@@ -127,12 +137,12 @@ export default class ExchangeVoucherIndex extends Vue {
       status       :this.expiredStatus,
       isExchange   :true 
     }
-     if(this.expiredStatus) return
     this.$Coupon.Method(coupon)
     .then(res=>{
-      this.contentText3 = res.arr
+      this.contentText3   = res.arr
       this.expiredStatus  = res.status
       this.expiredPageNo  = res.pageNo
+      this.$toast.clear()  //清除加载动画
     })
   }
 

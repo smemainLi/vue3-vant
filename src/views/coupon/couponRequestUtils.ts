@@ -21,7 +21,7 @@ class $Coupon {
       let usedArray:Array<any>=[]
       if(res.data.list.length===0){
         data.status = true
-        Toast.success('已全部加载')
+        // Toast.success('已全部加载')
         return {...data} 
       }
       // 2018-11-13

@@ -87,10 +87,14 @@ const actions = {
     return request("/wx/member/parking/feesDesc", data)
   },
   // 绑定会员id（邀请）
-  bindInvite({ commit }, data){
-    return request("/wx/member/account/auth/bindInvite",data)
-  }
-
+  bindInvite({ commit }, data) {
+    request("/wx/member/account/auth/bindInvite", data)
+      .then(res => {
+        localStorage.removeItem("inviterOpenId")
+      }).catch(err => { })
+  },
+  //创意集市内容
+  createBazaar({ commit }, data) { return request("/wx/member/homePage/article/index", data) }
 }
 
 

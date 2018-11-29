@@ -97,19 +97,21 @@ export default class ForgetPassword extends Vue {
   // 获取手机验证码
   getCode() {
     if (this.countDown !== 60||!this.notClick) return
+    this.$pottingTosts("发送中")
     this.notClick = false
 
     this.getSmsCode({  phoneNum: this.data.phoneNum,
                        vcode: this.data.vcode    })
       .then(res => {
-        // 60s倒计时
-        this.countDownTime()
+        this.$toast.success('验证码已发送')
+        this.countDownTime()  // 60s倒计时
+        this.$toast.clear()   //清除加载动画
       })
       .catch(err => {
         this.$toast.fail(err);
-        // 输入图形验证码错误后，就更新一个图形验证码
-        this.getVcodeUrl()
+        this.getVcodeUrl()    // 输入图形验证码错误后，就更新一个图形验证码
         this.notClick = true
+        this.$toast.clear()   //清除加载动画
       })
   }
 
@@ -133,9 +135,10 @@ export default class ForgetPassword extends Vue {
     this.time = setInterval(function () {
       _this.countDown--
       if (_this.countDown === 0) {
-        clearInterval(_this.time)
-        _this.countDown = 60
-        _this.getVcodeUrl()
+        clearInterval(_this.time)   //清除计时器
+        _this.countDown = 60        
+        _this.getVcodeUrl() 
+        _this.notClick = true
       }
     }, 1000)
   }

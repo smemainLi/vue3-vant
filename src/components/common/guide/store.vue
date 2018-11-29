@@ -103,6 +103,10 @@ export default class Tab extends Vue {
         color: $color-88;
         font-size: 24px;
         padding-top: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 300px;
       }
       .store-no-brief {
         height: 32px;

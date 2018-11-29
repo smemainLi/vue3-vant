@@ -8,6 +8,7 @@
         <div class="store-name" v-cloak>{{mechantInfo.storeName}}</div>
         <div class="store-brief" v-cloak>{{mechantInfo.storeBrief}}</div>
       </div>
+      <!-- 跳转店铺详情页面附带商店id -->
       <router-link class="benefits" tag="div" :to="{path:`/guide/detailPage/${mechantInfo.storeId}`}">
         <van-icon class="arrow-icon" name="arrow" />
         <div class="more-benefits" v-show="mechantInfo.isMore">更多优惠</div>
@@ -25,14 +26,13 @@ import { Component, Provide, Vue } from "vue-property-decorator";
 })
 export default class Top extends Vue {
   defaultImage = require('../../../assets/image/offer/head.png');
-  merchantId: string = "sdlfhskdfklsdf";
 }
 </script>
 <style lang="scss" scoped>
 .top {
   .store-title {
     width: 750px;
-    height: 194px;
+    height: 170px;
     background-color: $color-ff;
     .store-photo {
       width: 111px;
@@ -54,6 +54,10 @@ export default class Top extends Vue {
       .store-brief {
         font-size: 26px;
         color: $color-35;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 300px;
       }
     }
     .benefits {

@@ -9,11 +9,11 @@ import record from '../../components/common/redeem/record.vue';
 import { Action } from 'vuex-class';
 
 interface recordInfo {
-  scoreNum: string;
-  scoreWord: string;
-  detailsInfo: string;
-  content: string;
-  plus?: boolean;//判断加减
+  scoreNum: string;//分数
+  scoreWord: string;//"分"字
+  detailsInfo: string;//明细
+  content: string;//时间
+  plus?: boolean;//判断加减分
 }
 
 @Component({
@@ -26,41 +26,12 @@ export default class IntegralDetail extends Vue {
 
   recordInfoList: any = [];
 
-  /* recordInfo: Array<recordInfo> = [
-    {
-      scoreNum: "+5",
-      scoreWord: "分",
-      detailsInfo: "优惠券买单(小精灵茶餐厅)",
-      content: "2018-07-27 10:45:25",
-      plus: true,
-    },
-    {
-      scoreNum: "+5",
-      scoreWord: "分",
-      detailsInfo: "优惠券买单(小精灵茶餐厅)",
-      content: "2018-07-27 10:45:25",
-      plus: true,
-    },
-    {
-      scoreNum: "-5",
-      scoreWord: "分",
-      detailsInfo: "兑换礼品",
-      content: "2018-07-27 10:45:25",
-      plus: false,
-    },
-    {
-      scoreNum: "+5",
-      scoreWord: "分",
-      detailsInfo: "优惠券买单(小精灵茶餐厅)",
-      content: "2018-07-27 10:45:25",
-      plus: true,
-    },
-  ] */
-
+  /**
+   * 获取积分明细
+   */
   getIntegralDetail() {
     this.integralDetail().then((res) => {
       const detailList = res.data.list;
-      console.log(detailList);
       for (let i = 0; i < detailList.length; i++) {
         const record = detailList[i];
         const recordInfo: recordInfo = {
