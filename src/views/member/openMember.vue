@@ -46,6 +46,7 @@ import { Component, Provide, Vue } from "vue-property-decorator";
 import myInput from '@/components/common/myInput.vue'
 import { Action } from 'vuex-class'
 import md5 from 'js-md5';
+import { getStore } from '@/config/utils';
 
 @Component({ components: { myInput } })
 
@@ -56,7 +57,7 @@ export default class OpenMember extends Vue {
   @Action('bindInvite') bindInvite         // 邀请积分
 
   data = {
-    inviterOpenId: JSON.parse((<any>localStorage).getItem("inviterOpenId"))? JSON.parse((<any>localStorage).getItem("inviterOpenId")):"",     //邀请码
+    inviterOpenId: (<any>localStorage).getItem("_inviterOpenId") ? (<any>localStorage).getItem("_inviterOpenId") : "",     //邀请码
     phoneNum: "",	         //手机号码
     pwd: "",	               //密码
     smsCode: "",           //短信验证码
@@ -74,8 +75,8 @@ export default class OpenMember extends Vue {
     this.$pottingTosts("发送中")
     this.notClick = false
 
-    this.getSmsCode({   phoneNum: this.data.phoneNum,
-                        vcode: this.data.vcode    })
+    this.getSmsCode({      phoneNum: this.data.phoneNum,
+      vcode: this.data.vcode    })
       .then(res => {
         this.$toast.success('验证码已发送');
         this.countDownTime()    // 60s倒计时
@@ -101,7 +102,7 @@ export default class OpenMember extends Vue {
         // 60s 之后重新请求一个图形验证码
         _this.getVcodeUrl()
         _this.notClick = true
-        _this.$toast.clear() 
+        _this.$toast.clear()
       }
     }, 1000)
   }
@@ -126,13 +127,13 @@ export default class OpenMember extends Vue {
       //   return
       // }
 
-      
+
       //   ============== 结束 ==================
       this.$toast.clear()
       // 跳到我的卡券包
       this.$toast.success("注册成功")
-      setTimeout(()=>{ this.$router.push({ name: 'coupon' }) },1000 )
-      
+      setTimeout(() => { this.$router.push({ name: 'coupon' }) }, 1000)
+
     }).catch(err => {
       this.$toast.fail(err)
     })
@@ -142,7 +143,7 @@ export default class OpenMember extends Vue {
   testInfo() {
     // 信息是否都填写，邀请码可不填
     for (let item in this.data) {
-      if (this.data[item] === '' && item !== 'invitationCode') {
+      if (this.data[item] === '' && item !== 'inviterOpenId') {
         this.$toast.fail("请完善信息后再提交");
         return false
       }

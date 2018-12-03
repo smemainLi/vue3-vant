@@ -1,4 +1,5 @@
 import { request } from "@/config/request"
+import { removeStore } from '@/config/utils';
 
 const state = {
   // isLogin:false
@@ -90,7 +91,7 @@ const actions = {
   bindInvite({ commit }, data) {
     request("/wx/member/account/auth/bindInvite", data)
       .then(res => {
-        localStorage.removeItem("inviterOpenId")
+        removeStore("inviterOpenId");
       }).catch(err => { })
   },
   //创意集市内容

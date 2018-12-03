@@ -89,11 +89,8 @@ export default class Login extends Vue {
     });
   } */
 
-  test() {
-  }
   mounted() {
     /* this.getLocation(); */
-    this.test();
   }
 }
 </script>

@@ -3,7 +3,7 @@ import Router from "vue-router";
 import wx from 'weixin-js-sdk';
 import * as routerPath from '@/router/router-path';
 import { isLogin, getAuthorizeUrlSuperSJ, getJsSdkConfig } from '@/service/getData'
-import { getCookie, setStore } from '@/config/utils'
+import { getCookie, setStore, getStore, removeStore } from '@/config/utils'
 import { Toast } from 'vant';
 import { wxMethod } from "../config/wxMethod"  //封装的js sdk的方法
 import store from "../store/index"
@@ -86,9 +86,12 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  let inviterOpenId = to.query.qi_openid  //邀请人
+  let inviterOpenId = to.query.qi_openid;  //邀请人
+  let shareOpenId = to.query.qi_openid;
   if (inviterOpenId) {
-    localStorage.setItem("inviterOpenId", JSON.stringify(inviterOpenId))
+    setStore('inviterOpenId', inviterOpenId);
+    setStore('_inviterOpenId', inviterOpenId);
+    setStore('shareOpenId', shareOpenId);
   }
   /**
    * 跳转页面为app分享至微信端的页面，无需登录以及鉴权
@@ -107,12 +110,13 @@ router.beforeEach((to, from, next) => {
     })
   } else {
     // 绑定邀请人与被邀请人的方法
-    if (getCookie('qi_openid') && JSON.parse((<any>localStorage).getItem("inviterOpenId"))) {
+    if (getCookie('qi_openid') && getStore('inviterOpenId')) {
       let data = {
-        inviteeOpenId: getCookie('qi_openid'),                                    //受邀人
-        inviterOpenId: JSON.parse((<any>localStorage).getItem("inviterOpenId"))   //邀请人
+        inviteeOpenId: getCookie('qi_openid'),     //受邀人
+        inviterOpenId: getStore('inviterOpenId')   //邀请人
       }
-      store.dispatch('bindInvite', data)  //调用绑定关系的接口
+      //调用绑定关系的接口
+      store.dispatch('bindInvite', data);
     }
 
     document.title = to.meta.title;
@@ -121,8 +125,9 @@ router.beforeEach((to, from, next) => {
     isLogin().then(res => {
       store.commit('isLogins', { isLogin: res.data.isLogin })
       if (!res.data.isLogin && to.path !== "/" && to.path !== "/login" && to.path !== "/member/openMember" && to.path !== "/forgetPassword" && to.path !== "/guide/index" && to.path !== "/ar/index" && to.path !== "/wifi/index" && to.path !== "/member/welcome") {
-        if (to.query.qi_openid) {
+        if (getStore("shareOpenId")) {
           location.href = decodeURIComponent(`${location.origin}/member/welcome`);
+          removeStore("shareOpenId");
         }
         next({ path: "/login" })
       }
@@ -133,7 +138,7 @@ router.beforeEach((to, from, next) => {
     // sdk认证
     getJsSdkConfig(to.path).then(res => {
       wx.config({
-        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId: res.data.appid, // 必填，公众号的唯一标识
         timestamp: res.data.timestamp, // 必填，生成签名的时间戳
         nonceStr: res.data.noncestr, // 必填，生成签名的随机串

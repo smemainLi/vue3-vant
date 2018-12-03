@@ -33,9 +33,11 @@ class share {
       title: data.title, // 分享标题
       link: data.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
       imgUrl: data.imgUrl, // 分享图标
-      success: function () {
-        console.log('ggggggggggggggggggggggggggggggggggggggggg');
-
+      trigger: function (res) {
+        console.log(res);
+      },
+      success: function (res) {
+        console.log(res);
         // 用户点击了分享后执行的回调函数
         console.log(data.toPath);
         console.log(data.toPath.indexOf("/guide/detailPage"));
@@ -50,7 +52,10 @@ class share {
             store.commit('recordWinPoints', false);
           });
         }
-      }
+      },
+      complete: function (res) {
+        console.log(res);
+      },
     })
   }
   shareMenuShareAppMessage(data: any) {
@@ -64,7 +69,6 @@ class share {
       dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
       success: function () {
         // 用户点击了分享后执行的回调函数
-        console.log('ggggggggggggggggggggggggggggggggggggggggg');
       }
     });
   }

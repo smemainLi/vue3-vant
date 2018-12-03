@@ -2,6 +2,7 @@
   <!-- 万悦湾 -->
   <div class="welcome">
     <img class="welcome-img" :src="welcomeImg" alt="">
+    <img class="qrcode" src="../../assets/image/member/qrcode.png" alt="">
   </div>
 </template>
 <script lang="ts">
@@ -22,6 +23,11 @@ export default class Welcome extends Vue {
   .welcome-img {
     width: 100%;
     display: block;
+  }
+  .qrcode {
+    position: absolute;
+    width: 100%;
+    top: 700px;
   }
 }
 </style>
